@@ -1,3 +1,5 @@
 .DS_Store
-build/
-node_modules/
+Solidity/build/
+Solidity/node_modules/
+ng/node_modules/
+ng/dist/

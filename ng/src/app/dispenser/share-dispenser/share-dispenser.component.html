@@ -1,0 +1,78 @@
+<div class="buy-box">
+
+  <button type="button" class="buy-box-top" disabled="true">
+      <p class="total-price">Price per Share <br> <span> {{ pricePerShare }} CHF  </span></p>
+    </button>
+
+
+  <div class="buy-box-middle">
+    <div class="container-no-shares">
+      <mat-form-field class="no-shares-input">
+        <input type="number" matInput id="amount" placeholder="Number of shares to buy" value="{{ maxCanBuy }}"  min="20" max= "{{ ALEQAvailable }}" (change)="setAmount($event)">
+      </mat-form-field>
+    </div>
+
+
+    <div class="row-buy-box">
+      <div class="col span-4-of-7">Total shares issued: </div>
+      <div class="col span-3-of-7">{{ ALEQTotal }}</div>
+    </div>
+    <div class="row-buy-box">
+        <div class="col span-4-of-7">Shares available now: </div>
+        <div class="col span-3-of-7">{{ ALEQAvailable }}</div>
+    </div>
+    <div class="row-buy-box">
+        <div class="col span-4-of-7">Your XCHF balance: </div>
+        <div class="col span-3-of-7">{{ XCHFBalance }}</div>
+    </div>
+    <div class="row-buy-box">
+        <div class="col span-4-of-7">Your ALEQ balance: </div>
+        <div class="col span-3-of-7">{{ ALEQBalance }}</div>
+    </div>
+  </div>
+  <!-- <div class="buy-box-bottom">
+    
+  </div> -->
+  <button type="button" class="buy-box-bottom" (click)="buyShares()">
+    <p class="total-price">Buy now for <br><span>{{ totalPrice }} CHF </span></p>
+  </button>
+
+</div>
+
+<div class="AGB-container">
+    <div class="agreed">
+      <label>I have read and agree to Equility AG's:</label>
+    </div>
+
+    <!-- <br><br>
+    {{ shareTokenTerms }} {{ prospectus }} {{ privacyPolicy }}
+    <br><br> -->
+
+
+
+    <div class="checkbox">
+      <mat-checkbox [(ngModel)]="shareTokenTerms">
+        <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
+          Share Token Terms
+        </a></mat-checkbox>
+
+    </div>
+
+    <div class="checkbox">
+      <mat-checkbox  [(ngModel)]="privacyPolicy">
+        <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
+          Privacy
+          Policy
+        </a></mat-checkbox>
+
+    </div>
+
+    <div class="checkbox" >
+      <mat-checkbox [(ngModel)]="prospectus">
+        <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
+          Prospectus
+        </a></mat-checkbox>
+
+    </div>
+
+  </div>

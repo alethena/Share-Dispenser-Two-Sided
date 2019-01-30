@@ -1,0 +1,973 @@
+{
+  "contractName": "InterestRateInterface",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "SCALEFACTOR",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCurrentCompoundingLevel",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_date",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCompoundingLevelDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.24;\n\ncontract InterestRateInterface {\n\n    uint256 public constant SCALEFACTOR = 1e18;\n\n    /// @notice get compounding level for currenct day\n    function getCurrentCompoundingLevel() public view returns (uint256);\n\n    /// @notice get compounding level for _date `_date`\n    /// @param _date The date \n    function getCompoundingLevelDate(uint256 _date) public view returns (uint256);\n\n}\n\ncontract InterestRateNone is InterestRateInterface {\n    \n    /// @notice get compounding level for currenct day\n    function getCurrentCompoundingLevel() public view returns (uint256) {\n        return SCALEFACTOR;\n    }\n\n    /// @notice get compounding level for day `_date`\n    /// param _date The daynumber \n    function getCompoundingLevelDate(uint256 /* _date */) public view returns (uint256) {\n        return SCALEFACTOR;\n    }\n\n}",
+  "sourcePath": "/home/benjamin/Documents/GitHub/Ethereum/share-dispenser/share-dispenser/contracts/XCHFContracts/InterestRateNone.sol",
+  "ast": {
+    "absolutePath": "/home/benjamin/Documents/GitHub/Ethereum/share-dispenser/share-dispenser/contracts/XCHFContracts/InterestRateNone.sol",
+    "exportedSymbols": {
+      "InterestRateInterface": [
+        2796
+      ],
+      "InterestRateNone": [
+        2817
+      ]
+    },
+    "id": 2818,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2780,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:11"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 2796,
+        "linearizedBaseContracts": [
+          2796
+        ],
+        "name": "InterestRateInterface",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 2783,
+            "name": "SCALEFACTOR",
+            "nodeType": "VariableDeclaration",
+            "scope": 2796,
+            "src": "64:42:11",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2781,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "64:7:11",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31653138",
+              "id": 2782,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "102:4:11",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000000000000000000_by_1",
+                "typeString": "int_const 1000000000000000000"
+              },
+              "value": "1e18"
+            },
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": "@notice get compounding level for currenct day",
+            "id": 2788,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCurrentCompoundingLevel",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2784,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "203:2:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2787,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2786,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2788,
+                  "src": "227:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2785,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "227:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "226:9:11"
+            },
+            "scope": 2796,
+            "src": "168:68:11",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": "@notice get compounding level for _date `_date`\n @param _date The date ",
+            "id": 2795,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCompoundingLevelDate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2791,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2790,
+                  "name": "_date",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2795,
+                  "src": "362:13:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2789,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "362:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "361:15:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2794,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2793,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2795,
+                  "src": "398:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2792,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "398:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "397:9:11"
+            },
+            "scope": 2796,
+            "src": "329:78:11",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2818,
+        "src": "26:384:11"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2797,
+              "name": "InterestRateInterface",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2796,
+              "src": "441:21:11",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_InterestRateInterface_$2796",
+                "typeString": "contract InterestRateInterface"
+              }
+            },
+            "id": 2798,
+            "nodeType": "InheritanceSpecifier",
+            "src": "441:21:11"
+          }
+        ],
+        "contractDependencies": [
+          2796
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2817,
+        "linearizedBaseContracts": [
+          2817,
+          2796
+        ],
+        "name": "InterestRateNone",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 2805,
+              "nodeType": "Block",
+              "src": "597:35:11",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2803,
+                    "name": "SCALEFACTOR",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2783,
+                    "src": "614:11:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2802,
+                  "id": 2804,
+                  "nodeType": "Return",
+                  "src": "607:18:11"
+                }
+              ]
+            },
+            "documentation": "@notice get compounding level for currenct day",
+            "id": 2806,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCurrentCompoundingLevel",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2799,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "564:2:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2802,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2801,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2806,
+                  "src": "588:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2800,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "588:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "587:9:11"
+            },
+            "scope": 2817,
+            "src": "529:103:11",
+            "stateMutability": "view",
+            "superFunction": 2788,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2815,
+              "nodeType": "Block",
+              "src": "811:35:11",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2813,
+                    "name": "SCALEFACTOR",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2783,
+                    "src": "828:11:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2812,
+                  "id": 2814,
+                  "nodeType": "Return",
+                  "src": "821:18:11"
+                }
+              ]
+            },
+            "documentation": "@notice get compounding level for day `_date`\n param _date The daynumber ",
+            "id": 2816,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCompoundingLevelDate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2809,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2808,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "760:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2807,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "760:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "759:21:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2812,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2811,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "802:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2810,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "802:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "801:9:11"
+            },
+            "scope": 2817,
+            "src": "727:119:11",
+            "stateMutability": "view",
+            "superFunction": 2795,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2818,
+        "src": "412:437:11"
+      }
+    ],
+    "src": "0:849:11"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/benjamin/Documents/GitHub/Ethereum/share-dispenser/share-dispenser/contracts/XCHFContracts/InterestRateNone.sol",
+    "exportedSymbols": {
+      "InterestRateInterface": [
+        2796
+      ],
+      "InterestRateNone": [
+        2817
+      ]
+    },
+    "id": 2818,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2780,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:11"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 2796,
+        "linearizedBaseContracts": [
+          2796
+        ],
+        "name": "InterestRateInterface",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 2783,
+            "name": "SCALEFACTOR",
+            "nodeType": "VariableDeclaration",
+            "scope": 2796,
+            "src": "64:42:11",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2781,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "64:7:11",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31653138",
+              "id": 2782,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "102:4:11",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000000000000000000_by_1",
+                "typeString": "int_const 1000000000000000000"
+              },
+              "value": "1e18"
+            },
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": "@notice get compounding level for currenct day",
+            "id": 2788,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCurrentCompoundingLevel",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2784,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "203:2:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2787,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2786,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2788,
+                  "src": "227:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2785,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "227:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "226:9:11"
+            },
+            "scope": 2796,
+            "src": "168:68:11",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": "@notice get compounding level for _date `_date`\n @param _date The date ",
+            "id": 2795,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCompoundingLevelDate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2791,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2790,
+                  "name": "_date",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2795,
+                  "src": "362:13:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2789,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "362:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "361:15:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2794,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2793,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2795,
+                  "src": "398:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2792,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "398:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "397:9:11"
+            },
+            "scope": 2796,
+            "src": "329:78:11",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2818,
+        "src": "26:384:11"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2797,
+              "name": "InterestRateInterface",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2796,
+              "src": "441:21:11",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_InterestRateInterface_$2796",
+                "typeString": "contract InterestRateInterface"
+              }
+            },
+            "id": 2798,
+            "nodeType": "InheritanceSpecifier",
+            "src": "441:21:11"
+          }
+        ],
+        "contractDependencies": [
+          2796
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2817,
+        "linearizedBaseContracts": [
+          2817,
+          2796
+        ],
+        "name": "InterestRateNone",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 2805,
+              "nodeType": "Block",
+              "src": "597:35:11",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2803,
+                    "name": "SCALEFACTOR",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2783,
+                    "src": "614:11:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2802,
+                  "id": 2804,
+                  "nodeType": "Return",
+                  "src": "607:18:11"
+                }
+              ]
+            },
+            "documentation": "@notice get compounding level for currenct day",
+            "id": 2806,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCurrentCompoundingLevel",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2799,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "564:2:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2802,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2801,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2806,
+                  "src": "588:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2800,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "588:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "587:9:11"
+            },
+            "scope": 2817,
+            "src": "529:103:11",
+            "stateMutability": "view",
+            "superFunction": 2788,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2815,
+              "nodeType": "Block",
+              "src": "811:35:11",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2813,
+                    "name": "SCALEFACTOR",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2783,
+                    "src": "828:11:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2812,
+                  "id": 2814,
+                  "nodeType": "Return",
+                  "src": "821:18:11"
+                }
+              ]
+            },
+            "documentation": "@notice get compounding level for day `_date`\n param _date The daynumber ",
+            "id": 2816,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCompoundingLevelDate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2809,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2808,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "760:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2807,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "760:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "759:21:11"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2812,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2811,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2816,
+                  "src": "802:7:11",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2810,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "802:7:11",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "801:9:11"
+            },
+            "scope": 2817,
+            "src": "727:119:11",
+            "stateMutability": "view",
+            "superFunction": 2795,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2818,
+        "src": "412:437:11"
+      }
+    ],
+    "src": "0:849:11"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-12-04T14:32:24.794Z"
+}

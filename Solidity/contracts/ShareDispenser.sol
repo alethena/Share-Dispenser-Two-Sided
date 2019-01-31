@@ -1,14 +1,15 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 interface ERC20 {
     function totalSupply() external view returns (uint256);
-    function transferFrom(address _from, address _to, uint256 _value) external returns (bool success);
+    function transfer(address to, uint tokens) external returns (bool success);
+    function transferFrom(address from, address to, uint256 value) external returns (bool success);
     function totalShares() external view returns (uint256);
-    function allowance(address _owner, address _spender) external view returns (uint256);
-    function balanceOf(address _owner) external view returns (uint256 balance);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function balanceOf(address owner) external view returns (uint256 balance);
 }
 
 contract ShareDispenser is Ownable {
@@ -24,51 +25,48 @@ contract ShareDispenser is Ownable {
     // Relevant Addresses
 
     address public XCHFContractAddress;     // Address where XCHF is deployed
-    address public XCHFPayInAddress;        // User pays XCHF to this address when buying shares
-    address public XCHFSupplyAddress;       // User gets XCHF from this address when selling shares
-
     address public ALEQContractAddress;     // Address where ALEQ is deployed
-    address public ALEQPayInAddress;        // User transfers ALEQ to this address when selling shares
-    address public ALEQSupplyAddress;       // User gets ALEQ from this address when buying shares
-
+ 
     address public usageFeeAddress;         // Address where usage fee is collected
 
     // Definition of constants e.g. prices etc. Buy and sell always refer to the end-user view.
     // 10000 basis points = 100%
 
-    uint256 public usageFeeBuy  = 0;   // In basis points.
-    uint256 public usageFeeSell = 0;  // In basis points.
-    uint256 public reserveRate  = 0;   // In basis points.
-    uint256 public spreadRate   = 0;    // In basis points.
+    uint256 public usageFeeBSP  = 0;   // In basis points.
     
     uint256 public sharePriceInXCHF   = 6*10**18;
     uint256 public buyBackPriceInXCHF = 59*10**17; 
 
-    
-    // Implementing all the setters
+    // Getters for ERC20 balances
+
+    function getERC20Balance(address contractAddress) public view returns (uint256) {
+        ERC20 contractInstance = ERC20(contractAddress);
+        return contractInstance.balanceOf(address(this));
+    }
+
+    function getERC20Available(address contractAddress, address owner) public view returns (uint256) {
+        ERC20 contractInstance = ERC20(contractAddress);
+        uint256 allowed = contractInstance.allowance(owner, address(this));
+        uint256 bal = contractInstance.balanceOf(owner);
+        return (allowed <= bal) ? allowed : bal;
+    }
+
+    // Price getters
+
+    function getCumulatedPrice(uint256 amount, uint256 supply) public view returns (uint256){
+        return sharePriceInXCHF.mul(amount);
+    }
+
+    function getCumulatedBuyBackPrice(uint256 amount, uint256 supply) public view returns (uint256){
+        return sharePriceInXCHF.mul(amount);
+    }
+
+    // Setters for contract addresses
 
     function setXCHFContractAddress(address newXCHFContractAddress) public onlyOwner() {
         require(newXCHFContractAddress != 0x0000000000000000000000000000000000000000, "XCHF does not reside at address 0x");
         XCHFContractAddress = newXCHFContractAddress;
         emit XCHFContractAddressSet(XCHFContractAddress);
-    }
-
-    function setXCHFPayInAddress(address newXCHFPayInAddress) public onlyOwner() {
-        require(newXCHFPayInAddress != 0x0000000000000000000000000000000000000000, "Not a valid pay-in address");
-        XCHFPayInAddress = newXCHFPayInAddress;
-        emit XCHFPayInAddressSet(XCHFPayInAddress);
-    }
-    
-    function setXCHFSupplyAddress(address newXCHFSupplyAddress) public onlyOwner() {
-        require(newXCHFSupplyAddress != 0x0000000000000000000000000000000000000000, "Not a valid supply address");
-        XCHFSupplyAddress = newXCHFSupplyAddress;
-        emit XCHFSupplyAddressSet(XCHFSupplyAddress);
-    }
-
-    function setALEQPayInAddress(address newALEQPayInAddress) public onlyOwner() {
-        require(newALEQPayInAddress != 0x0000000000000000000000000000000000000000, "Not a valid pay-in address");
-        ALEQPayInAddress = newALEQPayInAddress;
-        emit ALEQPayInAddressSet(ALEQPayInAddress);
     }
 
     function setALEQContractAddress(address newALEQContractAddress) public onlyOwner() {
@@ -77,116 +75,73 @@ contract ShareDispenser is Ownable {
         emit ALEQContractAddressSet(ALEQContractAddress);
     }
 
-    function setALEQSupplyAddress(address newALEQSupplyAddress) public onlyOwner() {
-        require(newALEQSupplyAddress != 0x0000000000000000000000000000000000000000, "Not a valid supply address");
-        ALEQSupplyAddress = newALEQSupplyAddress;
-        emit ALEQSupplyAddressSet(ALEQSupplyAddress);
+    // Function for buying shares
+
+    function buyShares(uint256 numberOfSharesToBuy) public returns (bool) {
+        // Fetch the total price
+        address buyer = msg.sender;
+        uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
+        uint256 totalPrice = getCumulatedPrice(numberOfSharesToBuy, sharesAvailable);
+
+        // Check everything necessary
+        require(sharesAvailable >= numberOfSharesToBuy, "Not enough shares available");
+        require(getERC20Available(XCHFContractAddress, buyer) >= totalPrice, "Payment not authorized or funds insufficient");
+
+        // Compute usage fee and final payment amount
+        uint256 usageFee = totalPrice.mul(usageFeeBSP).div(10000);
+        uint256 paymentAmount = totalPrice.sub(usageFee);
+
+        // Instantiate contracts
+        ERC20 ALEQ = ERC20(ALEQContractAddress);
+        ERC20 XCHF = ERC20(XCHFContractAddress);
+
+        // Transfer usage fee and payment amount
+        XCHF.transferFrom(buyer, usageFeeAddress, usageFee);
+        XCHF.transferFrom(buyer, address(this), paymentAmount);
+
+        // Transfer the shares
+        ALEQ.transfer(buyer, numberOfSharesToBuy);
+
+        emit SharesPurchased(buyer, numberOfSharesToBuy);
+        return true;
     }
 
-    function setSharePrice(uint256 newSharePriceInRappen) public onlyOwner() {
-        require(newSharePriceInRappen > 0, "Share price cannot be zero");
-        sharePriceInXCHF = newSharePriceInRappen.mul(10**16);
-        emit sharePriceInXCHFSet(sharePriceInXCHF);
+    // Function for selling shares
+
+    function sellShares(uint256 numberOfSharesToSell) public returns (bool) {
+        address seller = msg.sender;
+        uint256 XCHFAvailable = getERC20Balance(XCHFContractAddress);
+        uint256 buyBackPrice = getCumulatedBuyBackPrice(numberOfSharesToSell, numberOfSharesToSell);
+
+        // Checks
+        require(XCHFAvailable >= buyBackPrice, "Not enough shares available");
+        require(getERC20Available(ALEQContractAddress, seller) >= numberOfSharesToSell, "Payment not authorized or funds insufficient");
+
+        // Compute usage fee and final payment amount
+        uint256 usageFee = buyBackPrice.mul(usageFeeBSP).div(10000);
+        uint256 paymentAmount = buyBackPrice.sub(usageFee);
+
+        // Instantiate contracts
+        ERC20 ALEQ = ERC20(ALEQContractAddress);
+        ERC20 XCHF = ERC20(XCHFContractAddress);
+
+        // Transfer the shares
+        ALEQ.transferFrom(seller, address(this), numberOfSharesToSell);
+
+        // Transfer usage fee and payment amount
+        XCHF.transfer(usageFeeAddress, usageFee);
+        XCHF.transfer(seller, paymentAmount);
+
+        emit SharesSold(seller, numberOfSharesToSell);
+        return true;
     }
 
-    // Non-trivial getters (cross-contract)
-
-    function getSharePriceInXCHF() public view returns(uint256){
-        return sharePriceInXCHF;
-    }
-
-    function getCumulativeBuyPrice(uint256 numberToBuy, uint256 availableShares) public view returns(uint256){
-        return sharePriceInXCHF*numberToBuy;
-    }
-
-    function getBuyBackPriceInXCHF() public view returns(uint256){
-        return buyBackPriceInXCHF;
-    }
-
-    function getAvailableSupply() public view returns(uint256) {
-        ERC20 a = ERC20(ALEQContractAddress);
-        uint256 temp = a.allowance(ALEQSupplyAddress, address(this));
-        uint256 supply = a.balanceOf(ALEQSupplyAddress);
-
-        return (temp <= supply) ? temp : supply;
-        // if (temp <= supply){
-        //     return temp;
-        // } else{
-        //     return supply;
-        // }
-    }
-
-
-    function getTotalSupply() public view returns (uint256) {
-        ERC20 a = ERC20(ALEQContractAddress);
-        return a.totalSupply();
-    }
-
-    function getTotalNumberOfShares() public view returns(uint256) {
-        ERC20 a = ERC20(ALEQContractAddress);
-        return a.totalShares();
-    }
-
-
-    // Buy/Sell functions
-
-    function buyShares(uint256 numberOfSharesToBuy) public returns(bool) {
-
-        uint256 availableSupply = getAvailableSupply();
-        uint256 priceInXCHF = getCumulativeBuyPrice(numberOfSharesToBuy, availableSupply);
-        
-        ERC20 xchf = ERC20(XCHFContractAddress);
-
-        // What checks need to be done?
-        require(xchf.balanceOf(msg.sender) >= priceInXCHF, "XCHF balance insufficient");
-        require(xchf.allowance(msg.sender, address(this)) >= priceInXCHF, "Payment not authorized");
-        require(availableSupply >= numberOfSharesToBuy, "Not enough shares available");
-        
-        // Calculate usage fee, reserve amount and subtract it from payment amount
-        uint256 usageFee = priceInXCHF.mul(usageFeeBuy).div(10000);
-        uint256 reserveAmount = priceInXCHF.mul(reserveRate).div(10000);
-        uint256 paymentAmount = priceInXCHF.sub(usageFee).sub(reserveAmount);
-
-        // Transfer XCHF to specified account
-        xchf.transferFrom(msg.sender, XCHFPayInAddress, paymentAmount);
-
-        // Transfer usage fee
-        if (usageFee != 0) xchf.transferFrom(msg.sender, usageFeeAddress, usageFee);
-        
-        // Transfer reserve amount
-        if (reserveAmount != 0) xchf.transferFrom(msg.sender, XCHFSupplyAddress, reserveAmount);
-
-        //Transfer ALEQ to specified account
-        ERC20 a = ERC20(ALEQContractAddress);
-        a.transferFrom(ALEQSupplyAddress, msg.sender, numberOfSharesToBuy);
-        emit sharesPurchased(msg.sender, numberOfSharesToBuy);
-    }
-
-    // function sellShares(uint256 numberOfSharesToSell) public returns(bool) {
-    //     uint256 priceInXCHF = numberOfSharesToSell*buyBackPriceInXCHF;
-    //     ERC20 a = ERC20(ALEQContractAddress);
-    // }
-
-
-
-    // EVENTS:
+    // Events 
 
     event XCHFContractAddressSet(address newXCHFContractAddress);
-    event XCHFPayInAddressSet(address newXCHFPayInAddress);
-    event XCHFSupplyAddressSet(address newXCHFSupplyAddressSet);
-
     event ALEQContractAddressSet(address newALEQContractAddress);
-    event ALEQPayInAddressSet(address newALEQPayInAddress);
-    event ALEQSupplyAddressSet(address newALEQSupplyAddress);
 
-    event sharesPurchased(address indexed buyer, uint256 amount);
-    event sharesSold(address indexed seller, uint256 amount);
-
-    event sharePriceInXCHFSet(uint256 newSharePriceInXCHF);
-    event buyBackPriceInXCHFSet(uint256 newBuyBackPriceInXCHF);
-
-    // Function to give back foreign tokens?
-    // FALLBACK FUNCTION not implemented. Contract will not accept Ether.
-    // Pausable function
+    event SharesPurchased(address indexed buyer, uint256 amount);
+    event SharesSold(address indexed seller, uint256 amount);
 
 }

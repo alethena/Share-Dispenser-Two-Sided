@@ -27,19 +27,16 @@ contract ShareDispenser is Ownable, Pausable {
     address public XCHFContractAddress;     // Address where XCHF is deployed
     address public ALEQContractAddress;     // Address where ALEQ is deployed
  
-    address public usageFeeAddress;         // Address where usage fee is collected
+    address public usageFeeAddress = 0xFDeda15e2922C5ed41fc1fdF36DA2FB2623666b3;         // Address where usage fee is collected
 
     // Definition of constants e.g. prices etc. Buy and sell always refer to the end-user view.
     // 10000 basis points = 100%
 
     uint256 public usageFeeBSP  = 0;   // In basis points.
 
-    uint256 public minPriceInXCHF        = 6*10**18;
-    uint256 public maxPriceInXCHF        = 8*10**18;
+    uint256 public minPriceInXCHF = 6*10**18;
+    uint256 public maxPriceInXCHF = 8*10**18;
     uint256 public initialNumberOfShares = 10000;
-
-    
-    uint256 public sharePriceInXCHF = 6*10**18;
 
     // Getters for ERC20 balances
 
@@ -61,7 +58,7 @@ contract ShareDispenser is Ownable, Pausable {
         uint256 cumulatedPrice = 0;
         if (supply <= initialNumberOfShares) {
             uint256 first = initialNumberOfShares.sub(supply);
-            uint256 last = first.add(amount);
+            uint256 last = first.add(amount).sub(1);
             cumulatedPrice = helper(first,last);
         }
 
@@ -72,22 +69,15 @@ contract ShareDispenser is Ownable, Pausable {
         else {
             cumulatedPrice = supply.sub(initialNumberOfShares).mul(minPriceInXCHF);
             uint256 first = 0;
-            uint256 last = amount.sub(supply.sub(initialNumberOfShares));
-            cumulatedPrice.add(helper(first,last));
+            uint256 last = amount.sub(supply.sub(initialNumberOfShares).add(1));
+            cumulatedPrice = cumulatedPrice.add(helper(first,last));
         }
         
         return cumulatedPrice;
     }
 
     function getCumulatedBuyBackPrice(uint256 amount, uint256 supply) public view returns (uint256){
-        return sharePriceInXCHF.mul(amount);
-    }
-
-    function helper(uint256 first, uint256 last) internal view returns (uint256) {
-        uint256 tempa = last.sub(first).add(1).mul(minPriceInXCHF); // (l-m+1)*p_min
-        uint256 tempb = maxPriceInXCHF.sub(minPriceInXCHF).div(initialNumberOfShares).div(2); // (p_max-p_min)/(2N)
-        uint256 tempc = last.mul(last.add(1)).sub(first.mul(first.sub(1))); // l*(l+1)-m*(m-1)
-        return tempb.mul(tempc).add(tempa);
+        return getCumulatedPrice(amount, supply+amount); // For symmetry reasons
     }
 
     // Setters for contract addresses
@@ -125,11 +115,11 @@ contract ShareDispenser is Ownable, Pausable {
         ERC20 XCHF = ERC20(XCHFContractAddress);
 
         // Transfer usage fee and payment amount
-        XCHF.transferFrom(buyer, usageFeeAddress, usageFee);
-        XCHF.transferFrom(buyer, address(this), paymentAmount);
+        require(XCHF.transferFrom(buyer, usageFeeAddress, usageFee), "Usage fee transfer failed");
+        require(XCHF.transferFrom(buyer, address(this), paymentAmount), "XCHF payment failed");
 
         // Transfer the shares
-        ALEQ.transfer(buyer, numberOfSharesToBuy);
+        require(ALEQ.transfer(buyer, numberOfSharesToBuy), "Share transfer failed");
 
         emit SharesPurchased(buyer, numberOfSharesToBuy);
         return true;
@@ -140,11 +130,13 @@ contract ShareDispenser is Ownable, Pausable {
     function sellShares(uint256 numberOfSharesToSell) public whenNotPaused() returns (bool) {
         address seller = msg.sender;
         uint256 XCHFAvailable = getERC20Balance(XCHFContractAddress);
-        uint256 buyBackPrice = getCumulatedBuyBackPrice(numberOfSharesToSell, numberOfSharesToSell);
+        uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
+
+        uint256 buyBackPrice = getCumulatedBuyBackPrice(numberOfSharesToSell, sharesAvailable);
 
         // Checks
-        require(XCHFAvailable >= buyBackPrice, "Not enough shares available");
-        require(getERC20Available(ALEQContractAddress, seller) >= numberOfSharesToSell, "Payment not authorized or funds insufficient");
+        require(XCHFAvailable >= buyBackPrice, "Reserves to small to buy back this amount of shares");
+        require(getERC20Available(ALEQContractAddress, seller) >= numberOfSharesToSell, "Seller doesn't have enough shares");
 
         // Compute usage fee and final payment amount
         uint256 usageFee = buyBackPrice.mul(usageFeeBSP).div(10000);
@@ -155,13 +147,20 @@ contract ShareDispenser is Ownable, Pausable {
         ERC20 XCHF = ERC20(XCHFContractAddress);
 
         // Transfer the shares
-        ALEQ.transferFrom(seller, address(this), numberOfSharesToSell);
+        require(ALEQ.transferFrom(seller, address(this), numberOfSharesToSell), "Share transfer failed");
 
         // Transfer usage fee and payment amount
-        XCHF.transfer(usageFeeAddress, usageFee);
-        XCHF.transfer(seller, paymentAmount);
+        require(XCHF.transfer(usageFeeAddress, usageFee), "Usage fee transfer failed");
+        require(XCHF.transfer(seller, paymentAmount), "XCHF payment failed");
 
         emit SharesSold(seller, numberOfSharesToSell);
+        return true;
+    }
+
+    function retrieveERC20(address contractAddress, address to, uint256 amount) public onlyOwner() returns(bool) {
+        ERC20 contractInstance = ERC20(contractAddress);
+        require(contractInstance.transfer(to, amount), "Transfer failed");
+        emit TokensRetrieved(contractAddress, to, amount);
         return true;
     }
 
@@ -172,5 +171,17 @@ contract ShareDispenser is Ownable, Pausable {
 
     event SharesPurchased(address indexed buyer, uint256 amount);
     event SharesSold(address indexed seller, uint256 amount);
+    
+    event TokensRetrieved(address contractAddress, address to, uint256 amount);
+
+
+    // Helper functions
+
+    function helper(uint256 first, uint256 last) internal view returns (uint256) {
+        uint256 tempa = last.sub(first).add(1).mul(minPriceInXCHF);                            // (l-m+1)*p_min
+        uint256 tempb = maxPriceInXCHF.sub(minPriceInXCHF).div(initialNumberOfShares).div(2);  // (p_max-p_min)/(2N)
+        uint256 tempc = last.mul(last).add(last).add(first).sub(first.mul(first));                    // l*l+l-m*m+m)
+        return tempb.mul(tempc).add(tempa);
+    }
 
 }

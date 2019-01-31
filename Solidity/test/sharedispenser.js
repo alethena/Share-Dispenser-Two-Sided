@@ -37,7 +37,7 @@ contract('ShareDispenser', (accounts)=>{
 
     it('Mint ALEQ tokens', async () =>{
         const tx1 = await AlethenaSharesInstance.setTotalShares(ALEQAmountToMint);
-        const tx2 = await AlethenaSharesInstance.mint(ALEQSupplyAddress,ALEQAmountToMint,"Test");
+        const tx2 = await AlethenaSharesInstance.mint(ShareDispenserInstance.address,ALEQAmountToMint,"Test");
         // assert.equal(ALEQAmountToMint, await AlethenaSharesInstance.balanceOf(ALEQSupplyAddress));
         //console.log(tx2.logs[0].args); 
     });
@@ -50,50 +50,47 @@ contract('ShareDispenser', (accounts)=>{
 
 
     it('Mint CXHF tokens', async () =>{
-        let mintAmount1 = new BN(60);
+        let mintAmount1 = new BN(6000);
         let multiplier = new BN(10);
         let decimals = new BN(18);
 
         let mintBN = multiplier.pow(decimals).mul(mintAmount1);
-
-        console.log(mintBN.toString(10));
     
-        // const tx = await XCHFInstance.mint(Buyer, mintAmount1.mul(10));
+        const tx = await XCHFInstance.mint(Buyer, mintBN);
+        mintIs = await XCHFInstance.balanceOf(Buyer);
 
-        // console.log(await XCHFInstance.balanceOf(Buyer));
-        // console.log(tx);
+        assert.equal(mintBN.toString(10), mintIs.toString(10));
 
-        // assert.equal(mintAmount1, new BN(await XCHFInstance.balanceOf(Buyer)));
-
-        // await XCHFInstance.mint(conflictingBuyer1,30000*10**18);
-        // assert.equal(30000*10**18, await XCHFInstance.balanceOf(conflictingBuyer1));
-
-        // await XCHFInstance.mint(conflictingBuyer2,40000*10**18);
-        // assert.equal(40000*10**18, await XCHFInstance.balanceOf(conflictingBuyer2));  
     });
 
-    // it('Set supply and pay-in addresses', async () =>{
-    //     const tx1 = await ShareDispenserInstance.setXCHFPayInAddress(XCHFPayInAddress);
-    //     const tx2 = await ShareDispenserInstance.setALEQSupplyAddress(ALEQSupplyAddress);
-    //     assert.equal(tx1.logs[0].event, 'XCHFPayInAddressSet');
-    //     assert.equal(tx1.logs[0].args.newXCHFPayInAddress, XCHFPayInAddress);
-    //     assert.equal(tx2.logs[0].event, 'ALEQSupplyAddressSet');
-    //     assert.equal(tx2.logs[0].args.newALEQSupplyAddress, ALEQSupplyAddress);
+    // it('Check price', async () =>{
+    //     let price = await ShareDispenserInstance.getCumulatedPrice(2000, 11000);
+    //     console.log("Price", price.toString());
+    //     let price2 = await ShareDispenserInstance.getCumulatedBuyBackPrice(2000, 9000);
+    //     console.log("Price", price2.toString());
     // })
 
-    // it('Set allowance', async () =>{
-    //     await XCHFInstance.approve(ShareDispenserInstance.address, 50*10**18, {from: Buyer});
-    //     await XCHFInstance.approve(ShareDispenserInstance.address, 25000*10**18, {from: conflictingBuyer1});
-    //     await XCHFInstance.approve(ShareDispenserInstance.address, 25000*10**18, {from: conflictingBuyer2});
-    // })
+    it('Set allowance', async () =>{
 
-    // it('Buy shares', async () =>{
-    //     var tx = await ShareDispenserInstance.buyShares(10,{from: Buyer});
-    //     assert.equal(10, await AlethenaSharesInstance.balanceOf(Buyer));
-    //     assert.equal(tx.logs[0].event, 'sharesPurchased');
-    //     assert.equal(tx.logs[0].args.buyer, Buyer);
-    //     assert.equal(tx.logs[0].args.amount, 10); 
-    // });
+        let mintAmount1 = new BN(6000);
+        let multiplier = new BN(10);
+        let decimals = new BN(18);
+        
+        let allowance = multiplier.pow(decimals).mul(mintAmount1);
+
+        await XCHFInstance.approve(ShareDispenserInstance.address, allowance, {from: Buyer});
+    })
+
+    it('Buy shares', async () =>{
+        const temp = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
+        console.log(temp.toString(10));
+        var tx = await ShareDispenserInstance.buyShares(5,{from: Buyer});
+        assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
+        console.log(tx.logs[0].args);
+        // assert.equal(tx.logs[0].event, 'sharesPurchased');
+        // assert.equal(tx.logs[0].args.buyer, Buyer);
+        // assert.equal(tx.logs[0].args.amount, 10); 
+    });
 
     // //NEXT: COLLISION TESTS. I.e. what if an order doesn't go through for some reason?
     // it('Buy shares but too low supply', async () =>{

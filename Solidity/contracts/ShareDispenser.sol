@@ -2,6 +2,7 @@ pragma solidity 0.5.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
 interface ERC20 {
     function totalSupply() external view returns (uint256);
@@ -12,7 +13,7 @@ interface ERC20 {
     function balanceOf(address owner) external view returns (uint256 balance);
 }
 
-contract ShareDispenser is Ownable {
+contract ShareDispenser is Ownable, Pausable {
 
     constructor(address initialXCHFContractAddress, address initialALEQContractAddress) public {
         XCHFContractAddress = initialXCHFContractAddress;
@@ -20,7 +21,6 @@ contract ShareDispenser is Ownable {
     }
 
     using SafeMath for uint256;
-
 
     // Relevant Addresses
 
@@ -33,9 +33,13 @@ contract ShareDispenser is Ownable {
     // 10000 basis points = 100%
 
     uint256 public usageFeeBSP  = 0;   // In basis points.
+
+    uint256 public minPriceInXCHF        = 6*10**18;
+    uint256 public maxPriceInXCHF        = 8*10**18;
+    uint256 public initialNumberOfShares = 10000;
+
     
-    uint256 public sharePriceInXCHF   = 6*10**18;
-    uint256 public buyBackPriceInXCHF = 59*10**17; 
+    uint256 public sharePriceInXCHF = 6*10**18;
 
     // Getters for ERC20 balances
 
@@ -54,11 +58,36 @@ contract ShareDispenser is Ownable {
     // Price getters
 
     function getCumulatedPrice(uint256 amount, uint256 supply) public view returns (uint256){
-        return sharePriceInXCHF.mul(amount);
+        uint256 cumulatedPrice = 0;
+        if (supply <= initialNumberOfShares) {
+            uint256 first = initialNumberOfShares.sub(supply);
+            uint256 last = first.add(amount);
+            cumulatedPrice = helper(first,last);
+        }
+
+        else if (supply.sub(amount) >= initialNumberOfShares) {
+            cumulatedPrice = minPriceInXCHF.mul(amount);
+        }
+
+        else {
+            cumulatedPrice = supply.sub(initialNumberOfShares).mul(minPriceInXCHF);
+            uint256 first = 0;
+            uint256 last = amount.sub(supply.sub(initialNumberOfShares));
+            cumulatedPrice.add(helper(first,last));
+        }
+        
+        return cumulatedPrice;
     }
 
     function getCumulatedBuyBackPrice(uint256 amount, uint256 supply) public view returns (uint256){
         return sharePriceInXCHF.mul(amount);
+    }
+
+    function helper(uint256 first, uint256 last) internal view returns (uint256) {
+        uint256 tempa = last.sub(first).add(1).mul(minPriceInXCHF); // (l-m+1)*p_min
+        uint256 tempb = maxPriceInXCHF.sub(minPriceInXCHF).div(initialNumberOfShares).div(2); // (p_max-p_min)/(2N)
+        uint256 tempc = last.mul(last.add(1)).sub(first.mul(first.sub(1))); // l*(l+1)-m*(m-1)
+        return tempb.mul(tempc).add(tempa);
     }
 
     // Setters for contract addresses
@@ -77,7 +106,7 @@ contract ShareDispenser is Ownable {
 
     // Function for buying shares
 
-    function buyShares(uint256 numberOfSharesToBuy) public returns (bool) {
+    function buyShares(uint256 numberOfSharesToBuy) public whenNotPaused() returns (bool) {
         // Fetch the total price
         address buyer = msg.sender;
         uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
@@ -108,7 +137,7 @@ contract ShareDispenser is Ownable {
 
     // Function for selling shares
 
-    function sellShares(uint256 numberOfSharesToSell) public returns (bool) {
+    function sellShares(uint256 numberOfSharesToSell) public whenNotPaused() returns (bool) {
         address seller = msg.sender;
         uint256 XCHFAvailable = getERC20Balance(XCHFContractAddress);
         uint256 buyBackPrice = getCumulatedBuyBackPrice(numberOfSharesToSell, numberOfSharesToSell);

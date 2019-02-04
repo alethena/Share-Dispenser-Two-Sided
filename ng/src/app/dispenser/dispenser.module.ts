@@ -17,15 +17,16 @@ import {
   MatSnackBarModule,
   MatTabsModule,
   MatCheckboxModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSliderModule
 } from '@angular/material';
-
+import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
 
 @NgModule({
   declarations: [ShareDispenserComponent],
   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
     FormsModule,
@@ -39,6 +40,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatOptionModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatSliderModule,
     MatTabsModule,
     RouterModule,
     UtilModule

@@ -298,13 +298,13 @@ h2 {
 .buy-box {
 	width: 250px;
 	margin-left: 40px;
-	height: 400px;
+	height: 440px;
 	margin-top: 0px;
 }
 
 .buy-box-top {
 	background-color: #155c72;
-	height: 28%;
+	height: 24%;
 	border-radius: 10px 10px 0 0;
 	width: 100%;
 	border: none;
@@ -315,7 +315,7 @@ h2 {
 	font-family: Saira Semi Condensed;
 	font-size: 90%;
 	color: #333;
-	height: 44%;
+	height: 52%;
 	padding: 0 10px;
 	line-height: 110%;
 }
@@ -324,7 +324,7 @@ h2 {
 
 .buy-box-bottom {
 	background-color: #155c72ad;
-	height: 28%;
+	height: 24%;
 	border-radius: 0 0 10px 10px;
 	width: 100%;
 	border: none;
@@ -356,6 +356,39 @@ h2 {
 	font-weight: 400;
 }
 
+  
+  .example-margin {
+	margin: 10px;
+  }
+  
+  .mat-slider-horizontal {
+	width: 200px;
+  }
+ .mat-card {
+	 padding: 0px !important;
+	 background-color: transparent !important;
+	 box-shadow: none !important;
+ }
+
+ .mat-accent .mat-slider-thumb,
+ .mat-accent .mat-slider-thumb-label,
+ .mat-accent .mat-slider-track-fill{
+	 background-color:#333 !important;
+	}
+
+	.mat-slider, 
+	mat-accent,
+	mat-slider-horizontal, 
+	ng-valid, 
+	ng-dirty, 
+	ng-touched {
+		padding: 0px !important;
+		margin-top: -15px;
+		margin-bottom: 20px !important;
+	}
+
+
+  
 .share-price {
 	color: #fff;
 	font-family: Saira Semi Condensed;

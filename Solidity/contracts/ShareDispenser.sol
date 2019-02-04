@@ -173,6 +173,8 @@ contract ShareDispenser is Ownable, Pausable {
         emit UsageFeeAddressSet(usageFeeAddress);
     }
 
+    // Setters for constants
+    
     function setUsageFee(uint256 newUsageFeeInBSP) public onlyOwner() {
         require(newUsageFeeInBSP <= 10000, "Usage fee must be given in basis points");
         usageFeeBSP = newUsageFeeInBSP;

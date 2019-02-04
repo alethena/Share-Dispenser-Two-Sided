@@ -1,43 +1,103 @@
-<div class="buy-box">
+<!-- <div class="buy-sell-selector">
+    <button mat-button [matMenuTriggerFor]="menu" class="buy-sell-button">Buy/Sell</button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="buyOrSell = false">
 
-  <button type="button" class="buy-box-top" disabled="true">
-      <p class="total-price">Price per Share <br> <span> {{ pricePerShare }} CHF  </span></p>
-    </button>
+      </button>
+      <button mat-menu-item (click)="buyOrSell = true">
 
+      </button>
+    </mat-menu>
+</div> -->
 
-  <div class="buy-box-middle">
-    <div class="container-no-shares">
-      <mat-form-field class="no-shares-input">
-        <input type="number" matInput id="amount" placeholder="Number of shares to buy" value="{{ maxCanBuy }}"  min="20" max= "{{ ALEQAvailable }}" (change)="setAmount($event)">
-      </mat-form-field>
-    </div>
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Buy" class="tab-label"> 
+        <div class="buy-box">
+            
+          <button type="button" class="buy-box-top" disabled="true">
+              <p class="total-price">Price per Share <br> <span> {{ pricePerShare }} CHF  </span></p>
+            </button>
+      
+          <div class="buy-box-middle">
+            <div class="container-no-shares">
+              <mat-form-field class="no-shares-input">
+                <input type="number" matInput id="amount" placeholder="Number of shares to buy" value="{{ maxCanBuy }}"  min="20" max= "{{ ALEQAvailable }}" (change)="setAmount($event)">
+              </mat-form-field>
+            </div>
+        
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Total shares issued: </div>
+              <div class="col span-3-of-7">{{ ALEQTotal }}</div>
+            </div>
+            <div class="row-buy-box">
+                <div class="col span-4-of-7">Available for buyback: </div>
+                <div class="col span-3-of-7">{{ ALEQAvailable }}</div>
+            </div>
+            <div class="row-buy-box">
+                <div class="col span-4-of-7">Your XCHF balance: </div>
+                <div class="col span-3-of-7">{{ XCHFBalance }}</div>
+            </div>
+            <div class="row-buy-box">
+                <div class="col span-4-of-7">Your ALEQ balance: </div>
+                <div class="col span-3-of-7">{{ ALEQBalance }}</div>
+            </div>
+          </div>
+          <!-- <div class="buy-box-bottom">
+            
+          </div> -->
 
-
-    <div class="row-buy-box">
-      <div class="col span-4-of-7">Total shares issued: </div>
-      <div class="col span-3-of-7">{{ ALEQTotal }}</div>
-    </div>
-    <div class="row-buy-box">
-        <div class="col span-4-of-7">Shares available now: </div>
-        <div class="col span-3-of-7">{{ ALEQAvailable }}</div>
-    </div>
-    <div class="row-buy-box">
-        <div class="col span-4-of-7">Your XCHF balance: </div>
-        <div class="col span-3-of-7">{{ XCHFBalance }}</div>
-    </div>
-    <div class="row-buy-box">
-        <div class="col span-4-of-7">Your ALEQ balance: </div>
-        <div class="col span-3-of-7">{{ ALEQBalance }}</div>
-    </div>
-  </div>
-  <!-- <div class="buy-box-bottom">
+          <button type="button" class="buy-box-bottom" (click)="buyShares()">
+              <p class="total-price">Buy now for <br><span>{{ totalPrice }} CHF </span></p>
+            </button>
+        
+        </div>
+    </mat-tab>
+    <mat-tab label="Sell"> 
+        <div class="buy-box">
     
-  </div> -->
-  <button type="button" class="buy-box-bottom" (click)="buyShares()">
-    <p class="total-price">Buy now for <br><span>{{ totalPrice }} CHF </span></p>
-  </button>
 
-</div>
+            <!-- <app-share-dispenser *ngIf="buyOrSell === true"></app-share-dispenser> -->
+        
+          <button type="button" class="buy-box-top" disabled="true">
+              <p class="total-price">Price per Share <br> <span> {{ pricePerShare }} CHF  </span></p>
+            </button>
+        
+          <div class="buy-box-middle">
+            <div class="container-no-shares">
+                <mat-form-field class="no-shares-input">
+                  <input type="number" matInput id="amount" placeholder="Number of shares to sell" value="{{ maxCanBuy }}"  min="20" max= "{{ ALEQAvailable }}" (change)="setAmount($event)">
+                </mat-form-field>
+              </div>
+        
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Total shares issued: </div>
+              <div class="col span-3-of-7">{{ ALEQTotal }}</div>
+            </div>
+            <div class="row-buy-box">
+                <div class="col span-4-of-7">Available for buyback: </div>
+                <div class="col span-3-of-7">{{ ALEQAvailable }}</div>
+            </div>
+           
+            <div class="row-buy-box">
+                <div class="col span-4-of-7">Your XCHF balance: </div>
+                <div class="col span-3-of-7">{{ XCHFBalance }}</div>
+            </div>
+            <div class="row-buy-box">
+                <div class="col span-4-of-7">Your ALEQ balance: </div>
+                <div class="col span-3-of-7">{{ ALEQBalance }}</div>
+            </div>
+          </div>
+          <!-- <div class="buy-box-bottom">
+            
+          </div> -->
+          <button type="button" class="buy-box-bottom" (click)="buyShares()">
+            <p class="total-price">Sell now for <br><span>{{ totalPrice }} CHF </span></p>
+          </button>
+        
+        </div> </mat-tab>
+  </mat-tab-group>
+  
+
 
 <div class="AGB-container">
     <div class="agreed">

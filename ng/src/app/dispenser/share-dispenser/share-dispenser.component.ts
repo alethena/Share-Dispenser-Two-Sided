@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Web3Service } from '../../util/web3.service';
 import { MatSnackBar } from '@angular/material';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatCheckboxModule } from '@angular/material';
+import { MatCheckboxModule, MatMenuModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { delay } from 'q';
 
@@ -28,9 +28,11 @@ export class ShareDispenserComponent implements OnInit {
   accounts: string[];
   account: string;
 
+  buyOrSell = false;
   totalPrice = 0;
   pricePerShare = 0;
   numberOfSharesToBuy = 0;
+  numberOfSharesToSell = 0;
   XCHFBalance = 0;
   ALEQBalance = 0;
   ALEQAvailable = 0;

@@ -87,9 +87,9 @@ contract('ShareDispenser', (accounts)=>{
         var tx = await ShareDispenserInstance.buyShares(5,{from: Buyer});
         assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
         console.log(tx.logs[0].args);
-        // assert.equal(tx.logs[0].event, 'sharesPurchased');
-        // assert.equal(tx.logs[0].args.buyer, Buyer);
-        // assert.equal(tx.logs[0].args.amount, 10); 
+        assert.equal(tx.logs[0].event, 'SharesPurchased');
+        assert.equal(tx.logs[0].args.buyer, Buyer);
+        assert.equal(tx.logs[0].args.amount, 5); 
     });
 
     // //NEXT: COLLISION TESTS. I.e. what if an order doesn't go through for some reason?

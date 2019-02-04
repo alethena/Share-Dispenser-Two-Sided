@@ -7,7 +7,7 @@ import { MatCheckboxModule } from '@angular/material';
   styleUrls: ['./main-box.component.css']
 })
 export class MainBoxComponent implements OnInit {
-
+  buyOrSell = false;
 
   constructor() {}
 

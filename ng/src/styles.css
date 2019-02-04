@@ -204,8 +204,66 @@ h2 {
 }
 
 .mat-ripple-element {
-	background: rgba(27, 142, 241, .4) !important;
+	background: transparent;
 }
+
+/* .mat-tab-label {
+	font-size: 80%;
+} */
+
+/* .mat-tab-label {
+    min-width: 15px !important;
+    padding: 0px;
+    background-color: transparent;
+    color: red;
+    font-weight: 700;
+}
+
+
+.tab-label {
+	width: 40px;
+}
+
+ .mattablabelwrapper {
+	 width: 20px;
+} */
+
+.mat-tab-labels, .mat-tab-label, .mat-tab-link {
+	color: #155c72;
+	font-size: 90%;
+	min-width: 100px;
+  }
+
+/* .mat-tab-label-container {
+	max-width: 100px !important;
+} */
+
+.buy-box .mat-ripple-element {
+	background: transparent !important;
+}
+
+
+.mat-tab-header {
+	border-bottom: none;
+	margin-bottom: 20px;
+	margin-left: -40px;
+	font-size: 120%;
+	margin-top: -100px;
+}
+.mat-tab-label {
+	min-width: 100px !important;
+	padding: 0px !important;
+} 
+
+.mat-tab-label:active {
+	background-color: transparent;
+}
+  
+  .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+	background: #155c72;
+	/* color: #155c72; */
+	height: 2px; 
+  }
 
 .agreed {
 	font-weight: 500;
@@ -221,12 +279,27 @@ h2 {
 	margin-left: 7px;
 	font-weight: 400;
 }
+.buy-sell-selector {
+	margin-left: 120px;
+	height: 50px;
+	margin-top: -160px
+}
+
+.buy-sell-button {
+	background-color: #155c72;
+	color: #fff;
+}
+
+
+/* .mat-tab-label-active{
+	background-color: #155c72b7;
+ } */
 
 .buy-box {
 	width: 250px;
 	margin-left: 40px;
 	height: 400px;
-	margin-top: -90px;
+	margin-top: 0px;
 }
 
 .buy-box-top {
@@ -458,6 +531,11 @@ mat-form-field.mat-form-field {
 
 	body .buy-box {
 		font-size: 17px;
+	}
+
+	.buy-sell-selector {
+		margin-left: 85px;
+		margin-bottom: 10px;
 	}
 
 	.buy-box {

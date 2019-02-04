@@ -15,7 +15,9 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatSnackBarModule,
-  MatCheckboxModule
+  MatTabsModule,
+  MatCheckboxModule,
+  MatMenuModule
 } from '@angular/material';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -33,9 +35,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     MatOptionModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatTabsModule,
     RouterModule,
     UtilModule
   ],

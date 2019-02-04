@@ -32,11 +32,13 @@ contract ShareDispenser is Ownable, Pausable {
     // Definition of constants e.g. prices etc. Buy and sell always refer to the end-user view.
     // 10000 basis points = 100%
 
-    uint256 public usageFeeBSP  = 0;   // In basis points.
+    uint256 public usageFeeBSP  = 0;   // In basis points. 0 = no usage fee
+    uint256 public spreadBSP = 10000;      // In basis points. 95000 = 5% spread
 
     uint256 public minPriceInXCHF = 6*10**18;
     uint256 public maxPriceInXCHF = 8*10**18;
     uint256 public initialNumberOfShares = 10000;
+    
 
     // Getters for ERC20 balances
 
@@ -77,21 +79,7 @@ contract ShareDispenser is Ownable, Pausable {
     }
 
     function getCumulatedBuyBackPrice(uint256 amount, uint256 supply) public view returns (uint256){
-        return getCumulatedPrice(amount, supply+amount); // For symmetry reasons
-    }
-
-    // Setters for contract addresses
-
-    function setXCHFContractAddress(address newXCHFContractAddress) public onlyOwner() {
-        require(newXCHFContractAddress != 0x0000000000000000000000000000000000000000, "XCHF does not reside at address 0x");
-        XCHFContractAddress = newXCHFContractAddress;
-        emit XCHFContractAddressSet(XCHFContractAddress);
-    }
-
-    function setALEQContractAddress(address newALEQContractAddress) public onlyOwner() {
-        require(newALEQContractAddress != 0x0000000000000000000000000000000000000000, "ALEQ does not reside at address 0x");
-        ALEQContractAddress = newALEQContractAddress;
-        emit ALEQContractAddressSet(ALEQContractAddress);
+        return getCumulatedPrice(amount, supply+amount).mul(spreadBSP).div(10000); // For symmetry reasons
     }
 
     // Function for buying shares
@@ -164,15 +152,74 @@ contract ShareDispenser is Ownable, Pausable {
         return true;
     }
 
+
+    // Setters for addresses
+
+    function setXCHFContractAddress(address newXCHFContractAddress) public onlyOwner() {
+        require(newXCHFContractAddress != 0x0000000000000000000000000000000000000000, "XCHF does not reside at address 0x");
+        XCHFContractAddress = newXCHFContractAddress;
+        emit XCHFContractAddressSet(XCHFContractAddress);
+    }
+
+    function setALEQContractAddress(address newALEQContractAddress) public onlyOwner() {
+        require(newALEQContractAddress != 0x0000000000000000000000000000000000000000, "ALEQ does not reside at address 0x");
+        ALEQContractAddress = newALEQContractAddress;
+        emit ALEQContractAddressSet(ALEQContractAddress);
+    }
+
+    function setUsageFeeAddress(address newUsageFeeAddress) public onlyOwner() {
+        require(newUsageFeeAddress != 0x0000000000000000000000000000000000000000, "ALEQ does not reside at address 0x");
+        usageFeeAddress = newUsageFeeAddress;
+        emit UsageFeeAddressSet(usageFeeAddress);
+    }
+
+    function setUsageFee(uint256 newUsageFeeInBSP) public onlyOwner() {
+        require(newUsageFeeInBSP <= 10000, "Usage fee must be given in basis points");
+        usageFeeBSP = newUsageFeeInBSP;
+        emit UsageFeeSet(usageFeeBSP);
+    }
+
+    function setSpread(uint256 newSpreadInBSP) public onlyOwner() {
+        require(newSpreadInBSP <= 10000, "Spread must be given in basis points");
+        spreadBSP = newSpreadInBSP;
+        emit SpreadSet(spreadBSP);
+    }
+
+    function setminPriceInXCHF(uint256 newMinPriceInRappen) public onlyOwner() {
+        require(newMinPriceInRappen > 0, "Price must be positive number");
+        minPriceInXCHF = newMinPriceInRappen.mul(10**16);
+        emit MinPriceSet(minPriceInXCHF);
+    }
+
+    function setmaxPriceInXCHF(uint256 newMaxPriceInRappen) public onlyOwner() {
+        require(newMaxPriceInRappen > 0, "Price must be positive number");
+        maxPriceInXCHF = newMaxPriceInRappen.mul(10**16);
+        emit MaxPriceSet(maxPriceInXCHF);
+    }
+
+    function setInitialNumberOfShares(uint256 newInitialNumberOfShares) public onlyOwner() {
+        require(newInitialNumberOfShares > 0, "Initial number of shares must be positive");
+        initialNumberOfShares = newInitialNumberOfShares;
+        emit InitialNumberOfSharesSet(initialNumberOfShares);
+    }
+
     // Events 
 
     event XCHFContractAddressSet(address newXCHFContractAddress);
     event ALEQContractAddressSet(address newALEQContractAddress);
+    event UsageFeeAddressSet(address newUsageFeeAddress);
 
     event SharesPurchased(address indexed buyer, uint256 amount);
     event SharesSold(address indexed seller, uint256 amount);
     
     event TokensRetrieved(address contractAddress, address to, uint256 amount);
+
+    event UsageFeeSet(uint256 usageFee);
+    event SpreadSet(uint256 spread);
+    event MinPriceSet(uint256 minPrice);
+    event MaxPriceSet(uint256 maxPrice);
+    event InitialNumberOfSharesSet(uint256 initialNumberOfShares);
+
 
 
     // Helper functions

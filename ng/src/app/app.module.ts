@@ -14,7 +14,8 @@ import {
   MatInputModule,
   MatDividerModule,
   MatToolbarModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatMenuModule
 } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -37,6 +38,7 @@ import { LearnMoreComponent } from './learn-more/learn-more.component';
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     MatDividerModule,
     MatToolbarModule,
     BrowserModule,

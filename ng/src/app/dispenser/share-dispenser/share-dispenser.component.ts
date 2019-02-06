@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Web3Service } from '../../util/web3.service';
+import { DispenserService } from '../../util/dispenser.service';
 import { MatSnackBar } from '@angular/material';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule, MatMenuModule } from '@angular/material';
@@ -47,9 +48,12 @@ export class ShareDispenserComponent implements OnInit {
 
   SD: any;
   XCHF: any;
-  constructor(private web3Service: Web3Service, private matSnackBar: MatSnackBar, private matDividerModule: MatDividerModule) {
-    // console.log('Constructor: ' + web3Service);
-  }
+  constructor(
+    private web3Service: Web3Service, 
+    private dispenserService: DispenserService, 
+    private matSnackBar: MatSnackBar, 
+    private matDividerModule: MatDividerModule
+    ) {}
 
   ngOnInit(): void {
     // console.log('OnInit: ' + this.web3Service);
@@ -64,32 +68,32 @@ export class ShareDispenserComponent implements OnInit {
   }
 
   watchAccount() {
-    this.web3Service.accountsObservable.subscribe((accounts) => {
+    this.dispenserService.accountsObservable.subscribe((accounts) => {
       this.accounts = accounts;
       this.account = accounts[0];
     });
 
-    this.web3Service.XCHFBalanceObservable.subscribe((bal) => {
+    this.dispenserService.XCHFBalanceObservable.subscribe((bal) => {
       this.XCHFBalance = Math.round(bal);
     });
 
-    this.web3Service.ALEQBalanceObservable.subscribe((bal) => {
+    this.dispenserService.ALEQBalanceObservable.subscribe((bal) => {
       this.ALEQBalance = bal;
     });
 
-    this.web3Service.ALEQAvailableObservable.subscribe((available) => {
+    this.dispenserService.ALEQAvailableObservable.subscribe((available) => {
       this.ALEQAvailable = available;
     });
 
-    this.web3Service.ALEQTotalObservable.subscribe((total) => {
+    this.dispenserService.ALEQTotalObservable.subscribe((total) => {
       this.ALEQTotal = total;
     });
 
-    this.web3Service.SharePriceObservable.subscribe((sp) => {
+    this.dispenserService.SharePriceObservable.subscribe((sp) => {
       this.pricePerShare = sp;
     });
 
-    this.web3Service.MaxCanBuyObservable.subscribe((total) => {
+    this.dispenserService.MaxCanBuyObservable.subscribe((total) => {
       this.maxCanBuy = parseInt(total.toString(10), 10);
       if (this.ALEQAvailable < this.maxCanBuy) {
         this.maxCanBuy = this.ALEQAvailable;
@@ -99,7 +103,7 @@ export class ShareDispenserComponent implements OnInit {
       }
     });
 
-    this.web3Service.SharePriceObservable.subscribe((sp) => {
+    this.dispenserService.SharePriceObservable.subscribe((sp) => {
       this.pricePerShare = sp;
       this.totalPrice = sp * this.numberOfSharesToBuy;
     });
@@ -152,7 +156,7 @@ export class ShareDispenserComponent implements OnInit {
         await delay(4000);
 
         await SDInstance.buyShares.sendTransaction(this.numberOfSharesToBuy, { from: this.account });
-        this.web3Service.balanceRefresh();
+        this.dispenserService.balanceRefresh();
         this.web3Service.setStatus('The transfer suceeded, welcome as a shareholder at Alethena!');
 
         await delay(6000);

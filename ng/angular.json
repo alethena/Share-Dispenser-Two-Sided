@@ -25,7 +25,8 @@
             "styles": [
               "src/vendors/css/Grid.css",
               "src/vendors/css/ionicons.min.css",
-              "src/styles.css"
+              "src/styles.scss",
+              "src/material-style.scss"
             ],
             "scripts": []
           },

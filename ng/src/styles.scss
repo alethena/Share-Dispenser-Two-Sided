@@ -1,0 +1,206 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/*------------------------------*/
+/* COLORS */
+/* blue/green: #155c72,   dark grey: rgb(89, 91, 97) */
+/*------------------------------*/
+
+
+/*------------------------------*/
+/* GLOBAL */
+/*------------------------------*/
+
+html,
+body {
+	background-color: #fff;
+	color: #333;
+	font-family: 'Roboto', 'Arial', sans-serif;
+	font-weight: 300;
+	font-size: 17px;
+	text-rendering: optimizeLegibility;
+	width: 100vw;
+	height: 100%;
+	padding-block-end: 0;
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
+	scroll-behavior: smooth;
+}
+
+a {
+	text-decoration: none;
+	color: #155c72;
+	font-weight: 400;
+}
+
+a:hover {
+	color: #155c72a4;
+}
+
+
+
+
+.bg-img-2 {
+	height: 100%;
+	min-height: 100vh;
+	background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/hero.png);
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+}
+
+.row {
+	max-width: 1140px;
+	margin: 0 auto 0 auto;
+}
+
+/*------------------------------*/
+/* FIXES ETC. */
+/*------------------------------*/
+
+.clearfix {
+	zoom: 1;
+}
+
+.clearfix:after {
+	content: '.';
+	clear: both;
+	display: table;
+	height: 0;
+	visibility: hidden;
+}
+
+
+
+
+/*------------------------------*/
+/* MAIN BOX */
+/*------------------------------*/
+
+
+
+.main-left {
+	line-height: 160%;
+	text-align: justify;
+}
+
+/*------------------------------*/
+/* Headings */
+/*------------------------------*/
+
+h1,
+h2,
+h3 {
+	font-weight: 300;
+	color: #333;
+	font-family: "Saira Semi Condensed";
+}
+
+h1 {
+	font-size: 400%;
+	margin-block-start: 0px;
+	margin-block-end: 2px;
+	margin-inline-start: 2px;
+	margin-inline-end: 2px;
+	margin-top: 80px;
+	margin-left: 0px;
+	margin-bottom: 80px;
+}
+
+h2 {
+	font-size: 170%;
+}
+
+
+
+
+
+/*  GROUPING  ============================================================================= */
+
+.row {
+	zoom: 1;
+	/* For IE 6/7 (trigger hasLayout) */
+}
+
+.row:before,
+.row:after {
+	content: "";
+	display: table;
+}
+
+.row:after {
+	clear: both;
+}
+
+/*  GRID COLUMN SETUP   ==================================================================== */
+
+.col {
+	display: block;
+	float: left;
+	margin: 0%;
+}
+
+.col:first-child {
+	margin-left: 0;
+}
+
+/* all browsers except IE6 and lower */
+
+
+/*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
+
+@media only screen and (max-width: 480px) {
+	.col {
+		/*margin: 1% 0 1% 0%;*/
+		margin: 0;
+	}
+}
+
+
+/*  GRID OF TWO   ============================================================================= */
+
+
+.span-2-of-2 {
+	width: 100%;
+}
+
+.span-1-of-2 {
+	width: 49.2%;
+}
+
+/*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
+
+@media only screen and (max-width: 480px) {
+	.span-2-of-2 {
+		width: 100%;
+	}
+
+	.span-1-of-2 {
+		width: 100%;
+	}
+}
+
+
+/*  GRID OF THREE   ============================================================================= */
+
+
+/* 1 */
+
+
+/*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
+
+@media only screen and (max-width: 480px) {
+	.span-3-of-3 {
+		width: 100%;
+	}
+
+	.span-2-of-3 {
+		width: 100%;
+	}
+
+	.span-1-of-3 {
+		width: 100%;
+	}
+}
+

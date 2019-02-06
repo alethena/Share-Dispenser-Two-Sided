@@ -1,0 +1,8 @@
+.bg-img {
+	height: 100%;
+	min-height: 100vh;
+	background-image: linear-gradient(rgba(256, 256, 256, 0.7), rgba(256, 256, 256, 0.9), rgba(256, 256, 256, 0.95)), url(../resources/css/img/hero.png);
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+}

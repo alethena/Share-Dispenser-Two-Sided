@@ -15,12 +15,16 @@ import {
   MatDividerModule,
   MatToolbarModule,
   MatCheckboxModule,
-  MatMenuModule
+  MatMenuModule,
+  MatTabsModule
 } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { MainBoxComponent } from './main-box/main-box.component';
 import { LearnMoreComponent } from './learn-more/learn-more.component';
+import { FirstPageLeftComponent } from './first-page-left/first-page-left.component';
+import { FirstPageRightComponent } from './first-page-right/first-page-right.component';
+import { DispenserComponent } from './first-page-right/dispenser/dispenser.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +32,11 @@ import { LearnMoreComponent } from './learn-more/learn-more.component';
     HeaderComponent,
     FooterComponent,
     MainBoxComponent,
-    LearnMoreComponent
-  ],
+    LearnMoreComponent,
+    FirstPageLeftComponent,
+    FirstPageRightComponent,
+    DispenserComponent
+    ],
   imports: [
     BrowserAnimationsModule,
     CommonModule,
@@ -41,6 +48,7 @@ import { LearnMoreComponent } from './learn-more/learn-more.component';
     MatMenuModule,
     MatDividerModule,
     MatToolbarModule,
+    MatTabsModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

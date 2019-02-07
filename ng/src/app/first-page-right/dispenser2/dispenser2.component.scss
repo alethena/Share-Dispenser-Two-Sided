@@ -1,0 +1,80 @@
+.dispenser-container {
+    width: 280px;
+    margin: 0px auto;
+    // background-attachment: fixed;
+    // background-color: #155c7209;
+    border-radius: 14px;
+    padding: 10px;
+}
+
+.average-price {
+  font-family: Saira Semi Condensed;
+  text-align: center;
+  height: 100px;
+  background-color: #155c72c4;
+  color: #fff;
+  font-weight: 200;
+  border-radius: 10px;
+  margin: 10px;
+
+  .price {
+    margin: -5px 0px;
+    font-size: 270%;
+
+  }
+  .desc {
+    padding-top: 5px;
+  }
+}
+
+.middle-info {
+  font-size: 90%;
+  padding: 0px;
+  line-height: 60% !important;
+  height: 160px;
+  background-color: #155c721e;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.total-price {
+  font-size: 300%;
+  font-family: Saira Semi Condensed;
+  text-align: center;
+  height: 100px;
+  background-color: #155c729d;
+  color: #fff;
+  font-weight: 200;
+  border-radius: 0px 0px 10px 10px;
+
+  p {
+    padding: 15px 0px;
+    margin: 0px;
+  }
+}
+
+.buy-now {
+  font-size: 200%;
+  font-family: Saira Semi Condensed;
+  text-align: center;
+  background-color: #155c72;
+  color: #fff;
+  font-weight: 300;
+  border-radius: 10px;
+  margin: 10px auto;
+  width: 70%;
+
+  // p {
+  //   padding: 15px 0px;
+  //   margin: 0px;
+  // }
+}
+
+.buy-now:hover {
+  background-color: #155c72;
+}
+
+.number-selector {
+  font-size: 120%;
+  margin: 10px;
+}

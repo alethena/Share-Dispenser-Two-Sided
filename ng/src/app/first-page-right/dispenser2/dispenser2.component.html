@@ -1,0 +1,84 @@
+<!-- <button mat-raised-button (click)="openDialog()">Buy now</button> -->
+
+<mat-tab-group mat-align-tabs="center">
+  <mat-tab label="Buy" class="tab-label">
+
+
+    <div class="dispenser-container">
+        <div class="average-price">
+          <div class="desc">Total Price</div>
+          <div class="price">6 CHF</div>
+        </div>
+        <div class="number-selector">
+          <mat-form-field>
+            <input matInput type="number" placeholder="Number of shares to buy" value=994226 readonly=false>
+          </mat-form-field>
+          <!-- <mat-card>
+          <mat-list>
+            <mat-list-item>Total shares issued: 1000000 </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>Shares available now: 9097</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>Your XCHF balance: 32000</mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>Your ALEQ balance: 540</mat-list-item>
+          </mat-list>
+        </mat-card> -->
+        </div>
+<button mat-raised-button color="primary" (click)="openDialog()">Buy now</button>  
+
+
+      <!-- <div class="buy-now" (click)="openDialog()">
+        <p>Buy Now</p>
+      </div> -->
+      <!-- <div class="middle-info"> -->
+
+      <!-- <div class="row-buy-box">
+              <div class="col span-4-of-7">Total shares issued: </div>
+              <div class="col span-3-of-7">{{ ALEQTotal }}</div>
+            </div>
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Shares available now: </div>
+              <div class="col span-3-of-7">{{ ALEQAvailable }}</div>
+            </div>
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Your XCHF balance: </div>
+              <div class="col span-3-of-7">{{ XCHFBalance }}</div>
+            </div>
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Your ALEQ balance: </div>
+              <div class="col span-3-of-7">{{ ALEQBalance }}</div>
+            </div> -->
+      <!-- <mat-slider [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
+          </mat-slider> -->
+      <!-- </div> -->
+
+
+    </div>
+
+  </mat-tab>
+
+
+
+  <mat-tab label="Sell">
+    <mat-card class="result">
+      <mat-card-content>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+
+</mat-tab-group>
+
+<!-- 
+<mat-card>
+  <mat-card-content>
+    <form>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Your XCHF balance" value=994226 readonly=true>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Your ALEQ balance" value=350 readonly=true>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card> -->

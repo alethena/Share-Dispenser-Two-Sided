@@ -10,24 +10,141 @@
     </mat-menu>
 </div> -->
 
+
+
+
+
+
 <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Buy" class="tab-label">
- 
-    </mat-tab>
-    <mat-tab label="Sell">
-     
-    </mat-tab>
-  </mat-tab-group>
-  
-  
+
+
+  <mat-tab label="Buy" class="tab-label">
+    <mat-card>
+
+      <mat-card-actions>
+        <mat-slider class="example-margin" [disabled]="false" [invert]="false" [max]="200" [min]="20" [step]="1"
+          [thumbLabel]="true" [tickInterval]="false" [vertical]="false" [(ngModel)]="userInput" name="Slider">
+
+        </mat-slider>
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Amount to buy" [(ngModel)]="userInput" name="TextInput">
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Average Price / Share" value=6 readonly=true>
+            <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">help_outline</mat-icon>
+          </mat-form-field>
+
+        </form>
+        <mat-form-field class="example-full-width">
+          <input matInput type="number" placeholder="Total Price" value=120 readonly=true>
+        </mat-form-field>
+        <button mat-flat-button color="primary">Buy Shares</button>
+
+      </mat-card-actions>
+    </mat-card>
+    <mat-card class="basic-info">
+      <mat-card-content>
+
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Total shares issued" value=100000 readonly=true>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Shares available now" value=9197 readonly=true>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Your XCHF balance" value=994226 readonly=true>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Your ALEQ balance" value=350 readonly=true>
+          </mat-form-field>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+
+
+
+  <mat-tab label="Sell">
+      <div class="buy-box">
+
+          <button type="button" class="buy-box-top" disabled="true">
+            <p class="total-price">Price per Share <br> <span> {{ pricePerShare }} CHF </span></p>
+          </button>
+    
+          <div class="buy-box-middle">
+            <div class="container-no-shares">
+    
+              <mat-card class="result">
+                <mat-card-content>
+                  <mat-form-field class="no-shares-input">
+                    <input type="number" matInput id="amount" placeholder="Number of shares to buy" [(ngModel)]="numberOfSharesToBuy"
+                      min="20" max="{{ ALEQAvailable }}">
+                  </mat-form-field>
+    
+                  <!-- <mat-slider
+                              class="example-margin"
+                              [disabled]="disabled"
+                              [invert]="invert"
+                              [max]="max"
+                              [min]="min"
+                              [step]="step"
+                              [thumbLabel]="thumbLabel"
+                              [tickInterval]="tickInterval"
+                              [(ngModel)]="value"
+                              [vertical]="vertical">
+                          </mat-slider> -->
+    
+                  <mat-slider [max]="maxCanBuy" [min]=20 [(ngModel)]="numberOfSharesToBuy"
+                  [step]=1
+                  [thumbLabel]="true"></mat-slider>
+                </mat-card-content>
+              </mat-card>
+    
+            </div>
+    
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Total shares issued: </div>
+              <div class="col span-3-of-7">{{ ALEQTotal }}</div>
+            </div>
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Available for buyback: </div>
+              <div class="col span-3-of-7">{{ ALEQAvailable }}</div>
+            </div>
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Your XCHF balance: </div>
+              <div class="col span-3-of-7">{{ XCHFBalance }}</div>
+            </div>
+            <div class="row-buy-box">
+              <div class="col span-4-of-7">Your ALEQ balance: </div>
+              <div class="col span-3-of-7">{{ ALEQBalance }}</div>
+            </div>
+          </div>
+          <!-- <div class="buy-box-bottom">
+                
+              </div> -->
+    
+          <button type="button" class="buy-box-bottom" (click)="buyShares()">
+            <p class="total-price">Buy now for <br><span>{{ totalPrice }} CHF </span></p>
+          </button>
+    
+        </div>
+    
+
+  </mat-tab>
+</mat-tab-group>
+
+
 <!--   
   <div class="AGB-container">
     <div class="agreed">
       <label>I have read and agree to Equility AG's:</label>
     </div> -->
 
-  
-    <!-- <div class="checkbox">
+
+<!-- <div class="checkbox">
       <mat-checkbox [(ngModel)]="shareTokenTerms">
         <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
           Share Token Terms
@@ -51,5 +168,38 @@
         </a></mat-checkbox>
   
     </div> -->
-  
-  <!-- </div> -->
+
+<!-- </div> -->
+
+<!-- <div class="box">
+  <table mat-table [dataSource]="dataSource"> -->
+
+<!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+<!-- Position Column -->
+<!-- <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container> -->
+
+<!-- Name Column -->
+<!-- <ng-container matColumnDef="name">
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container> -->
+
+<!-- Symbol Column -->
+<!-- <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef> Symbol </th>
+      <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+    </ng-container> -->
+
+<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+<!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput type="number" placeholder="Amount to buy" value=200 readonly=true>
+    </mat-form-field>
+  </form>
+</div> -->

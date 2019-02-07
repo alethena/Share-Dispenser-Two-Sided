@@ -72,7 +72,58 @@ a:hover {
 }
 
 
+/*------------------------------*/
+/* OVERRIDE MATERIAL SETTINGS */
+/*------------------------------*/
 
+.mat-tab-label,
+.mat-ripple,
+.mat-tab-label-active,
+.ng-star-inserted {
+	min-width: 100px !important;
+}
+
+.mat-tab-label-container {
+	margin-bottom: 15px;
+}
+
+.mat-tab-header {
+	border-bottom: none !important;
+}
+
+.mat-card {
+	padding: 0px auto;
+	// background-color: #155c720c !important;
+}
+
+.mat-form-field {
+	width: 100%;
+	font-size: 120% !important;
+}
+
+.mat-list-item-content {
+	padding: 0px !important;
+}
+
+// .mat-list, mat-list-base {
+// 	padding: 0px;
+// 	margin-: 0px ;
+// }
+
+
+
+// .mat-form-field-infix {
+// 	border-top: 0px !important;
+// }
+// .basic-info,
+// .mat-card,
+// .ng-star-inserted {
+//     margin: 0px !important;
+// }
+
+// .mat-form-field {
+// 	margin: 0px auto !important;
+// }
 
 /*------------------------------*/
 /* MAIN BOX */
@@ -103,9 +154,9 @@ h1 {
 	margin-block-end: 2px;
 	margin-inline-start: 2px;
 	margin-inline-end: 2px;
-	margin-top: 80px;
+	margin-top: 40px;
 	margin-left: 0px;
-	margin-bottom: 80px;
+	margin-bottom: 40px;
 }
 
 h2 {

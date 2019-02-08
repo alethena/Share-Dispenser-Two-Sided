@@ -1,5 +1,5 @@
 .dispenser-container {
-    width: 280px;
+    width: 240px;
     margin: 0px auto;
     // background-attachment: fixed;
     // background-color: #155c7209;
@@ -10,8 +10,8 @@
 .average-price {
   font-family: Saira Semi Condensed;
   text-align: center;
-  height: 100px;
-  background-color: #155c72c4;
+  height: 90px;
+  background-color: #155c72;
   color: #fff;
   font-weight: 200;
   border-radius: 10px;
@@ -19,7 +19,7 @@
 
   .price {
     margin: -5px 0px;
-    font-size: 270%;
+    font-size: 240%;
 
   }
   .desc {
@@ -54,20 +54,21 @@
 }
 
 .buy-now {
-  font-size: 200%;
+  font-size: 140%;
   font-family: Saira Semi Condensed;
   text-align: center;
-  background-color: #155c72;
+  background-color: #155c729c;
   color: #fff;
   font-weight: 300;
   border-radius: 10px;
   margin: 10px auto;
-  width: 70%;
+  height: 55px;
+  width: 180px;
 
-  // p {
-  //   padding: 15px 0px;
-  //   margin: 0px;
-  // }
+  p {
+    padding: 10px 0px;
+    margin: 0px;
+  }
 }
 
 .buy-now:hover {
@@ -76,5 +77,16 @@
 
 .number-selector {
   font-size: 120%;
-  margin: 10px;
+  margin: 10px auto;
+  width: 90%;
+}
+
+.buy-button-container{
+  width: 30%;
+  margin: 0px auto;
+}
+
+.icon-tooltip {
+  position: absolute;
+  right: 0px;
 }

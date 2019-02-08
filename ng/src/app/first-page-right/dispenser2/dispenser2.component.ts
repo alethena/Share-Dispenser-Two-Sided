@@ -57,8 +57,6 @@ export class DialogComponent {
   async buyShares() {
     this.buyPopup2 = false;
     this.MMPopup = true;
-    
-
 
     // } else if (Number(this.numberOfSharesToBuy.toString(10)) < 20 || Number(this.numberOfSharesToBuy.toString(10)) > Number(this.ALEQAvailable.toString())) {
 
@@ -134,8 +132,8 @@ export class Dispenser2Component implements OnInit {
   account: string;
 
   totalPrice = 0;
-  pricePerShare = 0;
-  numberOfSharesToBuy = 0;
+  public pricePerShare = 0;
+  numberOfSharesToBuy = 20;
   numberOfSharesToSell = 0;
   XCHFBalance = 0;
   ALEQBalance = 0;
@@ -157,7 +155,7 @@ export class Dispenser2Component implements OnInit {
   openDialog() {
     this.checkbox = false;
     this.dialog.open(DialogComponent, { disableClose : true,
-      data: { address: '0xaF897e6DEE7d36130a3103D0E9B2299b5199F338', amount: this.numberOfSharesToBuy }
+      data: { address: this.account, amount: this.numberOfSharesToBuy }
     });
   }
 
@@ -182,17 +180,17 @@ export class Dispenser2Component implements OnInit {
     //   this.ALEQBalance = bal;
     // });
 
-    // this.dispenserService.ALEQAvailableObservable.subscribe((available) => {
-    //   this.ALEQAvailable = available;
-    // });
+    this.dispenserService.ALEQAvailableObservable.subscribe((available) => {
+      this.ALEQAvailable = Number(available.toString());
+    });
 
-    // this.dispenserService.ALEQTotalObservable.subscribe((total) => {
-    //   this.ALEQTotal = total;
-    // });
+    this.dispenserService.ALEQTotalObservable.subscribe((total) => {
+      this.ALEQTotal = Number(total.toString());
+    });
 
-    // this.dispenserService.SharePriceObservable.subscribe((sp) => {
-    //   this.pricePerShare = sp;
-    // });
+    this.dispenserService.SharePriceObservable.subscribe((sp) => {
+      this.pricePerShare = Number(sp.toString());
+    });
 
     // this.dispenserService.MaxCanBuyObservable.subscribe((total) => {
     //   this.maxCanBuy = parseInt(total.toString(10), 10);

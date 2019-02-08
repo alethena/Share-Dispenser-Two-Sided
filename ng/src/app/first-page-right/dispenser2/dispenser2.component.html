@@ -5,15 +5,42 @@
 
 
     <div class="dispenser-container">
-        <div class="average-price">
-          <div class="desc">Total Price</div>
-          <div class="price">6 CHF</div>
-        </div>
-        <div class="number-selector">
-          <mat-form-field>
-            <input matInput type="number" placeholder="Number of shares to buy" value=994226 readonly=false>
-          </mat-form-field>
-          <!-- <mat-card>
+      <!-- <mat-slider [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
+      </mat-slider> -->
+      <div class="average-price">
+        <div class="desc">Total Price</div>
+        <div class="price">1200 CHF</div>
+      </div>
+      <div class="number-selector">
+
+        <mat-form-field>
+          <input matInput type="number" placeholder="Number of shares to buy" [(ngModel)]="numberOfSharesToBuy"
+            readonly=false
+            [max]=500 [min]=20>
+            
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="number" placeholder="Average price / Share" [ngModel]="pricePerShare" readonly=true>
+          <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">help_outline</mat-icon>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Total Shares Issued" [ngModel]="ALEQTotal" readonly=true>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Shares available now" [ngModel]="ALEQAvailable" readonly=true>
+        </mat-form-field>
+
+      </div>
+      <!-- <div class="buy-button-container">
+        <button mat-raised-button color="primary" (click)="openDialog()">Buy now</button>
+      </div> -->
+      <div class="buy-now" (click)="openDialog()">
+        <p>Buy Now</p>
+      </div>
+
+      <!-- 
+      <mat-card>
           <mat-list>
             <mat-list-item>Total shares issued: 1000000 </mat-list-item>
             <mat-divider></mat-divider>
@@ -24,9 +51,6 @@
             <mat-list-item>Your ALEQ balance: 540</mat-list-item>
           </mat-list>
         </mat-card> -->
-        </div>
-<button mat-raised-button color="primary" (click)="openDialog()">Buy now</button>  
-
 
       <!-- <div class="buy-now" (click)="openDialog()">
         <p>Buy Now</p>

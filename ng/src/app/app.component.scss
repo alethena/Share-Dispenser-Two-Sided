@@ -1,7 +1,10 @@
 .bg-img {
 	height: 100%;
 	min-height: 100vh;
-	background-image: linear-gradient(rgba(256, 256, 256, 0.7), rgba(256, 256, 256, 0.9), rgba(256, 256, 256, 0.95)), url(../resources/css/img/hero.png);
+	// background-image: linear-gradient(rgba(256, 256, 256, 0.7), rgba(256, 256, 256, 0.9), rgba(256, 256, 256, 0.95)), url(../resources/css/img/hero.png);
+	background-image: linear-gradient(#ffffff, #fffffff5, #e7f9fff6), url(../resources/css/img/adventure-alps-altitude-1726970.jpg);
+
+	
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;

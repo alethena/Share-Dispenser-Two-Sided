@@ -34,6 +34,7 @@ import { FirstPageRightComponent } from './first-page-right/first-page-right.com
 import { DispenserComponent } from './first-page-right/dispenser/dispenser.component';
 import { Dispenser2Component } from './first-page-right/dispenser2/dispenser2.component';
 import { DialogComponent } from './first-page-right/dispenser2/dispenser2.component';
+import { Footer2Component } from './footer2/footer2.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { DialogComponent } from './first-page-right/dispenser2/dispenser2.compon
     FirstPageRightComponent,
     DispenserComponent,
     Dispenser2Component,
-    DialogComponent
+    DialogComponent,
+    Footer2Component
   ],
   entryComponents: [DialogComponent],
   imports: [

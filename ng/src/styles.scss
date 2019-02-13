@@ -26,6 +26,8 @@ body {
 	margin: 0;
 	padding: 0;
 	scroll-behavior: smooth;
+	position:relative;
+
 }
 
 a {
@@ -42,19 +44,23 @@ a:hover {
 
 
 .bg-img-2 {
-	height: 100%;
-	min-height: 100vh;
+	min-height: 100%;
 	// background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/hero.png);
-	background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
+	background-image: linear-gradient(#155c72f1, #155c72ec, #155c724f), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
+	// background-image: linear-gradient(#12546af5, #12546ace, #12546a80), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
+
+
 	
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
+	padding: 2px;
 }
 
 .row {
 	max-width: 1140px;
-	margin: 0 auto 0 auto;
+	margin: 0 auto;
+	padding: 0 10px;
 }
 
 /*------------------------------*/
@@ -93,10 +99,7 @@ a:hover {
 	border-bottom: none !important;
 }
 
-.mat-card {
-	padding: 0px auto;
-	// background-color: #155c720c !important;
-}
+
 
 .mat-form-field {
 	width: 100%;
@@ -109,6 +112,20 @@ a:hover {
 
 .mat-slider-horizontal {
 	width: 100%;
+}
+
+.mat-form-field-wrapper {
+	padding-bottom: 14px !important;
+  }
+
+.mat-card-title {
+	margin-bottom: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.mat-card-actions {
+	margin: 0px !important;
+	padding: 0px !important;
 }
 // .mat-list, mat-list-base {
 // 	padding: 0px;
@@ -129,6 +146,44 @@ a:hover {
 // .mat-form-field {
 // 	margin: 0px auto !important;
 // }
+
+/*------------------------------*/
+/* MEDIA QUERIES */
+/*------------------------------*/
+
+@media only screen and (max-width: 1024px) {
+	html, body {
+		font-size: 16px;
+		h1 {
+			font-size: 280%;
+		}
+		h2 {
+			font-size: 160%;
+		}
+	}
+
+	
+}
+
+@media only screen and (max-width: 800px) {
+	html, body {
+		font-size: 15px;
+		h1 {
+			margin: 10px auto 30px auto;
+			font-size: 300%;
+			font-weight: 300;
+			line-height: 120%;
+		}
+		h2 {
+			margin: 0px;
+			font-weight: 400;
+			font-size: 140%;
+		}
+	}
+
+	
+}
+
 
 /*------------------------------*/
 /* MAIN BOX */
@@ -194,7 +249,7 @@ h2 {
 .col {
 	display: block;
 	float: left;
-	margin: 0%;
+	// margin: 0%;
 }
 
 .col:first-child {
@@ -210,6 +265,9 @@ h2 {
 	.col {
 		/*margin: 1% 0 1% 0%;*/
 		margin: 0;
+	}
+	.row {
+		padding: 10px;
 	}
 }
 

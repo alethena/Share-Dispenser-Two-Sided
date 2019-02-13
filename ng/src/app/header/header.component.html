@@ -1,13 +1,35 @@
 <header>
   <nav>
     <div class="row">
-      <a href="https://alethena.com"><img src="../../resources/img/Alethena_horizontal.png" alt="Alethena Logo" class="logo"></a> 
+      <a href="https://alethena.com"><img src="../../resources/img/Alethena_horizontal.png" alt="Alethena Logo"
+          class="logo"></a>
       <ul class="main-nav">
-        <li><a href="https://www.alethena.com/about/">About</a></li>
+        <li><a href="https://www.alethena.com/about/" target="_blank">About</a></li>
         <li><a href="#learn-more-section">How It Works</a></li>
         <li><a href="http://www.tokenized-shares.ch" target="_blank">Tokenize Your Shares</a></li>
         <li><a href="mailto:contact@alethena.com">Contact</a></li>
       </ul>
+      <div class="mobile-nav">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <span><a href="https://www.alethena.com/about/" target="_blank">About</a></span>
+          </button>
+          <button mat-menu-item disabled>
+            <span><a href="#learn-more-section">How It Works</a></span>
+          </button>
+          <button mat-menu-item>
+            <span><a href="http://www.tokenized-shares.ch" target="_blank">Tokenize Your Shares</a></span>
+          </button>
+          <button mat-menu-item>
+            <span><a href="mailto:contact@alethena.com">Contact</a></span>
+          </button>
+        </mat-menu>
+      </div>
+
     </div>
+
   </nav>
 </header>

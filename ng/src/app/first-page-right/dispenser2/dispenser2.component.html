@@ -1,28 +1,177 @@
 <!-- <button mat-raised-button (click)="openDialog()">Buy now</button> -->
+<div class="dispenser-container">
 
-<mat-tab-group mat-align-tabs="center">
-  <mat-tab label="Buy" class="tab-label">
+  <mat-tab-group mat-align-tabs="center">
+
+    <mat-tab label="Buy" class="tab-label">
+      <mat-card class="dispenser-card">
+
+        <mat-card-title class="total-price-title">
+
+          Total Price <br>
+          <span>CHF 1200</span>
+
+        </mat-card-title>
+        <mat-card-title class="number-selection-title">
+          <!-- Select Amount -->
+          <!-- <span>200</span> -->
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Average Price / Share" value=6 readonly=true>
+            <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
+              help_outline
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Shares available" value=12736 readonly=true>
+          </mat-form-field>
+
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Select amount" [(ngModel)]="numberOfSharesToBuy">
+          </mat-form-field>
+        </mat-card-title>
+
+        <!-- <mat-card-content class="total-price-price">1200
+        </mat-card-content> -->
+
+        <mat-card-actions>
+          <mat-slider class="slider" [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
+          </mat-slider>
+        </mat-card-actions>
 
 
-    <div class="dispenser-container">
-      <!-- <mat-slider [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
-      </mat-slider> -->
-      <div class="average-price">
-        <div class="desc">Total Price</div>
-        <div class="price">1200 CHF</div>
+      </mat-card>
+      <div class="buttons">
+        <button mat-raised-button class="buy-button" color=primary (click)="openDialog()">
+          Buy Now
+        </button>
+        <button class="more-button" mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <span><a href="https://www.alethena.com/about/" target="_blank">Check balance</a></span>
+          </button>
+          <button mat-menu-item disabled>
+            <span><a href="https://rinkeby.etherscan.io/address/0x60689d8040fc5abc60589b9b2d5bab1f6f9b803f#code"
+                target="_blank">Share Dispenser on Etherscan</a></span>
+          </button>
+          <button mat-menu-item disabled>
+            <span><a href="https://rinkeby.etherscan.io/address/0x18A4251cD23A4e235987a11d2d36C0138E95fA7c#code"
+                target="_blank">ALEQ on Etherscan</a></span>
+          </button>
+        </mat-menu>
       </div>
-      <div class="number-selector">
 
-        <mat-form-field>
-          <input matInput type="number" placeholder="Number of shares to buy" [(ngModel)]="numberOfSharesToBuy"
-            readonly=false
-            [max]=500 [min]=20>
-            
-        </mat-form-field>
+      <!-- <mat-card>
 
+        <div class="number-selector-2">
+          <mat-form-field>
+            <input matInput type="number" placeholder="Choose amount" color=primary [(ngModel)]="numberOfSharesToBuy"
+              readonly=false [max]=500 [min]=20>
+          </mat-form-field>
+          <mat-slider [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
+          </mat-slider>
+        </div>
+        <div class="average-price">
+          <div class="desc">Total Price</div>
+          <div class="price">1200 CHF</div>
+        </div>
+
+        <button mat-raised-button color=primary (click)="openDialog()">
+          
+      </mat-card>
+
+      
+
+    </div> -->
+
+    </mat-tab>
+
+
+
+    <mat-tab label="Sell">
+      <mat-card class="dispenser-card">
+
+        <mat-card-title class="total-price-title">
+
+          Buyback Price <br>
+          <span>CHF 120</span>
+
+        </mat-card-title>
+        <mat-card-title class="number-selection-title">
+          <!-- Select Amount -->
+          <!-- <span>200</span> -->
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Average Price / Share" value=6 readonly=true>
+            <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
+              help_outline
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Max buyback amount" value=3736 readonly=true>
+          </mat-form-field>
+
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Select amount" [(ngModel)]="numberOfSharesToBuy">
+          </mat-form-field>
+        </mat-card-title>
+
+        <!-- <mat-card-content class="total-price-price">1200
+            </mat-card-content> -->
+
+        <mat-card-actions>
+          <mat-slider class="slider" [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
+          </mat-slider>
+        </mat-card-actions>
+
+
+      </mat-card>
+      <div class="buttons">
+        <button mat-raised-button class="buy-button" color=primary (click)="openDialog()">
+          Sell Now
+        </button>
+        <button class="more-button" mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <span><a href="https://www.alethena.com/about/" target="_blank">Check balance</a></span>
+          </button>
+          <button mat-menu-item disabled>
+            <span><a href="https://rinkeby.etherscan.io/address/0x60689d8040fc5abc60589b9b2d5bab1f6f9b803f#code"
+                target="_blank">Share Dispenser on Etherscan</a></span>
+          </button>
+          <button mat-menu-item disabled>
+            <span><a href="https://rinkeby.etherscan.io/address/0x18A4251cD23A4e235987a11d2d36C0138E95fA7c#code"
+                target="_blank">ALEQ on Etherscan</a></span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>
+<!-- 
+<mat-card>
+  <mat-card-content>
+    <form>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Your XCHF balance" value=994226 readonly=true>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Your ALEQ balance" value=350 readonly=true>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card> -->
+
+
+<!-- <div class="number-selector">
         <mat-form-field>
           <input matInput type="number" placeholder="Average price / Share" [ngModel]="pricePerShare" readonly=true>
-          <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">help_outline</mat-icon>
+          <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
+            help_outline</mat-icon>
         </mat-form-field>
         <mat-form-field>
           <input matInput type="number" placeholder="Total Shares Issued" [ngModel]="ALEQTotal" readonly=true>
@@ -31,17 +180,14 @@
           <input matInput type="number" placeholder="Shares available now" [ngModel]="ALEQAvailable" readonly=true>
         </mat-form-field>
 
-      </div>
-      <!-- <div class="buy-button-container">
+      </div> -->
+<!-- <div class="buy-button-container">
         <button mat-raised-button color="primary" (click)="openDialog()">Buy now</button>
       </div> -->
-      <div class="buy-now" (click)="openDialog()">
-        <p>Buy Now</p>
-      </div>
 
-      <!-- 
-      <mat-card>
-          <mat-list>
+
+
+<!-- <mat-list>
             <mat-list-item>Total shares issued: 1000000 </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item>Shares available now: 9097</mat-list-item>
@@ -49,15 +195,14 @@
             <mat-list-item>Your XCHF balance: 32000</mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item>Your ALEQ balance: 540</mat-list-item>
-          </mat-list>
-        </mat-card> -->
+          </mat-list> -->
 
-      <!-- <div class="buy-now" (click)="openDialog()">
+<!-- <div class="buy-now" (click)="openDialog()">
         <p>Buy Now</p>
       </div> -->
-      <!-- <div class="middle-info"> -->
+<!-- <div class="middle-info"> -->
 
-      <!-- <div class="row-buy-box">
+<!-- <div class="row-buy-box">
               <div class="col span-4-of-7">Total shares issued: </div>
               <div class="col span-3-of-7">{{ ALEQTotal }}</div>
             </div>
@@ -73,36 +218,6 @@
               <div class="col span-4-of-7">Your ALEQ balance: </div>
               <div class="col span-3-of-7">{{ ALEQBalance }}</div>
             </div> -->
-      <!-- <mat-slider [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
+<!-- <mat-slider [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
           </mat-slider> -->
-      <!-- </div> -->
-
-
-    </div>
-
-  </mat-tab>
-
-
-
-  <mat-tab label="Sell">
-    <mat-card class="result">
-      <mat-card-content>
-      </mat-card-content>
-    </mat-card>
-  </mat-tab>
-
-</mat-tab-group>
-
-<!-- 
-<mat-card>
-  <mat-card-content>
-    <form>
-      <mat-form-field>
-        <input matInput type="number" placeholder="Your XCHF balance" value=994226 readonly=true>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="number" placeholder="Your ALEQ balance" value=350 readonly=true>
-      </mat-form-field>
-    </form>
-  </mat-card-content>
-</mat-card> -->
+<!-- </div> -->

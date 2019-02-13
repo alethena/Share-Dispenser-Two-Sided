@@ -14,12 +14,13 @@
                     target="_blank">
                     Privacy
                     Policy
-                </a>.
-            </mat-checkbox>
+                </a>. </mat-checkbox>
+            <br><br>
         </div>
         <div mat-dialog-actions>
             <button mat-raised-button color="primary" (click)="openBuyPopup()" [(disabled)]="!checkbox">I agree</button>
             <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
+
         </div>
 
 
@@ -30,11 +31,11 @@
         <h1 mat-dialog-title>Please read carefully</h1>
         <div mat-dialog-content>
             You will receive two MetaMask notification pop-ups. Click "confirm" and wait until the transactions are
-            completed. <br>
-            Depending on your MetaMask settings, this process can take up to a minute. If you are unsure at all, please
-            reach out
-            to <a href="mailto:contact@alethena.com">our team</a>. <br>
-            We are happy to help!
+            completed. <br><br>
+            Depending on your MetaMask settings, this process can take up to a minute. <br><br>
+            If you are unsure at all, please reach out
+            to <a href="mailto:contact@alethena.com">our team</a>. We are happy to help!
+            <br>
 
         </div>
 
@@ -51,8 +52,9 @@
             <mat-icon>local_cafe</mat-icon> Please be patient
         </h1>
         <div mat-dialog-content>
-            Transactions on the blockchain can take a while to process. Do not refresh the window. <br>
-            If you don't want to wait grab a cup of coffee - it will be through once you get back!
+            Transactions on the blockchain can take a while to process. <br><br>
+            <b>Do not refresh the window.</b>  <br><br>
+            If you don't want to wait, grab a cup of coffee - it will be through once you get back!
         </div>
         <!-- <div mat-dialog-actions>
             <mat-spinner>
@@ -64,17 +66,21 @@
     <div *ngIf="FirstSucceded">
         <h1 mat-dialog-title>Success!</h1>
         <div mat-dialog-content>
-            The first transaction succeeded. Please accept the second MetaMask pop-up. <br>
-            Again, wait until the transaction has completed, this will be the last step.
+            The first transaction succeeded. Please accept the second MetaMask pop-up. <br> <br>
+            Again, wait until the transaction has completed. You're almost done!
         </div>
     </div>
 
     <div *ngIf="SecondSucceded">
         <h1 mat-dialog-title>Thank you for becoming a shareholder!</h1>
         <div mat-dialog-content>
-            If you would like to register, you can do so at <a href="http://alethena.ledgy.com" target="_blank">Ledgy</a>.
+            To exercise your shareholder rights, please register in our 
+            shareholder registry at <a href="http://alethena.ledgy.com"
+                target="_blank">Ledgy</a>.
         </div>
         <div mat-dialog-actions>
+            <a mat-raised-button color="primary" href="http://alethena.ledgy.com"
+            target="_blank">Register</a>.
             <button mat-raised-button [mat-dialog-close]="true">Done</button>
         </div>
     </div>

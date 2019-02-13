@@ -4,3 +4,17 @@ p {
 	text-align: justify;
 	line-height: 170%;
 }
+
+button {
+	a {
+		color: #fff;
+	}
+}
+
+@media only screen and (max-width: 800px) {
+	.learn-more-button {
+		display: block;
+		margin: 0px auto;
+	}
+}
+

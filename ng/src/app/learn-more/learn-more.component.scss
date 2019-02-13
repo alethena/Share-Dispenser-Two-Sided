@@ -1,15 +1,11 @@
 .learn-more {
 	color: #fff;
-}
-
-.learn-more {
-	color: #fff;
-	padding-top: 40px;
 	line-height: 160%;
-	font-weight: 300;
-	margin: 0 10px;
-	height: 100%;
+	font-weight: 200;
+	margin: 0 2px;
+	height: 100% !important;
 	text-align: justify;
+	// padding-top: 40px;
 }
 
 .learn-more {
@@ -45,6 +41,7 @@
 
 .learn-more ul {
 	list-style-type: none;
+	padding: 0px !important;
 }
 
 .learn-more li {
@@ -57,20 +54,38 @@
 	display: inline-block;
 	font-family: Saira Semi Condensed;
 	/* transform: translate(0px, -0px);  */
-	padding: -10px;
+	// padding: -10px;
+	padding: 5px 20px 0 0;
+	margin: 0px auto;
+	@media only screen and (max-width: 480px)  {
+		float: left;
+     }
+
 }
 
-.top-btn {
-	border: 2px solid #fff;
-	color: #fff;
-	padding: 5px;
-	border-radius: 20px;
-	margin-top: 0px;
-	display: inline-block;
-	font-weight: 500;
-	font-size: 80%;
+// .top-btn {
+// 	border: 2px solid #fff;
+// 	color: #fff;
+// 	padding: 5px;
+// 	border-radius: 20px;
+// 	margin-top: 0px;
+// 	display: inline-block;
+// 	font-weight: 500;
+// 	font-size: 80%;
+// }
+
+@media only screen and (max-width: 1800px) {
+	.top-button {
+		display: block;
+		margin: 0px auto;
+	}
 }
 
+.top-button {
+
+	background-color: #063042;
+	margin-bottom: 20px;
+}
 .learn-more a {
 	color: rgb(255, 255, 255);
 	font-weight: 400;

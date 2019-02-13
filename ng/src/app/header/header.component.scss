@@ -7,8 +7,23 @@
 	font-weight: 400;
 	font-size: 80%;
 	padding-inline-start: 0px;
+	padding-top: 8px;
 	/* margin: 0px; */
 
+}
+
+.mobile-nav {
+	a {
+		color: #333 !important;
+	}
+	position: absolute;
+	
+	right: 50px;
+	top: 30px;
+
+	.mat-icon {
+		font-size: 280%;
+	}
 }
 
 .main-nav li {
@@ -28,7 +43,40 @@
 }
 
 .logo {
-	width: 200px;
+	width: 170px;
 	height: auto;
 	margin: 20px 20px 0px 0px;
+}
+
+
+@media only screen and (max-width: 1024px) {
+
+	.logo {
+		width: 150px;
+		height: auto;
+		margin: 16px 28px 0px 0px;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.main-nav {
+		display: none;
+	}
+	.logo {
+		margin: 16px 20px 0px 0px;
+	}
+}
+
+@media only screen and (min-width: 639px) {
+	.mobile-nav {
+		visibility: hidden;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	.logo {
+		width: 150px;
+		height: auto;
+	}
+
 }

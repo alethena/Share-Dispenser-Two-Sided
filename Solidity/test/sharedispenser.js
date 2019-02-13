@@ -17,11 +17,12 @@ contract('ShareDispenser', (accounts)=>{
     const Owner             = accounts[0];
     const XCHFPayInAddress  = accounts[1];
     const Buyer             = accounts[2];
-    const ALEQSupplyAddress = accounts[3];
+    const Seller            = accounts[3];
     const conflictingBuyer1 = accounts[4];
     const conflictingBuyer2 = accounts[5];
+    const treasury          = accounts[6];
 
-    const ALEQAmountToMint = 10000;
+    const ALEQAmountToMint = 127043;
     //const XCHFAmountToMint = 10**6*10**18;
 
 
@@ -37,30 +38,18 @@ contract('ShareDispenser', (accounts)=>{
 
     it('Mint ALEQ tokens', async () =>{
         const tx1 = await AlethenaSharesInstance.setTotalShares(ALEQAmountToMint);
-        const tx2 = await AlethenaSharesInstance.mint(ShareDispenserInstance.address,ALEQAmountToMint,"Test");
-        // assert.equal(ALEQAmountToMint, await AlethenaSharesInstance.balanceOf(ALEQSupplyAddress));
-        //console.log(tx2.logs[0].args); 
+        const tx2 = await AlethenaSharesInstance.mint(ShareDispenserInstance.address, 10000, "Test");
+        const tx3 = await AlethenaSharesInstance.mint(treasury, ALEQAmountToMint-10000, "Test");
     });
 
-    // it('Allow Share Dispenser to use ALEQ reserve', async () =>{
-        // const tx1 = await AlethenaSharesInstance.approve(ShareDispenserInstance.address, ALEQAmountToMint, {from: ALEQSupplyAddress});
-    //     temp = await AlethenaSharesInstance.allowance(ALEQSupplyAddress, ShareDispenserInstance.address);
-    //     assert.equal(ALEQAmountToMint, await AlethenaSharesInstance.allowance(ALEQSupplyAddress, ShareDispenserInstance.address)); 
-    // });
-
-
     it('Mint CXHF tokens', async () =>{
-        let mintAmount1 = new BN(6000);
+        let mintAmount1 = new BN(1000000);
         let multiplier = new BN(10);
         let decimals = new BN(18);
 
         let mintBN = multiplier.pow(decimals).mul(mintAmount1);
     
         const tx = await XCHFInstance.mint(Buyer, mintBN);
-        mintIs = await XCHFInstance.balanceOf(Buyer);
-
-        assert.equal(mintBN.toString(10), mintIs.toString(10));
-
     });
 
     // it('Check price', async () =>{
@@ -71,26 +60,58 @@ contract('ShareDispenser', (accounts)=>{
     // })
 
     it('Set allowance', async () =>{
-
-        let mintAmount1 = new BN(6000);
-        let multiplier = new BN(10);
-        let decimals = new BN(18);
-        
-        let allowance = multiplier.pow(decimals).mul(mintAmount1);
-
-        await XCHFInstance.approve(ShareDispenserInstance.address, allowance, {from: Buyer});
+        const numberOfSharesToBuy = new BN(234);
+        const supply = await ShareDispenserInstance.getERC20Balance(AlethenaSharesInstance.address);
+        console.log("Supply:", supply.toString(10));
+        const totalPrice = await ShareDispenserInstance.getCumulatedPrice(numberOfSharesToBuy, supply);
+        console.log("Total Price:", totalPrice.toString(10));
+        await XCHFInstance.approve(ShareDispenserInstance.address, totalPrice, {from: Buyer});
     })
 
     it('Buy shares', async () =>{
+        const numberOfSharesToBuy = new BN(234);
+        const supply = await ShareDispenserInstance.getERC20Available(AlethenaSharesInstance.address, ShareDispenserInstance.address);
+        const totalPrice = ShareDispenserInstance.getCumulatedPrice(numberOfSharesToBuy, supply);
+
         const temp = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
         console.log(temp.toString(10));
-        var tx = await ShareDispenserInstance.buyShares(5,{from: Buyer});
-        assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
-        console.log(tx.logs[0].args);
-        assert.equal(tx.logs[0].event, 'SharesPurchased');
-        assert.equal(tx.logs[0].args.buyer, Buyer);
-        assert.equal(tx.logs[0].args.amount, 5); 
+
+        var tx = await ShareDispenserInstance.buyShares(numberOfSharesToBuy,{from: Buyer});
+        // assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
+        console.log("Log:", tx.logs[0].args);
+        const post1 = await AlethenaSharesInstance.balanceOf(Buyer);
+        console.log("Buyer ALEQ balance:", post1.toString(10));
+        const post2 = await XCHFInstance.balanceOf(ShareDispenserInstance.address);
+        console.log("SD XCH balance:", post2.toString(10));
     });
+
+    it('Set allowance', async () =>{
+        const numberOfSharesToSell = new BN(234);        
+        await AlethenaSharesInstance.approve(ShareDispenserInstance.address, numberOfSharesToSell, {from: Buyer});
+    })
+
+    it('Sell shares', async () =>{
+        const numberOfSharesToSell = new BN(234);
+        const supply = await ShareDispenserInstance.getERC20Available(AlethenaSharesInstance.address, ShareDispenserInstance.address);
+        const buybackPrice = ShareDispenserInstance.getCumulatedBuyBackPrice(numberOfSharesToSell, supply);
+
+        // const temp = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
+        // console.log(temp.toString(10));
+
+        var tx = await ShareDispenserInstance.sellShares(numberOfSharesToSell,{from: Buyer});
+        // assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
+        console.log("Log:", tx.logs[0].args);
+        const post1 = await AlethenaSharesInstance.balanceOf(Buyer);
+        console.log("Buyer ALEQ balance:", post1.toString(10));
+
+        const post3 = await XCHFInstance.balanceOf(Buyer);
+        console.log("Buyer XCHF balance:", post3.toString(10));
+
+        const post2 = await XCHFInstance.balanceOf(ShareDispenserInstance.address);
+        console.log("SD XCH balance:", post2.toString(10));
+    });
+
+    // Unit tests for pricing function
 
     // //NEXT: COLLISION TESTS. I.e. what if an order doesn't go through for some reason?
     // it('Buy shares but too low supply', async () =>{

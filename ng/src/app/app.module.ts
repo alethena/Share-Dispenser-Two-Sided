@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { EmbedVideo } from 'ngx-embed-video';
 
 import { AppComponent } from './app.component';
 import { DispenserModule } from './dispenser/dispenser.module';
@@ -72,6 +73,7 @@ import { Footer2Component } from './footer2/footer2.component';
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    EmbedVideo.forRoot(),
     DispenserModule,
   ],
   providers: [],

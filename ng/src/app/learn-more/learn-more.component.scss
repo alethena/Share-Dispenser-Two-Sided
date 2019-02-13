@@ -1,7 +1,7 @@
 .learn-more {
   color: #fff;
   line-height: 160%;
-  font-weight: 200;
+  font-weight: 400;
   margin: 0 2px;
   height: 100% !important;
   text-align: justify;
@@ -20,7 +20,7 @@ h3 {
 }
 
 h3 {
-	margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .learn-more-btn {
@@ -50,6 +50,16 @@ h3 {
   margin: 20px;
 }
 
+.divider {
+  width: 40%;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.span-10-of-12 {
+	text-align: justify;
+}
+
 .enum {
   font-size: 250%;
   display: inline-block;
@@ -58,7 +68,7 @@ h3 {
   // padding: -10px;
   padding: 15px 0 5px 20px;
   margin: 0px auto;
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: 800px) {
     float: left;
   }
 }
@@ -71,7 +81,7 @@ h3 {
   // padding: -10px;
   padding: 5px 20px 0 0;
   margin: 0px auto;
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: 800px) {
     float: left;
   }
 }
@@ -91,6 +101,19 @@ h3 {
   .top-button {
     display: block;
     margin: 0px auto;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  h2 {
+    text-align: center;
+  }
+
+  .enum {
+	  width: 100%;
+	  margin: 0px auto;
+	  text-align: center;
+	  padding: 0px 0px 10px 0px;
   }
 }
 

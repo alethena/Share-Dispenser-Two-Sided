@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EmbedVideoService } from 'ngx-embed-video';
 
 @Component({
   selector: 'app-first-page-left',
@@ -7,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FirstPageLeftComponent implements OnInit {
 
-  constructor() { }
+  youtubeUrl = 'https://www.youtube.com/watch?v=fH5NS3FOSU4';
+  youtubeId = 'fH5NS3FOSU4';
 
+  constructor(private embedService: EmbedVideoService) {
+    console.log(this.embedService.embed(this.youtubeUrl));
+    console.log(this.embedService.embed_youtube(this.youtubeId));
+  }
   ngOnInit() {
   }
 

@@ -2,7 +2,7 @@
     <div *ngIf="buyPopup">
         <h1 mat-dialog-title>Let's buy Alethena Shares</h1>
         <div mat-dialog-content>
-            <mat-checkbox [(ngModel)]="checkbox">
+            <mat-checkbox [(ngModel)]="checkbox"></mat-checkbox>
                 I acknowledge the terms set forth in the
                 <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
                     Prospectus</a>,
@@ -12,11 +12,11 @@
                     href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf"
                     target="_blank">
                     Privacy
-                    Policy</a>. </mat-checkbox>
+                    Policy</a>. 
             <br><br>
         </div>
         <div mat-dialog-actions>
-            <button mat-raised-button color="primary" (click)="openBuyPopup()" [(disabled)]="!checkbox">I agree</button>
+            <button mat-raised-button color="primary" (click)="openBuyPopup()" [(disabled)]="!checkbox">Agree</button>
             <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
 
         </div>

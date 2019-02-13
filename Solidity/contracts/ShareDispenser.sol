@@ -15,9 +15,10 @@ interface ERC20 {
 
 contract ShareDispenser is Ownable, Pausable {
 
-    constructor(address initialXCHFContractAddress, address initialALEQContractAddress) public {
+    constructor(address initialXCHFContractAddress, address initialALEQContractAddress, address initialusageFeeAddress) public {
         XCHFContractAddress = initialXCHFContractAddress;
         ALEQContractAddress = initialALEQContractAddress;
+        usageFeeAddress = initialusageFeeAddress;
     }
 
     using SafeMath for uint256;
@@ -26,8 +27,7 @@ contract ShareDispenser is Ownable, Pausable {
 
     address public XCHFContractAddress;     // Address where XCHF is deployed
     address public ALEQContractAddress;     // Address where ALEQ is deployed
- 
-    address public usageFeeAddress = 0xFDeda15e2922C5ed41fc1fdF36DA2FB2623666b3;         // Address where usage fee is collected
+    address public usageFeeAddress;         // Address where usage fee is collected
 
     // Definition of constants e.g. prices etc. Buy and sell always refer to the end-user view.
     // 10000 basis points = 100%
@@ -61,7 +61,7 @@ contract ShareDispenser is Ownable, Pausable {
         if (supply <= initialNumberOfShares) {
             uint256 first = initialNumberOfShares.sub(supply);
             uint256 last = first.add(amount).sub(1);
-            cumulatedPrice = helper(first,last);
+            cumulatedPrice = helper(first, last);
         }
 
         else if (supply.sub(amount) >= initialNumberOfShares) {
@@ -221,8 +221,6 @@ contract ShareDispenser is Ownable, Pausable {
     event MinPriceSet(uint256 minPrice);
     event MaxPriceSet(uint256 maxPrice);
     event InitialNumberOfSharesSet(uint256 initialNumberOfShares);
-
-
 
     // Helper functions
 

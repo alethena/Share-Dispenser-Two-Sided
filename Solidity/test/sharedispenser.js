@@ -34,6 +34,10 @@ contract('ShareDispenser', (accounts)=>{
         AlethenaSharesInstance = await AlethenaShares.deployed();
         XCHFInstance = await CryptoFranc.deployed();
         ShareDispenserInstance = await ShareDispenser.deployed();
+        console.log("AlethenaSharesInstance", AlethenaSharesInstance.address);
+        console.log("XCHFInstance", XCHFInstance.address);
+        console.log("ShareDispenserInstance", ShareDispenserInstance.address);
+
     });
 
     it('Mint ALEQ tokens', async () =>{

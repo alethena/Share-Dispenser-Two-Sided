@@ -33,11 +33,9 @@ export class Web3Service {
     if (typeof window.ethereum !== 'undefined') {
       // Use Mist/MetaMask's provider
       this.web3 = new Web3(window.ethereum);
-      console.log('WEB3:', this.web3);
       try {
         const MM = await window.ethereum.enable();
         this.setStatus('MetaMask enabled!');
-        console.log('MM', MM);
       } catch {
         this.setStatus('There was an error enabling MetaMask');
       }

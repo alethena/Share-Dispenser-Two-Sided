@@ -8,24 +8,55 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule, MatMenuModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { delay } from 'q';
+import { ThrowStmt } from '@angular/compiler';
+// import { E2BIG } from 'constants';
 
 declare let require: any;
+import { Big } from 'big.js';
 
 const BN = require('bn.js');
 const contractAddresses = require('../../../assets/contractAddresses.json');
 
-const XCHF_artifacts = require('../../../assets/contracts/CryptoFranc.json');
+const XCHF_artifacts = require('../../../../../Solidity/build/contracts/CryptoFranc.json');
 const XCHFAddress = contractAddresses.XCHFAddress;
 
-const SD_artifacts = require('../../../assets/contracts/ShareDispenser.json');
+const SD_artifacts = require('../../../../../Solidity/build/contracts/ShareDispenser.json');
 const SDAddress = contractAddresses.SDAddress;
 
 
 export interface DialogData {
   address: string;
   amount: number;
+  price: number;
 }
 
+export interface DialogData2 {
+  address: string;
+  ALEQ: number;
+  XCHF: number;
+}
+
+
+@Component({
+  selector: 'app-balance',
+  templateUrl: 'balance.html',
+  styleUrls: ['balance.scss']
+
+})
+export class BalanceComponent {
+  public ALEQ = 0;
+  public XCHF = 0;
+  public account;
+
+  constructor(@Inject(MAT_DIALOG_DATA)
+  public data: DialogData2,
+    public dialog: MatDialog,
+  ) {
+    this.ALEQ = this.data.ALEQ;
+    this.XCHF = this.data.XCHF;
+    this.account = this.data.address;
+  }
+}
 
 @Component({
   selector: 'app-dialog',
@@ -70,7 +101,6 @@ export class DialogComponent {
     // } else {
     // this.buttonLocked = true;
     try {
-
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
       const SDInstance = await SDAbstraction.at(SDAddress);
 
@@ -87,17 +117,31 @@ export class DialogComponent {
       // );
 
       // await delay(6000);
+      // console.log(this.data.price);
+      // console.log(this.data.price.toString());
+      // console.log(this.data.price.toString(10));
 
-      const hash = await XCHFInstance.approve.sendTransaction(SDAddress, 20000, { from: this.data.address });
+      // let temp = new BN(this.data.price.toString(10), 16);
+      // console.log(temp.toString(10));
+
+
+      const temp = await this.dispenserService.getBuyPrice(this.data.amount);
+
+      const hash = await XCHFInstance.approve.sendTransaction(SDAddress, temp, { from: this.data.address });
       this.MMPopup = false;
       this.FirstSucceded = true;
+
+
+
       // this.web3Service.setStatus(
       //   'Payment authorisation suceeded, \
       // please finalise the transaction by accepting the second MetaMask pop-up.'
       // );
 
       await delay(4000);
-      const hash2 = await XCHFInstance.approve.sendTransaction(SDAddress, 20000, { from: this.data.address });
+      // const hash2 = await XCHFInstance.approve.sendTransaction(SDAddress, 20000, { from: this.data.address });
+      await SDInstance.buyShares.sendTransaction(this.data.amount, { from: this.data.address });
+
       this.FirstSucceded = false;
       this.SecondSucceded = true;
       // await SDInstance.buyShares.sendTransaction(this.numberOfSharesToBuy, { from: this.account });
@@ -117,14 +161,12 @@ export class DialogComponent {
     // }
   }
 
-
-
 }
 
 @Component({
   selector: 'app-dispenser2',
   templateUrl: './dispenser2.component.html',
-  styleUrls: ['./dispenser2.component.scss', 'dialog.scss']
+  styleUrls: ['./dispenser2.component.scss']
 })
 export class Dispenser2Component implements OnInit {
   checkbox: boolean;
@@ -132,7 +174,9 @@ export class Dispenser2Component implements OnInit {
   account: string;
 
   totalPrice = 0;
+  totalPriceDisp = 0;
   public pricePerShare = 0;
+
   numberOfSharesToBuy = 20;
   numberOfSharesToSell = 0;
   XCHFBalance = 0;
@@ -154,31 +198,49 @@ export class Dispenser2Component implements OnInit {
 
   openDialog() {
     this.checkbox = false;
-    this.dialog.open(DialogComponent, { disableClose : true,
-      data: { address: this.account, amount: this.numberOfSharesToBuy }
+    this.dialog.open(DialogComponent, {
+      disableClose: true,
+      data: { address: this.account, amount: this.numberOfSharesToBuy, price: this.totalPrice }
     });
   }
 
-
+  openBalances() {
+    this.dialog.open(BalanceComponent, {
+      data: { address: this.account, ALEQ: this.ALEQBalance, XCHF: this.XCHFBalance }
+    });
+  }
 
 
   ngOnInit(): void {
     // console.log('OnInit: ' + this.web3Service);
     this.watchAccount();
+    this.numberOfSharesToBuyChanged()
   }
+
+  async numberOfSharesToBuyChanged() {
+    const total = new Big(await this.dispenserService.getBuyPrice(this.numberOfSharesToBuy));
+    this.totalPrice = total;
+    this.totalPriceDisp = Math.ceil(total.div(10 ** 18) * 100) / 100;
+    this.pricePerShare = Math.ceil(total.div(this.numberOfSharesToBuy).div(10 ** 18) * 100) / 100;
+  }
+  async setMaxCanBuy() {
+    this.numberOfSharesToBuy = this.maxCanBuy;
+    await this.numberOfSharesToBuyChanged();
+  }
+
   watchAccount() {
     this.dispenserService.accountsObservable.subscribe((accounts) => {
       this.accounts = accounts;
       this.account = accounts[0];
     });
 
-    // this.dispenserService.XCHFBalanceObservable.subscribe((bal) => {
-    //   this.XCHFBalance = Math.round(bal);
-    // });
+    this.dispenserService.XCHFBalanceObservable.subscribe((bal) => {
+      this.XCHFBalance = Math.round(bal);
+    });
 
-    // this.dispenserService.ALEQBalanceObservable.subscribe((bal) => {
-    //   this.ALEQBalance = bal;
-    // });
+    this.dispenserService.ALEQBalanceObservable.subscribe((bal) => {
+      this.ALEQBalance = bal;
+    });
 
     this.dispenserService.ALEQAvailableObservable.subscribe((available) => {
       this.ALEQAvailable = Number(available.toString());
@@ -188,9 +250,11 @@ export class Dispenser2Component implements OnInit {
       this.ALEQTotal = Number(total.toString());
     });
 
-    this.dispenserService.SharePriceObservable.subscribe((sp) => {
-      this.pricePerShare = Number(sp.toString());
+    this.dispenserService.MaxCanBuyObservable.subscribe((max) => {
+      this.maxCanBuy = Number(max.toString());
     });
+
+
 
     // this.dispenserService.MaxCanBuyObservable.subscribe((total) => {
     //   this.maxCanBuy = parseInt(total.toString(10), 10);

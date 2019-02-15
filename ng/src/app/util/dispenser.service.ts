@@ -8,13 +8,13 @@ declare let require: any;
 
 const contractAddresses = require('../../assets/contractAddresses.json');
 
-const XCHF_artifacts = require('../../assets/contracts/CryptoFranc.json');
+const XCHF_artifacts = require('../../../../Solidity/build/contracts/CryptoFranc.json');
 const XCHFAddress = contractAddresses.XCHFAddress;
 
-const SD_artifacts = require('../../assets/contracts/ShareDispenser.json');
+const SD_artifacts = require('../../../../Solidity/build/contracts/ShareDispenser.json');
 const SDAddress = contractAddresses.SDAddress;
 
-const ALEQ_artifacts = require('../../assets/contracts/AlethenaShares.json');
+const ALEQ_artifacts = require('../../../../Solidity/build/contracts/AlethenaShares.json');
 const ALEQAddress = contractAddresses.ALEQAddress;
 
 
@@ -77,23 +77,78 @@ export class DispenserService {
     try {
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
       const SDInstance = await SDAbstraction.at(SDAddress);
-      const available = new Big(await SDInstance.getAvailableSupply.call());
+      const available = new Big(await SDInstance.getERC20Balance.call(ALEQAddress));
+      // console.log("Test:", SDInstance, available.toString(10));
       return available;
     } catch (error) {
       console.log(error);
     }
   }
 
-  async getSharePrice() {
+  public async getBuyPrice(numberToBuy) {
     try {
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
       const SDInstance = await SDAbstraction.at(SDAddress);
-      const sharePrice = new Big(await SDInstance.sharePriceInXCHF.call());
-      return sharePrice.div(10 ** 18);
+      // console.log(SDInstance);
+      const supply = new Big(await SDInstance.getERC20Balance.call(ALEQAddress));
+      const numberToBuyBN = new Big(numberToBuy);
+      // console.log('Data:', supply, numberToBuyBN);
+      const price = await SDInstance.getCumulatedPrice.call(numberToBuyBN.toString(10), supply.toString(10));
+      return price;
     } catch (error) {
       console.log(error);
     }
   }
+
+  public async getMaxCanBuy() {
+    const totalShares = await this.getALEQAvailable();
+    let buyerXCHF = await this.getXCHFBalance(this.accounts[0]);
+    buyerXCHF = Number(buyerXCHF.div(10 ** 18).toString(10));
+
+    if (buyerXCHF === 0) {
+      return 0;
+    }
+    let power = 0;
+    let temp = 0;
+
+    // Find smallest power of two larger than total number of shares
+    while (2 ** (power + 1) < totalShares) {
+      power += 1;
+    }
+
+    // Now do binary search to find max allowed value
+    let iter = 2 ** (power);
+    while (power > 0) {
+      power -= 1;
+
+      temp = await this.compareValue(iter);
+
+      if (temp < buyerXCHF) {
+        iter += 2 ** (power);
+      } else if (temp > buyerXCHF) {
+        iter -= 2 ** (power);
+      } else if (temp === buyerXCHF) {
+        return (iter <= totalShares) ? iter : totalShares;
+      }
+    }
+    const high = await this.compareValue(iter + 1);
+    const current = await this.compareValue(iter);
+
+    if (high < buyerXCHF) {
+      iter += 1;
+    } else if (current > buyerXCHF) {
+      iter -= 1;
+    }
+
+    return (iter <= totalShares) ? iter : totalShares;
+  }
+
+  private async compareValue(numberOfShares) {
+    let temp = new Big(await this.getBuyPrice(numberOfShares));
+    temp = Number(temp.div(10 ** 18).toString(10));
+    return temp;
+  }
+
 
   private async refreshAccounts() {
     try {
@@ -116,7 +171,7 @@ export class DispenserService {
         this.accounts = accs;
         this.balanceRefresh();
       }
-    } catch(error) {}
+    } catch (error) { }
   }
 
   public async balanceRefresh() {
@@ -132,13 +187,11 @@ export class DispenserService {
     const ALEQSup = await this.getALEQAvailable();
     this.ALEQAvailableObservable.next(ALEQSup);
 
-    const sp = await this.getSharePrice();
+    const maxCanBuy = await this.getMaxCanBuy();
+    this.MaxCanBuyObservable.next(maxCanBuy);
 
-    const maxBuy = XCHFbal.div(sp * 10 ** 18);
-    this.MaxCanBuyObservable.next(maxBuy);
-
-    const sp2 = await this.getSharePrice();
-    this.SharePriceObservable.next(sp2);
+    // const sp2 = await this.getSharePrice();
+    // this.SharePriceObservable.next(sp2);
   }
 
 

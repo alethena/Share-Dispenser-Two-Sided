@@ -1,7 +1,7 @@
 .learn-more {
   color: #fff;
   line-height: 160%;
-  font-weight: 400;
+  font-weight: 300;
   margin: 0 2px;
   height: 100% !important;
   text-align: justify;
@@ -57,7 +57,7 @@ h3 {
 }
 
 .span-10-of-12 {
-	text-align: justify;
+  text-align: justify;
 }
 
 .enum {
@@ -110,10 +110,14 @@ h3 {
   }
 
   .enum {
-	  width: 100%;
-	  margin: 0px auto;
-	  text-align: center;
-	  padding: 0px 0px 10px 0px;
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    padding: 0px 0px 10px 0px;
+  }
+
+  .learn-more {
+    font-weight: 400;
   }
 }
 

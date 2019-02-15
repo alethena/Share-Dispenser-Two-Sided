@@ -8,4 +8,3 @@ cd ..
 cd ng
 npm install
 ng serve
-

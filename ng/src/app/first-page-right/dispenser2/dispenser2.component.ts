@@ -75,7 +75,9 @@ export class DialogComponent {
     private web3Service: Web3Service,
     private dispenserService: DispenserService,
     private matSnackBar: MatSnackBar,
-    private matDividerModule: MatDividerModule) { }
+    private matDividerModule: MatDividerModule) {
+
+  }
 
   async openBuyPopup() {
     this.buyPopup = false;
@@ -183,7 +185,8 @@ export class Dispenser2Component implements OnInit {
   ALEQBalance = 0;
   ALEQAvailable = 0;
   ALEQTotal = 0;
-  maxCanBuy = 0;
+  maxCanBuy = 20;
+  maxLocked = false;
   SD: any;
   XCHF: any;
 
@@ -193,15 +196,23 @@ export class Dispenser2Component implements OnInit {
     private dispenserService: DispenserService,
     private matSnackBar: MatSnackBar,
     private matDividerModule: MatDividerModule
-  ) { }
+  ) {
+   
+    this.numberOfSharesToBuyChanged();
+  }
 
 
   openDialog() {
-    this.checkbox = false;
-    this.dialog.open(DialogComponent, {
-      disableClose: true,
-      data: { address: this.account, amount: this.numberOfSharesToBuy, price: this.totalPrice }
-    });
+    if (this.web3Service.MM) {
+      this.checkbox = false;
+      this.dialog.open(DialogComponent, {
+        disableClose: true,
+        data: { address: this.account, amount: this.numberOfSharesToBuy, price: this.totalPrice }
+      });
+    } else {
+      this.web3Service.setStatus('Please use MetaMask to buy shares.');
+    }
+
   }
 
   openBalances() {
@@ -214,18 +225,36 @@ export class Dispenser2Component implements OnInit {
   ngOnInit(): void {
     // console.log('OnInit: ' + this.web3Service);
     this.watchAccount();
-    this.numberOfSharesToBuyChanged()
+    try {
+      this.setMaxCanBuy();
+    } catch (error) {
+    }
   }
 
   async numberOfSharesToBuyChanged() {
-    const total = new Big(await this.dispenserService.getBuyPrice(this.numberOfSharesToBuy));
-    this.totalPrice = total;
-    this.totalPriceDisp = Math.ceil(total.div(10 ** 18) * 100) / 100;
-    this.pricePerShare = Math.ceil(total.div(this.numberOfSharesToBuy).div(10 ** 18) * 100) / 100;
+    if (this.numberOfSharesToBuy < 20) {
+      this.numberOfSharesToBuy = 20;
+    } else if (this.numberOfSharesToBuy > this.ALEQAvailable) {
+      this.numberOfSharesToBuy = this.ALEQAvailable;
+    }
+    try {
+      const total = new Big(await this.dispenserService.getBuyPrice(this.numberOfSharesToBuy));
+      this.totalPrice = total;
+      this.totalPriceDisp = Math.ceil(total.div(10 ** 18));
+      this.pricePerShare = Math.ceil(total.div(this.numberOfSharesToBuy).div(10 ** 18) * 100) / 100;
+
+    } catch (error) {
+    }
+
   }
   async setMaxCanBuy() {
-    this.numberOfSharesToBuy = this.maxCanBuy;
-    await this.numberOfSharesToBuyChanged();
+    if (this.web3Service.MM) {
+      await this.numberOfSharesToBuyChanged();
+      this.numberOfSharesToBuy = this.maxCanBuy;
+      await delay(3000);
+    } else {
+      this.web3Service.setStatus('Please use MetaMask to buy shares.');
+    }
   }
 
   watchAccount() {
@@ -253,24 +282,6 @@ export class Dispenser2Component implements OnInit {
     this.dispenserService.MaxCanBuyObservable.subscribe((max) => {
       this.maxCanBuy = Number(max.toString());
     });
-
-
-
-    // this.dispenserService.MaxCanBuyObservable.subscribe((total) => {
-    //   this.maxCanBuy = parseInt(total.toString(10), 10);
-    //   if (this.ALEQAvailable < this.maxCanBuy) {
-    //     this.maxCanBuy = this.ALEQAvailable;
-    //   }
-    //   if (this.numberOfSharesToBuy == 0) {
-    //     this.setAmount({ 'target': { 'value': this.maxCanBuy } });
-    //   }
-    // });
-
-    // this.dispenserService.SharePriceObservable.subscribe((sp) => {
-    //   this.pricePerShare = sp;
-    //   this.totalPrice = sp * this.numberOfSharesToBuy;
-    // });
-
   }
 }
 

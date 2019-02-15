@@ -8,12 +8,12 @@ import { EmbedVideoService } from 'ngx-embed-video';
 })
 export class FirstPageLeftComponent implements OnInit {
 
-  youtubeUrl = 'https://www.youtube.com/watch?v=fH5NS3FOSU4';
-  youtubeId = 'fH5NS3FOSU4';
+  youtubeUrl = 'https://www.youtube.com/watch?v=BqDhbjjmFso';
+  youtubeId = 'BqDhbjjmFso';
 
   constructor(private embedService: EmbedVideoService) {
-    console.log(this.embedService.embed(this.youtubeUrl));
-    console.log(this.embedService.embed_youtube(this.youtubeId));
+    // console.log(this.embedService.embed(this.youtubeUrl));
+    // console.log(this.embedService.embed_youtube(this.youtubeId));
   }
   ngOnInit() {
   }

@@ -14,7 +14,7 @@ declare let window: any;
 @Injectable()
 export class Web3Service {
   public web3: any;
-
+  public MM: any;
   // public ready = false;
 
 
@@ -34,18 +34,20 @@ export class Web3Service {
       // Use Mist/MetaMask's provider
       this.web3 = new Web3(window.ethereum);
       try {
-        const MM = await window.ethereum.enable();
+        this.MM = await window.ethereum.enable();
         this.setStatus('MetaMask enabled!');
       } catch {
         this.setStatus('There was an error enabling MetaMask');
       }
+      
 
     } else {
       this.setStatus('Please use MetaMask if you want to buy shares');
-
+      // console.log("MM", this.MM);
       // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
       Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
-      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail);
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail); 
+      //rinkeby.infura.io/v3/2a59f4ddc9b14dd5b321f5fbee33f77d
       this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d'));
 
       // this.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d"));
@@ -78,6 +80,7 @@ export class Web3Service {
     if (this.web3) {
       out = await this.web3.eth.getAccounts();
     }
+    // console.log(out);
     return out;
   }
 

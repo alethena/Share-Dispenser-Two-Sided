@@ -6,61 +6,55 @@
 /* blue/green: #155c72,   dark grey: rgb(89, 91, 97) */
 /*------------------------------*/
 
-
 /*------------------------------*/
 /* GLOBAL */
 /*------------------------------*/
 
 html,
 body {
-	background-color: #fff;
-	color: #333;
-	font-family: 'Roboto', 'Arial', sans-serif;
-	font-weight: 300;
-	font-size: 17px;
-	text-rendering: optimizeLegibility;
-	width: 100vw;
-	height: 100%;
-	padding-block-end: 0;
-	overflow-x: hidden;
-	margin: 0;
-	padding: 0;
-	scroll-behavior: smooth;
-	position:relative;
-
+  background-color: #fff;
+  color: #333;
+  font-family: "Roboto", "Arial", sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  text-rendering: optimizeLegibility;
+  width: 100vw;
+  height: 100%;
+  padding-block-end: 0;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  position: relative;
 }
 
 a {
-	text-decoration: none;
-	color: #155c72;
-	font-weight: 400;
+  text-decoration: none;
+  color: #155c72;
+  font-weight: 400;
 }
 
 a:hover {
-	color: #155c72a4;
+  color: #155c72a4;
 }
 
-
-
-
 .bg-img-2 {
-	min-height: 100%;
-	// background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/hero.png);
-	background-image: linear-gradient(#155c72f1, #155c72ec, #155c724f), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
-	// background-image: linear-gradient(#12546af5, #12546ace, #12546a80), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
+  min-height: 100%;
+  // background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/hero.png);
+  background-image: linear-gradient(#155c72f1, #155c72ec, #155c724f),
+    url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
+  // background-image: linear-gradient(#12546af5, #12546ace, #12546a80), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
 
-
-	
-	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	padding: 2px;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 2px;
 }
 
 .row {
-	max-width: 1140px;
-	margin: 0 auto;
-	padding: 0 10px;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 10px;
 }
 
 /*------------------------------*/
@@ -68,17 +62,16 @@ a:hover {
 /*------------------------------*/
 
 .clearfix {
-	zoom: 1;
+  zoom: 1;
 }
 
 .clearfix:after {
-	content: '.';
-	clear: both;
-	display: table;
-	height: 0;
-	visibility: hidden;
+  content: ".";
+  clear: both;
+  display: table;
+  height: 0;
+  visibility: hidden;
 }
-
 
 /*------------------------------*/
 /* OVERRIDE MATERIAL SETTINGS */
@@ -88,51 +81,47 @@ a:hover {
 .mat-ripple,
 .mat-tab-label-active,
 .ng-star-inserted {
-	min-width: 100px !important;
+  min-width: 100px !important;
 }
 
 .mat-tab-label-container {
-	margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .mat-tab-header {
-	border-bottom: none !important;
+  border-bottom: none !important;
 }
 
-
-
 .mat-form-field {
-	width: 100%;
-	font-size: 75% !important;
+  width: 100%;
+  font-size: 75% !important;
 }
 
 .mat-list-item-content {
-	padding: 0px !important;
+  padding: 0px !important;
 }
 
 .mat-slider-horizontal {
-	width: 100%;
+  width: 100%;
 }
 
 .mat-form-field-wrapper {
-	padding-bottom: 14px !important;
-  }
+  padding-bottom: 14px !important;
+}
 
 .mat-card-title {
-	margin-bottom: 0px !important;
-	padding-bottom: 0px !important;
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 .mat-card-actions {
-	margin: 0px !important;
-	padding: 0px !important;
+  margin: 0px !important;
+  padding: 0px !important;
 }
 // .mat-list, mat-list-base {
 // 	padding: 0px;
 // 	margin-: 0px ;
 // }
-
-
 
 // .mat-form-field-infix {
 // 	border-top: 0px !important;
@@ -152,48 +141,45 @@ a:hover {
 /*------------------------------*/
 
 @media only screen and (max-width: 1024px) {
-	html, body {
-		font-size: 16px;
-		h1 {
-			font-size: 280%;
-		}
-		h2 {
-			font-size: 160%;
-		}
-	}
-
-	
+  html,
+  body {
+    // font-size: 16px;
+    h1 {
+      font-size: 280%;
+    }
+    h2 {
+      font-size: 160%;
+    }
+  }
 }
 
 @media only screen and (max-width: 800px) {
-	html, body {
-		font-weight: 400;
-		h1 {
-			margin: 10px auto 30px auto;
-			font-size: 300%;
-			font-weight: 300;
-			line-height: 120%;
-		}
-		h2 {
-			margin: 0px;
-			font-weight: 400;
-			font-size: 140%;
-		}
-	}
+  html,
+  body {
+    font-size: 16px;
 
-	
+    font-weight: 400;
+    h1 {
+      margin: 10px auto 30px auto;
+      font-size: 300%;
+      font-weight: 300;
+      line-height: 120%;
+    }
+    h2 {
+      margin: 0px;
+      font-weight: 400;
+      font-size: 160%;
+    }
+  }
 }
-
 
 /*------------------------------*/
 /* MAIN BOX */
 /*------------------------------*/
 
-
-
 .main-left {
-	line-height: 160%;
-	text-align: justify;
+  line-height: 160%;
+  text-align: justify;
 }
 
 /*------------------------------*/
@@ -203,118 +189,107 @@ a:hover {
 h1,
 h2,
 h3 {
-	font-weight: 300;
-	color: #333;
-	font-family: "Saira Semi Condensed";
+  font-weight: 300;
+  color: #333;
+  font-family: "Saira Semi Condensed";
 }
 
 h1 {
-	font-size: 400%;
-	margin-block-start: 0px;
-	margin-block-end: 2px;
-	margin-inline-start: 2px;
-	margin-inline-end: 2px;
-	margin-top: 40px;
-	margin-left: 0px;
-	margin-bottom: 40px;
+  font-size: 400%;
+  margin-block-start: 0px;
+  margin-block-end: 2px;
+  margin-inline-start: 2px;
+  margin-inline-end: 2px;
+  margin-top: 40px;
+  margin-left: 0px;
+  margin-bottom: 40px;
 }
 
 h2 {
-	font-size: 170%;
+  font-size: 170%;
 }
-
-
-
-
 
 /*  GROUPING  ============================================================================= */
 
 .row {
-	zoom: 1;
-	/* For IE 6/7 (trigger hasLayout) */
+  zoom: 1;
+  /* For IE 6/7 (trigger hasLayout) */
 }
 
 .row:before,
 .row:after {
-	content: "";
-	display: table;
+  content: "";
+  display: table;
 }
 
 .row:after {
-	clear: both;
+  clear: both;
 }
 
 /*  GRID COLUMN SETUP   ==================================================================== */
 
 .col {
-	display: block;
-	float: left;
-	// margin: 0%;
+  display: block;
+  float: left;
+  // margin: 0%;
 }
 
 .col:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 /* all browsers except IE6 and lower */
 
-
 /*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
 
 @media only screen and (max-width: 480px) {
-	.col {
-		/*margin: 1% 0 1% 0%;*/
-		margin: 0;
-	}
-	.row {
-		padding: 10px;
-	}
+  .col {
+    /*margin: 1% 0 1% 0%;*/
+    margin: 0;
+  }
+  .row {
+    padding: 10px;
+  }
 }
-
 
 /*  GRID OF TWO   ============================================================================= */
 
-
 .span-2-of-2 {
-	width: 100%;
+  width: 100%;
 }
 
 .span-1-of-2 {
-	width: 49.2%;
+  width: 49.2%;
 }
 
 /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
 
 @media only screen and (max-width: 480px) {
-	.span-2-of-2 {
-		width: 100%;
-	}
+  .span-2-of-2 {
+    width: 100%;
+  }
 
-	.span-1-of-2 {
-		width: 100%;
-	}
+  .span-1-of-2 {
+    width: 100%;
+  }
 }
-
 
 /*  GRID OF THREE   ============================================================================= */
 
-
 /* 1 */
-
 
 /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
 
 @media only screen and (max-width: 480px) {
-	.span-3-of-3 {
-		width: 100%;
-	}
+  .span-3-of-3 {
+    width: 100%;
+  }
 
-	.span-2-of-3 {
-		width: 100%;
-	}
+  .span-2-of-3 {
+    width: 100%;
+  }
 
-	.span-1-of-3 {
-		width: 100%;
-	}
+  .span-1-of-3 {
+    width: 100%;
+  }
 }
-

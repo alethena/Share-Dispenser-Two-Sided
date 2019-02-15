@@ -24,15 +24,15 @@
 
           <mat-form-field class="example-margin">
             <input matInput type="number" placeholder="Select amount" [(ngModel)]="numberOfSharesToBuy"
-              (ngModelChange)="numberOfSharesToBuyChanged()">
+              (change)="numberOfSharesToBuyChanged()">
           </mat-form-field>
         </mat-card-title>
 
         <mat-card-actions>
-          <mat-slider class="slider" [max]=ALEQAvailable [min]= 20 [(ngModel)]="numberOfSharesToBuy"
-            (ngModelChange)="numberOfSharesToBuyChanged()" [step]=1 [thumbLabel]="true">
+          <mat-slider class="slider" [max]=ALEQAvailable [min]=20 [(ngModel)]="numberOfSharesToBuy"
+            (change)="numberOfSharesToBuyChanged()" [step]=1 [thumbLabel]="true">
           </mat-slider>
-          <button  class="max-button"  (click)="setMaxCanBuy()">
+          <button mat-button class="max-button"  (click)="setMaxCanBuy()" [disabled]="maxLocked">
               Max
             </button>
 
@@ -85,7 +85,7 @@
             </mat-icon>
           </mat-form-field>
           <mat-form-field class="example-margin">
-            <input matInput type="number" placeholder="Max buyback amount" value=3736 readonly=true>
+            <input matInput type="number" placeholder="Max. buyback amount" value=3736 readonly=true>
           </mat-form-field>
 
           <mat-form-field class="example-margin">
@@ -116,7 +116,7 @@
                 target="_blank">Share Dispenser on Etherscan</a></span>
           </button>
           <button mat-menu-item (click)="openBalances()">
-            <a>Check my Balance</a>
+            <a>Check My Balance</a>
           </button>
         </mat-menu>
       </div>

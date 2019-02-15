@@ -37,6 +37,7 @@ export class DispenserService {
   }
 
   public async bootstrapAccounts() {
+    this.noMMGet();
     setInterval(() => this.refreshAccounts(), 100);
   }
 
@@ -47,7 +48,7 @@ export class DispenserService {
       const bal = new Big(await XCHFInstance.balanceOf.call(acc));
       return bal;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -58,7 +59,7 @@ export class DispenserService {
       const bal = new Big(await ALEQInstance.balanceOf.call(acc));
       return bal;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -69,7 +70,7 @@ export class DispenserService {
       const total = new Big(await ALEQInstance.totalShares.call());
       return total;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -81,7 +82,7 @@ export class DispenserService {
       // console.log("Test:", SDInstance, available.toString(10));
       return available;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -96,7 +97,7 @@ export class DispenserService {
       const price = await SDInstance.getCumulatedPrice.call(numberToBuyBN.toString(10), supply.toString(10));
       return price;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -148,16 +149,18 @@ export class DispenserService {
     temp = Number(temp.div(10 ** 18).toString(10));
     return temp;
   }
+  private async noMMGet() {
+    const ALEQTot = await this.getALEQTotal();
+    this.ALEQTotalObservable.next(ALEQTot);
 
+    const ALEQSup = await this.getALEQAvailable();
+    this.ALEQAvailableObservable.next(ALEQSup);
+  }
 
   private async refreshAccounts() {
     try {
       const accs = await this.web3Service.getAccounts();
-      console.log('Refreshing accounts');
-      // if (err != null) {
-      //   console.warn('There was an error fetching your accounts.');
-      //   return;
-      // }
+      // console.log('Refreshing accounts');
 
       // Get the initial account balance so it can be displayed.
       if (accs.length === 0) {
@@ -166,7 +169,7 @@ export class DispenserService {
       }
 
       if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
-        console.log('Observed new accounts');
+        // console.log('Observed new accounts');
         this.accountsObservable.next(accs);
         this.accounts = accs;
         this.balanceRefresh();
@@ -190,8 +193,6 @@ export class DispenserService {
     const maxCanBuy = await this.getMaxCanBuy();
     this.MaxCanBuyObservable.next(maxCanBuy);
 
-    // const sp2 = await this.getSharePrice();
-    // this.SharePriceObservable.next(sp2);
   }
 
 

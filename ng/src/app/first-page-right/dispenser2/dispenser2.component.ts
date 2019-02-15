@@ -197,7 +197,6 @@ export class Dispenser2Component implements OnInit {
     private matSnackBar: MatSnackBar,
     private matDividerModule: MatDividerModule
   ) {
-   
     this.numberOfSharesToBuyChanged();
   }
 

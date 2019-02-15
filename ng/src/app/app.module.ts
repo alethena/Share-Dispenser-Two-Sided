@@ -27,12 +27,9 @@ import {
   MatProgressSpinnerModule
 } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { MainBoxComponent } from './main-box/main-box.component';
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { FirstPageLeftComponent } from './first-page-left/first-page-left.component';
 import { FirstPageRightComponent } from './first-page-right/first-page-right.component';
-import { DispenserComponent } from './first-page-right/dispenser/dispenser.component';
 import { Dispenser2Component } from './first-page-right/dispenser2/dispenser2.component';
 import { DialogComponent } from './first-page-right/dispenser2/dispenser2.component';
 import { BalanceComponent } from './first-page-right/dispenser2/dispenser2.component';
@@ -43,12 +40,9 @@ import { Footer2Component } from './footer2/footer2.component';
     AppComponent,
     BalanceComponent,
     HeaderComponent,
-    FooterComponent,
-    MainBoxComponent,
     LearnMoreComponent,
     FirstPageLeftComponent,
     FirstPageRightComponent,
-    DispenserComponent,
     Dispenser2Component,
     DialogComponent,
     Footer2Component

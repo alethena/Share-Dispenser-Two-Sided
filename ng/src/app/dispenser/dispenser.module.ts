@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ShareDispenserComponent } from './share-dispenser/share-dispenser.component';
 import {UtilModule} from '../util/util.module';
 import {RouterModule} from '@angular/router';
 
@@ -24,7 +23,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [ShareDispenserComponent],
+  declarations: [],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -45,7 +44,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     RouterModule,
     UtilModule
   ],
-  exports: [ShareDispenserComponent]
+  exports: []
 })
 export class DispenserModule { }
 

@@ -55,6 +55,7 @@ import { Footer2Component } from './footer2/footer2.component';
   ],
   entryComponents: [DialogComponent, BalanceComponent],
   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
     MatButtonModule,
@@ -72,11 +73,10 @@ import { Footer2Component } from './footer2/footer2.component';
     MatSliderModule,
     MatIconModule,
     MatDialogModule,
-    BrowserModule,
     FormsModule,
     HttpClientModule,
-    EmbedVideo.forRoot(),
     DispenserModule,
+    EmbedVideo,
   ],
   providers: [],
   bootstrap: [AppComponent]

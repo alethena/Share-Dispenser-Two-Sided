@@ -91,41 +91,12 @@ export class DialogComponent {
     this.buyPopup2 = false;
     this.MMPopup = true;
 
-    // } else if (Number(this.numberOfSharesToBuy.toString(10)) < 20 || Number(this.numberOfSharesToBuy.toString(10)) > Number(this.ALEQAvailable.toString())) {
-
-    // this.web3Service.setStatus('Please select a number of shares between 20 and ' + this.ALEQAvailable + '.');
-    // console.log(this.numberOfSharesToBuy, this.ALEQAvailable);
-
-    // } else if (Math.round(Number(this.numberOfSharesToBuy.toString(10))) !== Number(this.numberOfSharesToBuy.toString(10))) {
-
-    //   this.web3Service.setStatus('Please select an integer number of shares to buy.');
-
-    // } else {
-    // this.buttonLocked = true;
     try {
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
       const SDInstance = await SDAbstraction.at(SDAddress);
 
-      // const sharePrice = await new BN(await SDInstance.sharePriceInXCHF.call(), 10);
-      // const price = sharePrice.mul(await new BN(this.numberOfSharesToBuy));
-
       const XCHFAbstraction = await this.web3Service.artifactsToContract(XCHF_artifacts);
       const XCHFInstance = await XCHFAbstraction.at(XCHFAddress);
-
-      // this.web3Service.setStatus(
-      //   'Transaction started! \
-      //   \n Please accept the MetaMask pop-up to authorise payment and wait for the confirmation. \
-      //    \n This process can take up to a minute.'
-      // );
-
-      // await delay(6000);
-      // console.log(this.data.price);
-      // console.log(this.data.price.toString());
-      // console.log(this.data.price.toString(10));
-
-      // let temp = new BN(this.data.price.toString(10), 16);
-      // console.log(temp.toString(10));
-
 
       const temp = await this.dispenserService.getBuyPrice(this.data.amount);
 
@@ -133,27 +104,12 @@ export class DialogComponent {
       this.MMPopup = false;
       this.FirstSucceded = true;
 
-
-
-      // this.web3Service.setStatus(
-      //   'Payment authorisation suceeded, \
-      // please finalise the transaction by accepting the second MetaMask pop-up.'
-      // );
-
       await delay(4000);
-      // const hash2 = await XCHFInstance.approve.sendTransaction(SDAddress, 20000, { from: this.data.address });
       await SDInstance.buyShares.sendTransaction(this.data.amount, { from: this.data.address });
 
       this.FirstSucceded = false;
       this.SecondSucceded = true;
-      // await SDInstance.buyShares.sendTransaction(this.numberOfSharesToBuy, { from: this.account });
-      // this.dispenserService.balanceRefresh();
-      // this.web3Service.setStatus('The transfer suceeded, welcome as a shareholder at Alethena!');
-
-      // await delay(6000);
-
-      // this.web3Service.setStatus('Please proceed to alethena.ledgy.com to register your address.');
-      // this.buttonLocked = false;
+ 
 
     } catch (error) {
       this.web3Service.setStatus('An error occured during the transaction!');
@@ -252,7 +208,7 @@ export class Dispenser2Component implements OnInit {
       this.numberOfSharesToBuy = this.maxCanBuy;
       await delay(3000);
     } else {
-      this.web3Service.setStatus('Please use MetaMask to buy shares.');
+      // this.web3Service.setStatus('Please use MetaMask to buy shares.');
     }
   }
 

@@ -158,23 +158,26 @@ export class DispenserService {
   }
 
   private async refreshAccounts() {
-    try {
-      const accs = await this.web3Service.getAccounts();
-      // console.log('Refreshing accounts');
+    if (this.web3Service.MM) {
+      try {
+        const accs = await this.web3Service.getAccounts();
+        // console.log('Refreshing accounts');
 
-      // Get the initial account balance so it can be displayed.
-      if (accs.length === 0) {
-        console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-        return;
-      }
+        // Get the initial account balance so it can be displayed.
+        if (accs.length === 0) {
+          console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+          return;
+        }
 
-      if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
-        // console.log('Observed new accounts');
-        this.accountsObservable.next(accs);
-        this.accounts = accs;
-        this.balanceRefresh();
-      }
-    } catch (error) { }
+        if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
+          // console.log('Observed new accounts');
+          this.accountsObservable.next(accs);
+          this.accounts = accs;
+          this.balanceRefresh();
+        }
+      } catch (error) { }
+    }
+
   }
 
   public async balanceRefresh() {

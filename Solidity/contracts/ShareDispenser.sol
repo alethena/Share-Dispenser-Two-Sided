@@ -33,11 +33,13 @@ contract ShareDispenser is Ownable, Pausable {
     // 10000 basis points = 100%
 
     uint256 public usageFeeBSP  = 0;   // In basis points. 0 = no usage fee
-    uint256 public spreadBSP = 10000;      // In basis points. 95000 = 5% spread
+    uint256 public spreadBSP = 10000;      // In basis points. 9500 = 5% spread
 
     uint256 public minPriceInXCHF = 6*10**18;
     uint256 public maxPriceInXCHF = 8*10**18;
     uint256 public initialNumberOfShares = 10000;
+    bool public buyEnabled = true;
+    bool public sellEnabled = true;
     
 
     // Getters for ERC20 balances
@@ -85,6 +87,7 @@ contract ShareDispenser is Ownable, Pausable {
     // Function for buying shares
 
     function buyShares(uint256 numberOfSharesToBuy) public whenNotPaused() returns (bool) {
+        require(buyEnabled, "Buying is currenty disabled");
         // Fetch the total price
         address buyer = msg.sender;
         uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
@@ -116,6 +119,8 @@ contract ShareDispenser is Ownable, Pausable {
     // Function for selling shares
 
     function sellShares(uint256 numberOfSharesToSell) public whenNotPaused() returns (bool) {
+        require(sellEnabled, "Selling is currenty disabled");
+
         address seller = msg.sender;
         uint256 XCHFAvailable = getERC20Balance(XCHFContractAddress);
         uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
@@ -190,12 +195,14 @@ contract ShareDispenser is Ownable, Pausable {
     function setminPriceInXCHF(uint256 newMinPriceInRappen) public onlyOwner() {
         require(newMinPriceInRappen > 0, "Price must be positive number");
         minPriceInXCHF = newMinPriceInRappen.mul(10**16);
+        require(minPriceInXCHF <= maxPriceInXCHF, "Minimum price cannot exceed maximum price");
         emit MinPriceSet(minPriceInXCHF);
     }
 
     function setmaxPriceInXCHF(uint256 newMaxPriceInRappen) public onlyOwner() {
         require(newMaxPriceInRappen > 0, "Price must be positive number");
         maxPriceInXCHF = newMaxPriceInRappen.mul(10**16);
+        require(minPriceInXCHF <= maxPriceInXCHF, "Minimum price cannot exceed maximum price");
         emit MaxPriceSet(maxPriceInXCHF);
     }
 
@@ -203,6 +210,18 @@ contract ShareDispenser is Ownable, Pausable {
         require(newInitialNumberOfShares > 0, "Initial number of shares must be positive");
         initialNumberOfShares = newInitialNumberOfShares;
         emit InitialNumberOfSharesSet(initialNumberOfShares);
+    }
+
+    // Enable buy and sell separately
+
+    function buyStatus(bool newStatus) public onlyOwner() {
+        buyEnabled = newStatus;
+        emit BuyStatusChanged(newStatus);
+    }
+
+    function sellStatus(bool newStatus) public onlyOwner() {
+        sellEnabled = newStatus;
+        emit SellStatusChanged(newStatus);
     }
 
     // Events 
@@ -221,6 +240,9 @@ contract ShareDispenser is Ownable, Pausable {
     event MinPriceSet(uint256 minPrice);
     event MaxPriceSet(uint256 maxPrice);
     event InitialNumberOfSharesSet(uint256 initialNumberOfShares);
+
+    event BuyStatusChanged(bool newStatus);
+    event SellStatusChanged(bool newStatus);
 
     // Helper functions
 

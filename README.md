@@ -1,20 +1,9 @@
-This is the repository for the two sided share dispenser. It allows the user to swap ALEQ shares for XCHF and vice versa.
+**Alethena Share Dispenser**
+The share dispenser allows a company to provide a certain degree of liquidity to their shares. 
+The company deploys the share dispenser smart contract and supplies it with tokenised shares (and optionally an amount of XCHF).
 
-To run locally:
-- cd into folder
-- run `./init.sh` (on Windows use `sh .\init`)
-
-
-Attention: 
-There is a breaking change in the npm module `truffle-contract` from version 4.x.x onwards (breaks bignumber dependencies).
-
-
-**Documentation Share Dispenser Smart Contract:**
-
-The share dispenser allows a company to provide a certain degree of liquidity to their shares. The company 
 
 **State Variables**
-
 The contract uses the following variables:
 
 * `address public XCHFContractAddress` is the contract address where the Crypto Franc is deployed
@@ -29,7 +18,8 @@ The three addresses above have to be supplied to the constructor function (allow
 
 * `uint256 public spreadBSP` The company can decide to fix a spread between bid and ask prices. This is again expressed in basis points. Example: A value of 9500 corresponds to a spread of 5%, which means that the buyback price (i.e. the amount of XCHF a shareholder selling their shares to the company) will be reduced by 5%. 
 
-**Pricing Model**
+Pricing Model:
+
 The price is adjusted according to the available supply.
 Initially a total of `uint256 public initialNumberOfShares` shares are allocated (i.e. sent to) the share dispenser contract.
 The first share is to be sold at price `uint256 public minPriceInXCHF` and the last at price `uint256 public initialNumberOfShares`. Inbetween a linear interpolation is used, please see the pricing documentation for details and formulas.
@@ -39,18 +29,8 @@ If the company additionally supplies XCHF or if a spread is set, a situation can
 
 The buy and sell sides can be separately enabled/disabled through the variables `bool public buyEnabled` and `bool public sellEnabled`.
 
-**Additonal Functions**
-* The XCHF or ALEQ balance held by the dispenser contract can be retrieved through `getERC20Balance` which takes the corresponding contract address as an argument. 
-* To check that a share purchase can happen, the user needs to hold a sufficient amount of XCHF (or ALEQ) but they also need to give a sufficient allowance to the dispenser contract. This is checked using the `getERC20Available` function which takes two arguments, the contract address (ALEQ or XCHF) as well as the potential buyer/seller.
-* In order for the company to retrieve XCHF or ALEQ from the dispenser contract the `retrieveERC20` function is implemented. It expects three arguments, the contract address (ALEQ or XCHF), the address to send the tokens to as well as the amount. This function can only be called by the contract owner.
-
-
-**A note on decimals**
-XCHF has 18 decimals, ALEQ has zero decimals.
-Share prices are entered by the user in Rappen (0.01 XCHF). Hence we need a factor of 10**16 inbetween.
 
 **The buy process**
-
 To buy shares the user first grants a sufficient XCHF allowance to the dispenser smart contract.
 Then the user calls the function `buyShares` with one argument, the number of shares to buy.
 
@@ -66,7 +46,6 @@ Then the user calls the function `buyShares` with one argument, the number of sh
 Any user can call `buyShares`.
 
 **The sell process**
-
 To buy shares the user first grants a sufficient ALEQ allowance to the dispenser smart contract.
 Then the user calls the function `sellShares` with one argument, the number of shares to sell.
 
@@ -82,4 +61,29 @@ Then the user calls the function `sellShares` with one argument, the number of s
 Any user can call `sellShares`.
 
 
+
+**A note on decimals**
+XCHF has 18 decimals, ALEQ has zero decimals.
+Share prices are entered by the user in Rappen (0.01 XCHF). Hence we need a factor of 10**16 inbetween.
+
+**Additonal Functions**
+* The XCHF or ALEQ balance held by the dispenser contract can be retrieved through `getERC20Balance` which takes the corresponding contract address as an argument. 
+* To check that a share purchase can happen, the user needs to hold a sufficient amount of XCHF (or ALEQ) but they also need to give a sufficient allowance to the dispenser contract. This is checked using the `getERC20Available` function which takes two arguments, the contract address (ALEQ or XCHF) as well as the potential buyer/seller.
+* In order for the company to retrieve XCHF or ALEQ from the dispenser contract the `retrieveERC20` function is implemented. It expects three arguments, the contract address (ALEQ or XCHF), the address to send the tokens to as well as the amount. This function can only be called by the contract owner.
+
 **Permissions**
+
+
+**A note on versions**
+The deployed version of the ALEQ contract (https://etherscan.io/token/0xf40c5e190a608b6f8c0bf2b38c9506b327941402) uses Solidity 0.4.24, the deployed version of the XCHF contract (https://etherscan.io/address/0xb4272071ecadd69d933adcd19ca99fe80664fc08#code) uses Solidity 0.4.25. 
+The share dispenser uses Solidity version 0.5.0 (Truffle compatibility).
+For simplicity the ALEQ and XCHF contracts in this repository have been updated to Solidity version 0.5.0.
+
+**Running locally**
+To run locally:
+- cd into folder
+- run `./init.sh` (on Windows use `sh .\init`)
+
+
+**Attention:** 
+There is a breaking change in the npm module `truffle-contract` from version 4.x.x onwards (breaks bignumber dependencies).

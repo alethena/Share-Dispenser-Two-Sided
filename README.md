@@ -107,9 +107,9 @@ Given transaction costs (as well as usage fee and spread) rounding errors in int
 **Permissions**
 
 * The contract has an owner. This is handled through the corresponding open-zeppelin contract.
+* The contract is pausible by the owner (using the corresponding open-zeppelin contract).
 * The user can call the following functions `buyShares`, `sellShares`, `getERC20Balance`, `getERC20Available`, `getCumulatedPrice`, `getCumulatedBuyBackPrice`.
 * All other functions are restricted to internal use or can only be called by the contract owner.
-
 
 **A Note on Versions**
 

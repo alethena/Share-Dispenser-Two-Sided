@@ -121,6 +121,7 @@ For simplicity the ALEQ and XCHF contracts in this repository have been updated 
 Only the core ERC20 functionality of these two tokens is used, which is not affected by the compiler version.
 
 **Race conditions**
+
 Consider a situation where two users (Alice and Bob) both check the cumulated price for buying 10 shares roughly at the same time. Based on this Alice and Bob both give the corresponding XCHF allowance to the Share Dispenser contract.
 Let's assume Alice and Bob now both call the `buyShares` function roughly at the same time. 
 If the transaction of Alice goes through first, the transaction of Bob will revert because the price for the same number of shares has inncreased in the meantime. 

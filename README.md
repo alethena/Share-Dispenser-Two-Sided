@@ -79,14 +79,14 @@ To buy shares the user first grants a sufficient ALEQ allowance to the dispenser
 Then the user calls the function `sellShares` with two arguments, the number of shares to sell and the lowest price the seller will accept (see section Race Conditions).
 
 1. It is checked that selling is enabled
-2. a) The number of XCHF available is fetched and the totalPrice is computed using `getCumulatedBuyBackPrice`.
-2. b) It is checked that the totalPrice is not lower than the price limit supplied as the second argument.
-3. It is checked that the dispenser has enough XCHF and the seller has sufficient ALEQ balance and allowance set.
-4. The usage fee is computed and subtracted from the total price.
-5. The shares are transferred from the seller to the dispenser contract.
-6. Usage fee is transferred to the corresponding address
-7. The remaining XCHF is transferred to the dispenser seller.
-8. An event is emitted and the function returns `true`.
+2. The number of XCHF available is fetched and the totalPrice is computed using `getCumulatedBuyBackPrice`.
+3. It is checked that the totalPrice is not lower than the price limit supplied as the second argument.
+4. It is checked that the dispenser has enough XCHF and the seller has sufficient ALEQ balance and allowance set.
+5. The usage fee is computed and subtracted from the total price.
+6. The shares are transferred from the seller to the dispenser contract.
+7. Usage fee is transferred to the corresponding address
+8. The remaining XCHF is transferred to the dispenser seller.
+9. An event is emitted and the function returns `true`.
 
 If any conditions is not met or an ERC20 transaction does not go through, the function reverts.
 Any user can call `sellShares`.

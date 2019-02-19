@@ -113,7 +113,7 @@ Given transaction costs (as well as usage fee and spread) rounding errors in int
 
 **A Note on Versions**
 
-The deployed version of the ALEQ contract (https://etherscan.io/address/0xf40c5e190a608b6f8c0bf2b38c9506b327941402) uses Solidity 0.4.24, the deployed version of the XCHF contract (https://etherscan.io/address/0xb4272071ecadd69d933adcd19ca99fe80664fc08#code) uses Solidity 0.4.25. 
+The deployed version of the ALEQ contract (https://etherscan.io/address/0xf40c5e190a608b6f8c0bf2b38c9506b327941402#code) uses Solidity 0.4.24, the deployed version of the XCHF contract (https://etherscan.io/address/0xb4272071ecadd69d933adcd19ca99fe80664fc08#code) uses Solidity 0.4.25. 
 The share dispenser uses Solidity version 0.5.0 (because of Truffle compatibility).
 For simplicity the ALEQ and XCHF contracts in this repository have been updated to Solidity version 0.5.0.
 Only the core ERC20 functionality of these two tokens is used, which is not affected by the compiler version.

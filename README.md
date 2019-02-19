@@ -21,11 +21,12 @@ This will deploy a new instance of the ALEQ, XCHF and Share Dispenser contracts 
 **Demo system**
 
 The contracts have been deployed for testing purposes on Rinkeby:
-* ALEQ: 
-* XCHF:
-* Share Dispenser
+* ALEQ: TBD
+* XCHF: TBD
+* Share Dispenser: TBD
 
-* Front-end available at dispenser.alethena.com
+* A demo front-end is available at dispenser.alethena.com
+
 If you would like some fake XCHF to play around with this, let us know at `contact@alethena.com`.
 
 **State Variables**

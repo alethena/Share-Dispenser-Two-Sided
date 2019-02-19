@@ -9,9 +9,13 @@ The company deploys the share dispenser smart contract and supplies it with toke
 **Running the smart contract locally**
 
 This project uses the truffle framework (https://truffleframework.com/). 
+
 Clone the whole repository and install the necessary dependecies with `npm install` (or run `./init.sh` which includes the ng dependencies).
+
 To run the test cases use `truffle test` -- you need to run a local blockchain (Ganache) to do this.
+
 To deploy, run `truffle compile` and then `truffle migrate`. You can chose the network to deploy to in `tuffle-config.js`.
+
 This will deploy a new instance of the ALEQ, XCHF and Share Dispenser contracts and will provide the right arguments to the constructor of the Share Dispenser. 
 
 **Demo system**

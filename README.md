@@ -3,7 +3,26 @@
 The share dispenser allows a company to provide a certain degree of liquidity to their shares. 
 The company deploys the share dispenser smart contract and supplies it with tokenised shares (and optionally an amount of XCHF). Anyone can then buy and sell shares directly at a price dynamically computed depending on the current supply.
 
+
 <h2>Smart Contract Documentation</h2>
+
+**Running the smart contract locally**
+
+This project uses the truffle framework (https://truffleframework.com/). 
+Clone the whole repository and install the necessary dependecies with `npm install` (or run `./init.sh` which includes the ng dependencies).
+To run the test cases use `truffle test` -- you need to run a local blockchain (Ganache) to do this.
+To deploy, run `truffle compile` and then `truffle migrate`. You can chose the network to deploy to in `tuffle-config.js`.
+This will deploy a new instance of the ALEQ, XCHF and Share Dispenser contracts and will provide the right arguments to the constructor of the Share Dispenser. 
+
+**Demo system**
+
+The contracts have been deployed for testing purposes on Rinkeby:
+* ALEQ: 
+* XCHF:
+* Share Dispenser
+
+* Front-end available at dispenser.alethena.com
+If you would like some fake XCHF to play around with this, let us know at `contact@alethena.com`.
 
 **State Variables**
 
@@ -46,14 +65,17 @@ Then the user calls the function `buyShares` with one argument, the number of sh
 7. The shares are transferred to the buyer.
 8. An event is emitted and the function returns `true`.
 
+If any conditions is not met or an ERC20 transaction does not go through, the function reverts.
 Any user can call `buyShares`.
 
 **The Sell Process**
+
 To buy shares the user first grants a sufficient ALEQ allowance to the dispenser smart contract.
-Then the user calls the function `sellShares` with one argument, the number of shares to sell.
+Then the user calls the function `sellShares` with two arguments, the number of shares to sell and the lowest price the seller will accept (see section Race Conditions).
 
 1. It is checked that selling is enabled
-2. The number of XCHF available is fetched and the totalPrice is computed using `getCumulatedBuyBackPrice`.
+2. a) The number of XCHF available is fetched and the totalPrice is computed using `getCumulatedBuyBackPrice`.
+2. b) It is checked that the totalPrice is not lower than the price limit supplied as the second argument.
 3. It is checked that the dispenser has enough XCHF and the seller has sufficient ALEQ balance and allowance set.
 4. The usage fee is computed and subtracted from the total price.
 5. The shares are transferred from the seller to the dispenser contract.
@@ -61,14 +83,17 @@ Then the user calls the function `sellShares` with one argument, the number of s
 7. The remaining XCHF is transferred to the dispenser seller.
 8. An event is emitted and the function returns `true`.
 
+If any conditions is not met or an ERC20 transaction does not go through, the function reverts.
 Any user can call `sellShares`.
 
 
-
-**A Note on Decimals**
+**Decimals and Arithmetic**
 
 XCHF has 18 decimals, ALEQ has zero decimals.
 Share prices are entered by the user in Rappen (0.01 XCHF). Hence we need a factor of 10**16 inbetween.
+
+All arithmetic operations are handled using the `safeMath` open-zeppelin library. 
+Given transaction costs (as well as usage fee and spread) rounding errors in integer divison will not lead to an arbitrage possibility through repeated buying and selling.
 
 **Additonal Functions**
 
@@ -78,22 +103,36 @@ Share prices are entered by the user in Rappen (0.01 XCHF). Hence we need a fact
 
 **Permissions**
 
+* The contract has an owner. This is handled through the corresponding open-zeppelin contract.
+* The user can call the following functions `buyShares`, `sellShares`, `getERC20Balance`, `getERC20Available`, `getCumulatedPrice`, `getCumulatedBuyBackPrice`.
+* All other functions are restricted to internal use or can only be called by the contract owner.
+
 
 **A note on versions**
 
 The deployed version of the ALEQ contract (https://etherscan.io/token/0xf40c5e190a608b6f8c0bf2b38c9506b327941402) uses Solidity 0.4.24, the deployed version of the XCHF contract (https://etherscan.io/address/0xb4272071ecadd69d933adcd19ca99fe80664fc08#code) uses Solidity 0.4.25. 
-The share dispenser uses Solidity version 0.5.0 (Truffle compatibility).
+The share dispenser uses Solidity version 0.5.0 (because of Truffle compatibility).
 For simplicity the ALEQ and XCHF contracts in this repository have been updated to Solidity version 0.5.0.
+Only the core ERC20 functionality of these two tokens is used, which is not affected by the compiler version.
+
+**Race conditions**
+Consider a situation where two users (Alice and Bob) both check the cumulated price for buying 10 shares roughly at the same time. Based on this Alice and Bob both give the corresponding XCHF allowance to the Share Dispenser contract.
+Let's assume Alice and Bob now both call the `buyShares` function roughly at the same time. 
+If the transaction of Alice goes through first, the transaction of Bob will revert because the price for the same number of shares has inncreased in the meantime. 
+
+A similar case can occur when selling shares. To protect the seller, along with the number of shares to sell a limit needs to be supplied. If the price moves below the limit after a transaction is broadcasted, it will revert.
+
+Both of these cases can be handled in the front-end so that the user understands what has happened.
 
 
-<h2>Front-end Documentation</h2>
+
+<h1>Front-end Documentation</h1>
 
 **Running locally**
 
 To run locally:
 - cd into folder
 - run `./init.sh` (on Windows use `sh .\init`)
-
 
 **Attention:** 
 

@@ -115,6 +115,8 @@ contract('ShareDispenser', (accounts)=>{
         console.log("SD XCH balance:", post2.toString(10));
     });
 
+    // Test all the setters and getters
+
     // Unit tests for pricing function
 
     // //NEXT: COLLISION TESTS. I.e. what if an order doesn't go through for some reason?

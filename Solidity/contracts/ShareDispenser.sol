@@ -5,7 +5,21 @@ import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
 
-// Overall comment: What does contract do and dependencies...
+/**
+ * @title Alethena Share Dispenser
+ * @author Benjamin Rickenbacher, benjamin@alethena.com
+ * @dev This contract uses the open-zeppelin library.
+ *
+ * This smart contract is intended to serve as a tool that companies can use to provide liquidity in the context of 
+ * shares not traded on an exchange. This concrete instance is used to by Alethena for the tokenised shares of the 
+ * underlying Equility AG (https://etherscan.io/token/0xf40c5e190a608b6f8c0bf2b38c9506b327941402).
+ *
+ * The currency used for payment is the Crypto Franc XCHF (https://www.swisscryptotokens.ch/) which makes it possible
+ * to quote share prices directly in Swiss Francs.
+ *
+ * A company can allocate a certain number of shares (and optionally also some XCHF) to the share dispenser 
+ * and defines a linear price dependency.
+ **/
 
 interface ERC20 {
     function totalSupply() external view returns (uint256);
@@ -27,6 +41,7 @@ contract ShareDispenser is Ownable, Pausable {
         usageFeeAddress = initialusageFeeAddress;
     }
 
+    // Fallback function to prevent accidentally dending Ether to the contract
     function () external payable {
         revert("This contract does not accept Ether."); 
     }   
@@ -39,10 +54,10 @@ contract ShareDispenser is Ownable, Pausable {
     address public ALEQContractAddress;     // Address where ALEQ is deployed
     address public usageFeeAddress;         // Address where usage fee is collected
 
-    // Definition of constants e.g. prices etc. Buy and sell always refer to the end-user view.
+    // Buy and sell always refer to the end-user view.
     // 10000 basis points = 100%
 
-    uint256 public usageFeeBSP  = 0;   // In basis points. 0 = no usage fee
+    uint256 public usageFeeBSP  = 0;       // In basis points. 0 = no usage fee
     uint256 public spreadBSP = 10000;      // In basis points. 9500 = 5% spread
 
     uint256 public minPriceInXCHF = 6*10**18;
@@ -57,10 +72,10 @@ contract ShareDispenser is Ownable, Pausable {
     event ALEQContractAddressSet(address newALEQContractAddress);
     event UsageFeeAddressSet(address newUsageFeeAddress);
 
-    event SharesPurchased(address indexed buyer, uint256 amount);
-    event SharesSold(address indexed seller, uint256 amount);
+    event SharesPurchased(address indexed buyer, uint256 amount, uint256 totalPrice);
+    event SharesSold(address indexed seller, uint256 amount, uint256 buyBackPrice);
     
-    event TokensRetrieved(address contractAddress, address to, uint256 amount);
+    event TokensRetrieved(address contractAddress, address indexed to, uint256 amount);
 
     event UsageFeeSet(uint256 usageFee);
     event SpreadSet(uint256 spread);
@@ -83,8 +98,9 @@ contract ShareDispenser is Ownable, Pausable {
         uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
         uint256 totalPrice = getCumulatedPrice(numberOfSharesToBuy, sharesAvailable);
 
-        // Check everything necessary
+        // Check that there are enough shares
         require(sharesAvailable >= numberOfSharesToBuy, "Not enough shares available");
+        //Check that XCHF balance is sufficient and allowance is set
         require(getERC20Available(XCHFContractAddress, buyer) >= totalPrice, "Payment not authorized or funds insufficient");
 
         // Compute usage fee and final payment amount
@@ -102,13 +118,13 @@ contract ShareDispenser is Ownable, Pausable {
         // Transfer the shares
         require(ALEQ.transfer(buyer, numberOfSharesToBuy), "Share transfer failed");
 
-        emit SharesPurchased(buyer, numberOfSharesToBuy);
+        emit SharesPurchased(buyer, numberOfSharesToBuy, totalPrice);
         return true;
     }
 
     // Function for selling shares
 
-    function sellShares(uint256 numberOfSharesToSell) public whenNotPaused() returns (bool) {
+    function sellShares(uint256 numberOfSharesToSell, uint256 limitInXCHF) public whenNotPaused() returns (bool) {
         // Check that selling is enabled
         require(sellEnabled, "Selling is currenty disabled");
 
@@ -118,9 +134,11 @@ contract ShareDispenser is Ownable, Pausable {
         uint256 sharesAvailable = getERC20Balance(ALEQContractAddress);
 
         uint256 buyBackPrice = getCumulatedBuyBackPrice(numberOfSharesToSell, sharesAvailable);
+        require(limitInXCHF <= buyBackPrice, "Price too low");
 
-        // Checks
+        // Check that XCHF reserve is sufficient
         require(XCHFAvailable >= buyBackPrice, "Reserves to small to buy back this amount of shares");
+        // Check that seller has sufficient shares and allowance is set
         require(getERC20Available(ALEQContractAddress, seller) >= numberOfSharesToSell, "Seller doesn't have enough shares");
 
         // Compute usage fee and final payment amount
@@ -138,7 +156,7 @@ contract ShareDispenser is Ownable, Pausable {
         require(XCHF.transfer(usageFeeAddress, usageFee), "Usage fee transfer failed");
         require(XCHF.transfer(seller, paymentAmount), "XCHF payment failed");
 
-        emit SharesSold(seller, numberOfSharesToSell);
+        emit SharesSold(seller, numberOfSharesToSell, buyBackPrice);
         return true;
     }
 
@@ -181,10 +199,11 @@ contract ShareDispenser is Ownable, Pausable {
     }
 
     function getCumulatedBuyBackPrice(uint256 amount, uint256 supply) public view returns (uint256){
-        return getCumulatedPrice(amount, supply+amount).mul(spreadBSP).div(10000); // For symmetry reasons
+        return getCumulatedPrice(amount, supply.add(amount)).mul(spreadBSP).div(10000); // For symmetry reasons
     }
 
-    
+    // Function to retrieve ALEQ or XCHF from contract
+
     function retrieveERC20(address contractAddress, address to, uint256 amount) public onlyOwner() returns(bool) {
         ERC20 contractInstance = ERC20(contractAddress);
         require(contractInstance.transfer(to, amount), "Transfer failed");
@@ -258,14 +277,12 @@ contract ShareDispenser is Ownable, Pausable {
         emit SellStatusChanged(newStatus);
     }
 
-
-
     // Helper functions
 
     function helper(uint256 first, uint256 last) internal view returns (uint256) {
         uint256 tempa = last.sub(first).add(1).mul(minPriceInXCHF);                            // (l-m+1)*p_min
         uint256 tempb = maxPriceInXCHF.sub(minPriceInXCHF).div(initialNumberOfShares).div(2);  // (p_max-p_min)/(2N)
-        uint256 tempc = last.mul(last).add(last).add(first).sub(first.mul(first));                    // l*l+l-m*m+m)
+        uint256 tempc = last.mul(last).add(last).add(first).sub(first.mul(first));             // l*l+l-m*m+m)
         return tempb.mul(tempc).add(tempa);
     }
 

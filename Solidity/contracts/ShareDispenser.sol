@@ -92,6 +92,7 @@ contract ShareDispenser is Ownable, Pausable {
     function buyShares(uint256 numberOfSharesToBuy) public whenNotPaused() returns (bool) {
         // Check that buying is enabled
         require(buyEnabled, "Buying is currenty disabled");
+        require(numberOfSharesToBuy > 0, "Can't buy zero shares");
 
         // Fetch the total price
         address buyer = msg.sender;
@@ -127,6 +128,7 @@ contract ShareDispenser is Ownable, Pausable {
     function sellShares(uint256 numberOfSharesToSell, uint256 limitInXCHF) public whenNotPaused() returns (bool) {
         // Check that selling is enabled
         require(sellEnabled, "Selling is currenty disabled");
+        require(numberOfSharesToSell > 0, "Can't sell zero shares");
 
         // Fetch buyback price
         address seller = msg.sender;
@@ -179,7 +181,7 @@ contract ShareDispenser is Ownable, Pausable {
     function getCumulatedPrice(uint256 amount, uint256 supply) public view returns (uint256){
         uint256 cumulatedPrice = 0;
         if (supply <= initialNumberOfShares) {
-            uint256 first = initialNumberOfShares.sub(supply);
+            uint256 first = initialNumberOfShares.add(1).sub(supply);
             uint256 last = first.add(amount).sub(1);
             cumulatedPrice = helper(first, last);
         }
@@ -190,8 +192,8 @@ contract ShareDispenser is Ownable, Pausable {
 
         else {
             cumulatedPrice = supply.sub(initialNumberOfShares).mul(minPriceInXCHF);
-            uint256 first = 0;
-            uint256 last = amount.sub(supply.sub(initialNumberOfShares).add(1));
+            uint256 first = 1;
+            uint256 last = amount.sub(supply.sub(initialNumberOfShares));
             cumulatedPrice = cumulatedPrice.add(helper(first,last));
         }
         
@@ -280,9 +282,9 @@ contract ShareDispenser is Ownable, Pausable {
     // Helper functions
 
     function helper(uint256 first, uint256 last) internal view returns (uint256) {
-        uint256 tempa = last.sub(first).add(1).mul(minPriceInXCHF);                            // (l-m+1)*p_min
-        uint256 tempb = maxPriceInXCHF.sub(minPriceInXCHF).div(initialNumberOfShares).div(2);  // (p_max-p_min)/(2N)
-        uint256 tempc = last.mul(last).add(last).add(first).sub(first.mul(first));             // l*l+l-m*m+m)
+        uint256 tempa = last.sub(first).add(1).mul(minPriceInXCHF);                                   // (l-m+1)*p_min
+        uint256 tempb = maxPriceInXCHF.sub(minPriceInXCHF).div(initialNumberOfShares.sub(1)).div(2);  // (p_max-p_min)/(2(N-1))
+        uint256 tempc = last.mul(last).add(first.mul(3)).sub(last).sub(first.mul(first)).sub(2);      // l*l+3*m-l-m*m-2)
         return tempb.mul(tempc).add(tempa);
     }
 

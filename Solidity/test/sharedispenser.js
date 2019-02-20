@@ -96,13 +96,13 @@ contract('ShareDispenser', (accounts)=>{
 
     it('Sell shares', async () =>{
         const numberOfSharesToSell = new BN(234);
-        const supply = await ShareDispenserInstance.getERC20Available(AlethenaSharesInstance.address, ShareDispenserInstance.address);
-        const buybackPrice = ShareDispenserInstance.getCumulatedBuyBackPrice(numberOfSharesToSell, supply);
+        const supply = await ShareDispenserInstance.getERC20Balance(AlethenaSharesInstance.address);
+        const buybackPrice = await ShareDispenserInstance.getCumulatedBuyBackPrice(numberOfSharesToSell, supply);
 
         // const temp = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
         // console.log(temp.toString(10));
 
-        var tx = await ShareDispenserInstance.sellShares(numberOfSharesToSell,{from: Buyer});
+        var tx = await ShareDispenserInstance.sellShares(numberOfSharesToSell, buybackPrice, {from: Buyer});
         // assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
         console.log("Log:", tx.logs[0].args);
         const post1 = await AlethenaSharesInstance.balanceOf(Buyer);

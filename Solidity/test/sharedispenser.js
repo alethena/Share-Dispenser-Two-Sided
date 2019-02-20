@@ -77,16 +77,23 @@ contract('ShareDispenser', (accounts)=>{
         const supply = await ShareDispenserInstance.getERC20Available(AlethenaSharesInstance.address, ShareDispenserInstance.address);
         const totalPrice = ShareDispenserInstance.getCumulatedPrice(numberOfSharesToBuy, supply);
 
-        const temp = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
-        console.log(temp.toString(10));
+        const XCHFBalancePreBuyer = await XCHFInstance.balanceOf(Buyer);
+        const XCHFBalancePreSD = await XCHFInstance.balanceOf(ShareDispenserInstance.address);
+        const ALEQBalancePreBuyer = await AlethenaSharesInstance.balanceOf(Buyer);
+        const ALEQBalancePreSD = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
 
         var tx = await ShareDispenserInstance.buyShares(numberOfSharesToBuy,{from: Buyer});
-        // assert.equal(5, await AlethenaSharesInstance.balanceOf(Buyer));
-        console.log("Log:", tx.logs[0].args);
-        const post1 = await AlethenaSharesInstance.balanceOf(Buyer);
-        console.log("Buyer ALEQ balance:", post1.toString(10));
-        const post2 = await XCHFInstance.balanceOf(ShareDispenserInstance.address);
-        console.log("SD XCH balance:", post2.toString(10));
+
+        const XCHFBalancePostBuyer = await XCHFInstance.balanceOf(Buyer);
+        const XCHFBalancePostSD = await XCHFInstance.balanceOf(ShareDispenserInstance.address);
+        const ALEQBalancePostBuyer = await AlethenaSharesInstance.balanceOf(Buyer);
+        const ALEQBalancePostSD = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
+
+        // Check effects
+        assert.equal(XCHFBalancePreBuyer.sub(totalPrice), XCHFBalancePostBuyer);
+        // Check events
+
+
     });
 
     it('Set allowance', async () =>{
@@ -117,16 +124,21 @@ contract('ShareDispenser', (accounts)=>{
 
     // Test all the setters and getters
 
+    // Negative test for all setters
+
     // Unit tests for pricing function
 
-    // //NEXT: COLLISION TESTS. I.e. what if an order doesn't go through for some reason?
-    // it('Buy shares but too low supply', async () =>{
-    //     try{
-    //         const tx1 = await ShareDispenserInstance.buyShares(5000,{from: conflictingBuyer1}); //.then((tx)=>{console.log(tx)});
-    //     }
-    //     catch(err){
-    //         console.log(err);
-    //     }
-    //     await helpers.shouldRevert(ShareDispenserInstance.buyShares(5000,{from: conflictingBuyer2})); //.then((tx)=>{console.log(tx)});
-    // });
+    // Test across kink
+
+    // NEGATIVE TESTS:
+
+    // Balance too low
+
+    // Allowance not set
+
+    // Sell. Someone buys first --> Should revert fully
+
+    // 
+
+  
 });

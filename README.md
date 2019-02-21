@@ -20,10 +20,10 @@ This will deploy a new instance of the ALEQ, XCHF, and Share Dispenser contracts
 
 **Demo System**
 
-The contracts have been deployed for testing purposes on Rinkeby:
-* ALEQ: TBD
-* XCHF: TBD
-* Share Dispenser: TBD
+The contracts have been deployed for testing purposes on Rinkeby (https://rinkeby.etherscan.io):
+* ALEQ: 0x107F1323071884FaF7f00540b09Da97d5B72435B
+* XCHF: 0x2Ee59972244DF1688c27C5F0e007E6dBF61dAF28
+* Share Dispenser: 0x2ED73C109d5C0fe0e85F11fb9A93E0042b55f5f1
 
 * A demo front-end is available at https://dispenser.alethena.com.
 

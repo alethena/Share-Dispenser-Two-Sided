@@ -8,13 +8,13 @@ contract('ShareDispenser', (accounts) => {
 
     //Accounts used
 
-    const Owner              = accounts[0];
-    const Seller             = accounts[1];
-    const Buyer              = accounts[2];
-    const Buyer2             = accounts[3];
-    const conflictingBuyer1  = accounts[4];
-    const conflictingBuyer2  = accounts[5];
-    const treasury           = accounts[6];
+    const Owner = accounts[0];
+    const Seller = accounts[1];
+    const Buyer = accounts[2];
+    const Buyer2 = accounts[3];
+    const conflictingBuyer1 = accounts[4];
+    const conflictingBuyer2 = accounts[5];
+    const treasury = accounts[6];
     const conflictingSeller1 = accounts[7];
     const conflictingSeller2 = accounts[8];
 
@@ -184,8 +184,6 @@ contract('ShareDispenser', (accounts) => {
 
     });
 
-    // Test all the setters and getters
-
     // Negative test for all setters
 
     it('Only owner can use setter functions', async () => {
@@ -209,6 +207,11 @@ contract('ShareDispenser', (accounts) => {
         await shouldRevert(ShareDispenserInstance.setSpread(newValue, {
             from: Buyer2
         }));
+
+        await shouldRevert(ShareDispenserInstance.setMinVolume(newValue, {
+            from: Buyer2
+        }));
+
         await shouldRevert(ShareDispenserInstance.setminPriceInXCHF(newValue, {
             from: Buyer2
         }));
@@ -264,7 +267,7 @@ contract('ShareDispenser', (accounts) => {
         assert(price2.gte(pMax.sub(initialNumberOfShares)));
 
         // Check overflow is priced at pMin
-    
+
         let price3 = await ShareDispenserInstance.getCumulatedPrice(1, initialNumberOfShares.add(new BN(74324, 10)));
         assert(price3.lte(pMin.add(initialNumberOfShares)));
         assert(price3.gte(pMin.sub(initialNumberOfShares)));
@@ -275,7 +278,7 @@ contract('ShareDispenser', (accounts) => {
 
         // Check "kink" case
         const price4 = await ShareDispenserInstance.getCumulatedPrice(17, initialNumberOfShares.add(new BN(10, 10)));
-        const price5 = await ShareDispenserInstance.getCumulatedPrice(7, initialNumberOfShares); 
+        const price5 = await ShareDispenserInstance.getCumulatedPrice(7, initialNumberOfShares);
         const price6 = price4.sub(price3);
         assert(price6.lte(price5.add(initialNumberOfShares)));
         assert(price6.gte(price5.sub(initialNumberOfShares)));
@@ -297,10 +300,11 @@ contract('ShareDispenser', (accounts) => {
 
         assert(XCHFBalancePreBuyer.lt(totalPrice));
 
-        await shouldRevert(ShareDispenserInstance.buyShares(numberOfSharesToBuy, {
+        const e = await shouldRevert(ShareDispenserInstance.buyShares(numberOfSharesToBuy, {
             from: Buyer
         }));
 
+        assert(e.message.search("Payment not authorized or funds insufficient") >= 0);
     });
 
     it('Negative test (buy): Allowance too low', async () => {
@@ -315,6 +319,12 @@ contract('ShareDispenser', (accounts) => {
             from: Buyer2
         });
 
+        const e = await shouldRevert(ShareDispenserInstance.buyShares(numberOfSharesToBuy, {
+            from: Buyer2
+        }));
+
+        // console.log(e);
+        // assert(e.message.search("Payment not authorized or funds insufficient") >= 0);
     });
 
     it('Negative test (sell): Balance too low', async () => {
@@ -329,10 +339,11 @@ contract('ShareDispenser', (accounts) => {
 
         assert(ALEQBalancePreSeller.lt(numberOfSharesToSell));
 
-        await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell, totalPrice, {
+        const e = await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell, totalPrice, {
             from: Seller
         }));
 
+        assert(e.message.search("Seller doesn't have enough shares") >= 0);
     });
 
     it('Negative test (sell): Allowance too low', async () => {
@@ -347,10 +358,11 @@ contract('ShareDispenser', (accounts) => {
 
         assert(ALEQBalancePreSeller.gte(numberOfSharesToSell));
 
-        await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell, totalPrice, {
+        const e = await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell, totalPrice, {
             from: Seller
         }));
 
+        assert(e.message.search("Seller doesn't have enough shares") >= 0);
     });
 
     it('Set zero spread and fees', async () => {
@@ -392,12 +404,10 @@ contract('ShareDispenser', (accounts) => {
             from: Buyer2
         });
 
-
         const XCHFBalancePostBuyer = await XCHFInstance.balanceOf(Buyer2);
         const XCHFBalancePostSD = await XCHFInstance.balanceOf(ShareDispenserInstance.address);
         const ALEQBalancePostBuyer = await AlethenaSharesInstance.balanceOf(Buyer2);
         const ALEQBalancePostSD = await AlethenaSharesInstance.balanceOf(ShareDispenserInstance.address);
-
 
         assert.equal(XCHFBalancePreBuyer.toString(), XCHFBalancePostBuyer.toString());
         assert.equal(ALEQBalancePreBuyer.toString(), ALEQBalancePostBuyer.toString());
@@ -453,10 +463,98 @@ contract('ShareDispenser', (accounts) => {
             from: conflictingSeller1
         });
 
-        await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell2, buyBackPrice2, {
+        const e = await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell2, buyBackPrice2, {
             from: conflictingSeller2
         }));
+        assert(e.message.search('Price too low') >= 0);
     });
+
+    // Test all the setters
+
+    it('Setters work correctly', async () => {
+
+        const newXCHFContractAddress = "0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8";
+        const tx1 = await ShareDispenserInstance.setXCHFContractAddress(newXCHFContractAddress);
+        const XCHFContractAddress = await ShareDispenserInstance.XCHFContractAddress();
+        assert.equal(newXCHFContractAddress, XCHFContractAddress);
+        assert.equal("XCHFContractAddressSet", tx1.logs[0].event);
+        assert.equal(newXCHFContractAddress, tx1.logs[0].args.newXCHFContractAddress);
+
+        const newALEQContractAddress = "0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8";
+        const tx2 = await ShareDispenserInstance.setALEQContractAddress(newALEQContractAddress);
+        const ALEQContractAddress = await ShareDispenserInstance.ALEQContractAddress();
+        assert.equal(newALEQContractAddress, ALEQContractAddress);
+        assert.equal("ALEQContractAddressSet", tx2.logs[0].event);
+        assert.equal(newALEQContractAddress, tx2.logs[0].args.newALEQContractAddress);
+
+        const newUsageFeeAddress = "0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8";
+        const tx3 = await ShareDispenserInstance.setUsageFeeAddress(newUsageFeeAddress);
+        const UsageFeeAddress = await ShareDispenserInstance.usageFeeAddress();
+        assert.equal(newUsageFeeAddress, UsageFeeAddress);
+        assert.equal("UsageFeeAddressSet", tx3.logs[0].event);
+        assert.equal(newUsageFeeAddress, tx3.logs[0].args.newUsageFeeAddress);
+
+        const newValue = new BN(123, 10);
+
+        const tx4 = await ShareDispenserInstance.setUsageFee(newValue);
+        const usageFee = await ShareDispenserInstance.usageFeeBSP();
+        assert.equal(newValue.toString(), usageFee.toString());
+        assert.equal("UsageFeeSet", tx4.logs[0].event);
+        assert.equal(newValue.toString(), tx4.logs[0].args.usageFee.toString());
+
+        const tx5 = await ShareDispenserInstance.setSpread(newValue);
+        const spreadBSP = await ShareDispenserInstance.spreadBSP();
+        assert.equal(newValue.toString(), spreadBSP.toString());
+        assert.equal("SpreadSet", tx5.logs[0].event);
+        assert.equal(newValue.toString(), tx5.logs[0].args.spread.toString());
+
+        const tx6 = await ShareDispenserInstance.setMinVolume(newValue);
+        const minVolume = await ShareDispenserInstance.minVolume();
+        assert.equal(newValue.toString(), minVolume.toString());
+        assert.equal("MinVolumeSet", tx6.logs[0].event);
+        assert.equal(newValue.toString(), tx6.logs[0].args.minVolume.toString());
+
+        // await shouldRevert(ShareDispenserInstance.setMinVolume(newValue, {
+        //     from: Buyer2
+        // }));
+
+        // await shouldRevert(ShareDispenserInstance.setminPriceInXCHF(newValue, {
+        //     from: Buyer2
+        // }));
+        // await shouldRevert(ShareDispenserInstance.setmaxPriceInXCHF(newValue, {
+        //     from: Buyer2
+        // }));
+        // await shouldRevert(ShareDispenserInstance.setInitialNumberOfShares(newValue, {
+        //     from: Buyer2
+        // }));
+
+        // const newStatus = true;
+
+        // await shouldRevert(ShareDispenserInstance.buyStatus(newStatus, {
+        //     from: Buyer2
+        // }));
+        // await shouldRevert(ShareDispenserInstance.sellStatus(newStatus, {
+        //     from: Buyer2
+        // }));
+    })
+
+    it('Minimum volume is correctly enforced', async () => {
+
+        const numberOfSharesToBuy = new BN(2, 10);
+        const numberOfSharesToSell = new BN(2, 10);
+        let supply = await ShareDispenserInstance.getERC20Balance(AlethenaSharesInstance.address);
+        const buyBackPrice = await ShareDispenserInstance.getCumulatedBuyBackPrice(numberOfSharesToSell, supply);
+
+        const e1 = await shouldRevert(ShareDispenserInstance.buyShares(numberOfSharesToBuy, {
+            from: conflictingBuyer1
+        }));
+        assert(e1.message.search('Volume too low') >= 0);
+
+        const e2 = await shouldRevert(ShareDispenserInstance.sellShares(numberOfSharesToSell, buyBackPrice, {
+            from: conflictingSeller1
+        }));
+        assert(e2.message.search('Volume too low') >= 0);
+    })
 });
 
 
@@ -466,12 +564,13 @@ async function shouldRevert(promise) {
     try {
         await promise;
     } catch (error) {
+        // console.log(error);
         const revert = error.message.search('revert') >= 0;
         assert(
             revert,
             'Expected throw, got \'' + error + '\' instead',
         );
-        return;
+        return (error);
     }
     assert.fail('Expected throw not received');
 }

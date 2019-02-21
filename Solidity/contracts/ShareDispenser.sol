@@ -59,6 +59,7 @@ contract ShareDispenser is Ownable, Pausable {
 
     uint256 public usageFeeBSP  = 0;       // In basis points. 0 = no usage fee
     uint256 public spreadBSP = 10000;      // In basis points. 9500 = 5% spread
+    uint256 public minVolume = 1;          // Minimum number of shares to buy/sell
 
     uint256 public minPriceInXCHF = 6*10**18;
     uint256 public maxPriceInXCHF = 8*10**18;
@@ -79,6 +80,7 @@ contract ShareDispenser is Ownable, Pausable {
 
     event UsageFeeSet(uint256 usageFee);
     event SpreadSet(uint256 spread);
+    event MinVolumeSet(uint256 minVolume);
     event MinPriceSet(uint256 minPrice);
     event MaxPriceSet(uint256 maxPrice);
     event InitialNumberOfSharesSet(uint256 initialNumberOfShares);
@@ -92,7 +94,7 @@ contract ShareDispenser is Ownable, Pausable {
     function buyShares(uint256 numberOfSharesToBuy) public whenNotPaused() returns (bool) {
         // Check that buying is enabled
         require(buyEnabled, "Buying is currenty disabled");
-        require(numberOfSharesToBuy > 0, "Can't buy zero shares");
+        require(numberOfSharesToBuy >= minVolume, "Volume too low");
 
         // Fetch the total price
         address buyer = msg.sender;
@@ -128,7 +130,7 @@ contract ShareDispenser is Ownable, Pausable {
     function sellShares(uint256 numberOfSharesToSell, uint256 limitInXCHF) public whenNotPaused() returns (bool) {
         // Check that selling is enabled
         require(sellEnabled, "Selling is currenty disabled");
-        require(numberOfSharesToSell > 0, "Can't sell zero shares");
+        require(numberOfSharesToSell >= minVolume, "Volume too low");
 
         // Fetch buyback price
         address seller = msg.sender;
@@ -245,6 +247,12 @@ contract ShareDispenser is Ownable, Pausable {
         require(newSpreadInBSP <= 10000, "Spread must be given in basis points");
         spreadBSP = newSpreadInBSP;
         emit SpreadSet(spreadBSP);
+    }
+
+    function setMinVolume(uint256 newMinVolume) public onlyOwner() {
+        require(newMinVolume > 0, "Minimum volume can't be zero");
+        minVolume = newMinVolume;
+        emit MinVolumeSet(minVolume);
     }
 
     function setminPriceInXCHF(uint256 newMinPriceInRappen) public onlyOwner() {

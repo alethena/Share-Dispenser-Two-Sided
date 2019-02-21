@@ -165,7 +165,7 @@ export class Dispenser2Component implements OnInit {
         data: { address: this.account, amount: this.numberOfSharesToBuy, price: this.totalPrice }
       });
     } else {
-      this.web3Service.setStatus('Please use MetaMask to buy shares.');
+      this.web3Service.setStatus('Please use MetaMask to buy or sell shares.');
     }
 
   }

@@ -48,7 +48,6 @@ export class DispenserService {
       const bal = new Big(await XCHFInstance.balanceOf.call(acc));
       return bal;
     } catch (error) {
-      // console.log(error);
     }
   }
 
@@ -59,7 +58,6 @@ export class DispenserService {
       const bal = new Big(await ALEQInstance.balanceOf.call(acc));
       return bal;
     } catch (error) {
-      // console.log(error);
     }
   }
 
@@ -70,7 +68,6 @@ export class DispenserService {
       const total = new Big(await ALEQInstance.totalShares.call());
       return total;
     } catch (error) {
-      // console.log(error);
     }
   }
 
@@ -79,10 +76,8 @@ export class DispenserService {
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
       const SDInstance = await SDAbstraction.at(SDAddress);
       const available = new Big(await SDInstance.getERC20Balance.call(ALEQAddress));
-      // console.log("Test:", SDInstance, available.toString(10));
       return available;
     } catch (error) {
-      // console.log(error);
     }
   }
 
@@ -90,14 +85,11 @@ export class DispenserService {
     try {
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
       const SDInstance = await SDAbstraction.at(SDAddress);
-      // console.log(SDInstance);
       const supply = new Big(await SDInstance.getERC20Balance.call(ALEQAddress));
       const numberToBuyBN = new Big(numberToBuy);
-      // console.log('Data:', supply, numberToBuyBN);
       const price = await SDInstance.getCumulatedPrice.call(numberToBuyBN.toString(10), supply.toString(10));
       return price;
     } catch (error) {
-      // console.log(error);
     }
   }
 

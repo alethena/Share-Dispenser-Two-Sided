@@ -96,9 +96,9 @@ XCHF has 18 decimals, ALEQ has zero decimals.
 Share prices are entered by the user in Rappen (0.01 XCHF). Hence we need a factor of 10**16 inbetween.
 
 All arithmetic operations are handled using the `safeMath` open-zeppelin library (https://www.npmjs.com/package/openzeppelin-solidity). 
-Given transaction costs (as well as usage fee and spread) rounding errors in integer divison will not lead to an arbitrage possibility through repeated buying and selling.
+Given transaction costs (as well as usage fee and spread) rounding errors in integer division will not lead to an arbitrage possibility through repeated buying and selling.
 
-**Additonal Functions**
+**Additional Functions**
 
 * The XCHF or ALEQ balance held by the dispenser contract can be retrieved through `getERC20Balance` which takes the corresponding contract address as an argument. 
 * To check that a share purchase can happen, the user needs to hold a sufficient amount of XCHF (or ALEQ) but they also need to give a sufficient allowance to the dispenser contract. This is checked using the `getERC20Available` function which takes two arguments, the contract address (ALEQ or XCHF) as well as the potential buyer/seller.
@@ -122,7 +122,7 @@ Only the core ERC20 functionality of these two tokens is used, which is not affe
 
 Consider a situation where two users (Alice and Bob) both check the cumulated price for buying 10 shares roughly at the same time. Based on this Alice and Bob both give the corresponding XCHF allowance to the Share Dispenser contract.
 Let's assume Alice and Bob now both call the `buyShares` function roughly at the same time. 
-If the transaction of Alice goes through first, the transaction of Bob will revert because the price for the same number of shares has inncreased in the meantime. 
+If the transaction of Alice goes through first, the transaction of Bob will revert because the price for the same number of shares has increased in the meantime. 
 
 A similar case can occur when selling shares. To protect the seller, along with the number of shares to sell a limit needs to be supplied. If the price moves below the limit after a transaction is broadcasted, it will revert.
 

@@ -4,7 +4,6 @@ import "../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
-
 /**
  * @title Alethena Share Dispenser
  * @author Benjamin Rickenbacher, benjamin@alethena.com
@@ -64,6 +63,7 @@ contract ShareDispenser is Ownable, Pausable {
     uint256 public minPriceInXCHF = 6*10**18;
     uint256 public maxPriceInXCHF = 8*10**18;
     uint256 public initialNumberOfShares = 10000;
+
     bool public buyEnabled = true;
     bool public sellEnabled = true;
 
@@ -92,6 +92,7 @@ contract ShareDispenser is Ownable, Pausable {
     // Function for buying shares
 
     function buyShares(uint256 numberOfSharesToBuy) public whenNotPaused() returns (bool) {
+
         // Check that buying is enabled
         require(buyEnabled, "Buying is currenty disabled");
         require(numberOfSharesToBuy >= minVolume, "Volume too low");
@@ -103,6 +104,7 @@ contract ShareDispenser is Ownable, Pausable {
 
         // Check that there are enough shares
         require(sharesAvailable >= numberOfSharesToBuy, "Not enough shares available");
+
         //Check that XCHF balance is sufficient and allowance is set
         require(getERC20Available(XCHFContractAddress, buyer) >= totalPrice, "Payment not authorized or funds insufficient");
 
@@ -128,6 +130,7 @@ contract ShareDispenser is Ownable, Pausable {
     // Function for selling shares
 
     function sellShares(uint256 numberOfSharesToSell, uint256 limitInXCHF) public whenNotPaused() returns (bool) {
+
         // Check that selling is enabled
         require(sellEnabled, "Selling is currenty disabled");
         require(numberOfSharesToSell >= minVolume, "Volume too low");
@@ -142,6 +145,7 @@ contract ShareDispenser is Ownable, Pausable {
 
         // Check that XCHF reserve is sufficient
         require(XCHFAvailable >= buyBackPrice, "Reserves to small to buy back this amount of shares");
+
         // Check that seller has sufficient shares and allowance is set
         require(getERC20Available(ALEQContractAddress, seller) >= numberOfSharesToSell, "Seller doesn't have enough shares");
 
@@ -164,7 +168,7 @@ contract ShareDispenser is Ownable, Pausable {
         return true;
     }
 
-    // Getters for ERC20 balances
+    // Getters for ERC20 balances (for convenience)
 
     function getERC20Balance(address contractAddress) public view returns (uint256) {
         ERC20 contractInstance = ERC20(contractAddress);

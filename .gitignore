@@ -4,3 +4,6 @@ Solidity/node_modules/
 ng/node_modules/
 ng/dist/
 node_modules/
+.solcover.js
+coverage.json
+coverage/

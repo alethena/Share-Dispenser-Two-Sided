@@ -514,6 +514,8 @@ contract('ShareDispenser', (accounts) => {
         assert.equal("MinVolumeSet", tx6.logs[0].event);
         assert.equal(newValue.toString(), tx6.logs[0].args.minVolume.toString());
 
+        // Still need to expand tests here...
+
         // await shouldRevert(ShareDispenserInstance.setMinVolume(newValue, {
         //     from: Buyer2
         // }));
@@ -555,10 +557,15 @@ contract('ShareDispenser', (accounts) => {
         }));
         assert(e2.message.search('Volume too low') >= 0);
     })
+
+    // it('Tokens can be retrieved from contract', async () => {
+    //     // TBD
+    // })
 });
 
 
-//Used to check that EVM reverts when we expect it to
+// Used to check that EVM reverts when we expect it to
+// Error is returned so we can check that it reverted for the right reason
 
 async function shouldRevert(promise) {
     try {

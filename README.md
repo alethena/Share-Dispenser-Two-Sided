@@ -111,6 +111,14 @@ Given transaction costs (as well as usage fee and spread) rounding errors in int
 * The user can call the following functions `buyShares`, `sellShares`, `getERC20Balance`, `getERC20Available`, `getCumulatedPrice`, `getCumulatedBuyBackPrice`.
 * All other functions are restricted to internal use or can only be called by the contract owner.
 
+Users interact with the Share Dispenser only during transactions. It is therefore important that the process is transparent
+and the user is fully aware of the logic at the time of the transaction.
+However, the operator of the Share Dispenser reserves the right to unilaterally
+change parameters or pause the contract at any time. 
+The contract is not autonomous and is not intended to act in a DAO like fashion.
+
+"Trust" in the system should therefore only refer to transactions (e.g. the contract is not a honeypot).
+
 **A Note on Versions**
 
 The deployed version of the ALEQ contract (https://etherscan.io/address/0xf40c5e190a608b6f8c0bf2b38c9506b327941402#code) uses Solidity 0.4.24, the deployed version of the XCHF contract (https://etherscan.io/address/0xb4272071ecadd69d933adcd19ca99fe80664fc08#code) uses Solidity 0.4.25. 

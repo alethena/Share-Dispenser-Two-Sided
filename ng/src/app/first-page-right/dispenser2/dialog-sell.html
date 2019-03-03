@@ -1,0 +1,82 @@
+<div class="dialog">
+    <div *ngIf="buyPopup">
+        <h1 mat-dialog-title>Let's sell Alethena Shares</h1>
+        <div mat-dialog-content>
+            <mat-checkbox [(ngModel)]="checkbox"></mat-checkbox>
+                I acknowledge the terms set forth in the
+                <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
+                    Prospectus</a>,
+                <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
+                    Share Token Terms</a>, and the Alethena 
+                <a
+                    href="https://www.alethena.com/wp-content/uploads/Alethena_Privacy_Policy.pdf"
+                    target="_blank">
+                    Privacy
+                    Policy</a>. 
+            <br><br>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-raised-button color="primary" (click)="openBuyPopup()" [(disabled)]="!checkbox">Agree</button>
+            <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
+        </div>
+
+
+
+    </div>
+
+    <div *ngIf="buyPopup2">
+        <h1 mat-dialog-title>Please read carefully</h1>
+        <div mat-dialog-content>
+            You will receive two MetaMask notification pop-ups. Click "confirm" and wait until the transactions are
+            completed. <br><br>
+            Depending on your MetaMask settings, <b>this process can take up to a minute</b>. <br><br>
+            If you are unsure at all, please reach out
+            to <a href="mailto:contact@alethena.com">our team</a>. We are happy to help!
+            <br>
+
+        </div>
+
+        <div mat-dialog-actions>
+            <button mat-raised-button color="primary" (click)="sellShares()" [(disabled)]="!checkbox2">Proceed</button>
+            <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
+        </div>
+
+
+    </div>
+
+    <div *ngIf="MMPopup">
+        <h1 mat-dialog-title>
+            <mat-icon>local_cafe</mat-icon> Please be patient
+        </h1>
+        <div mat-dialog-content>
+            Transactions on the blockchain can take a while to process. <br><br>
+            <b>Do not refresh the window.</b>  <br><br>
+            If you don't want to wait, grab a cup of coffee - it will be through once you get back!
+        </div>
+        <!-- <div mat-dialog-actions>
+            <mat-spinner>
+            </mat-spinner>
+            <br><br>
+        </div> -->
+    </div>
+
+    <div *ngIf="FirstSucceded">
+        <h1 mat-dialog-title>Success!</h1>
+        <div mat-dialog-content>
+            The first transaction succeeded. Please accept the second MetaMask pop-up. <br> <br>
+            Again, wait until the transaction has completed. You're almost done!
+        </div>
+    </div>
+
+    <div *ngIf="SecondSucceded">
+        <h1 mat-dialog-title>Thank you for using the Share Dispenser</h1>
+        <div mat-dialog-content>
+            Come back soon!
+        </div>
+        <div mat-dialog-actions>
+            <button mat-raised-button color="primary" [mat-dialog-close]="true">Done</button>
+        </div>
+    </div>
+
+
+</div>

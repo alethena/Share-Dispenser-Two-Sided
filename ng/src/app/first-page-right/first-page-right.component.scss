@@ -1,6 +1,18 @@
 .dispenser-box {
-    margin-top: 155px;
+    margin-top: 117px;
     height: 100%;
+}
+
+@media only screen and (max-width: 1140px) {
+	.dispenser-box {
+        margin-top: 100px;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+	.dispenser-box {
+        margin-top: 74px;
+    }
 }
 
 @media only screen and (max-width: 800px) {

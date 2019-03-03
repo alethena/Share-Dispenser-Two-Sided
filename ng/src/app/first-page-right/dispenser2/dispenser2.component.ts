@@ -23,6 +23,9 @@ const XCHFAddress = contractAddresses.XCHFAddress;
 const SD_artifacts = require('../../../../../Solidity/build/contracts/ShareDispenser.json');
 const SDAddress = contractAddresses.SDAddress;
 
+const ALEQ_artifacts = require('../../../../../Solidity/build/contracts/AlethenaShares.json');
+const ALEQAddress = contractAddresses.ALEQAddress;
+
 
 export interface DialogData {
   address: string;
@@ -63,12 +66,14 @@ export class BalanceComponent {
   templateUrl: 'dialog.html',
 })
 export class DialogComponent {
+
   buyPopup = true;
   buyPopup2 = false;
   MMPopup = false;
   FirstSucceded = false;
   SecondSucceded = false;
   checkbox2 = false;
+
   constructor(@Inject(MAT_DIALOG_DATA)
   public data: DialogData,
     public dialog: MatDialog,
@@ -109,7 +114,7 @@ export class DialogComponent {
 
       this.FirstSucceded = false;
       this.SecondSucceded = true;
- 
+
 
     } catch (error) {
       this.web3Service.setStatus('An error occured during the transaction!');
@@ -120,6 +125,8 @@ export class DialogComponent {
   }
 
 }
+
+
 
 @Component({
   selector: 'app-dispenser2',
@@ -135,13 +142,18 @@ export class Dispenser2Component implements OnInit {
   totalPriceDisp = 0;
   public pricePerShare = 0;
 
+  totalPriceSell = 0;
+  totalPriceDispSell = 0;
+  public pricePerShareSell = 0;
+
   numberOfSharesToBuy = 20;
-  numberOfSharesToSell = 0;
+  numberOfSharesToSell = 20;
   XCHFBalance = 0;
   ALEQBalance = 0;
   ALEQAvailable = 0;
   ALEQTotal = 0;
   maxCanBuy = 20;
+  maxBuyBack = 20;
   maxLocked = false;
   SD: any;
   XCHF: any;
@@ -167,7 +179,6 @@ export class Dispenser2Component implements OnInit {
     } else {
       this.web3Service.setStatus('Please use MetaMask to buy or sell shares.');
     }
-
   }
 
   openBalances() {
@@ -187,6 +198,7 @@ export class Dispenser2Component implements OnInit {
   }
 
   async numberOfSharesToBuyChanged() {
+    // console.log("Called");
     if (this.numberOfSharesToBuy < 20) {
       this.numberOfSharesToBuy = 20;
     } else if (this.numberOfSharesToBuy > this.ALEQAvailable) {
@@ -197,6 +209,23 @@ export class Dispenser2Component implements OnInit {
       this.totalPrice = total;
       this.totalPriceDisp = Math.ceil(total.div(10 ** 18));
       this.pricePerShare = Math.ceil(total.div(this.numberOfSharesToBuy).div(10 ** 18) * 100) / 100;
+    } catch (error) {
+    }
+
+  }
+
+  async numberOfSharesToSellChanged() {
+    // console.log("Called");
+    if (this.numberOfSharesToSell < 20) {
+      this.numberOfSharesToSell = 20;
+    } else if (this.numberOfSharesToSell > this.ALEQAvailable) {
+      this.numberOfSharesToSell = this.ALEQAvailable;
+    }
+    try {
+      const total = new Big(await this.dispenserService.getBuyBackPrice(this.numberOfSharesToSell));
+      this.totalPriceSell = total;
+      this.totalPriceDispSell = Math.ceil(total.div(10 ** 18));
+      this.pricePerShareSell = Math.ceil(total.div(this.numberOfSharesToSell).div(10 ** 18) * 100) / 100;
 
     } catch (error) {
     }
@@ -206,6 +235,18 @@ export class Dispenser2Component implements OnInit {
     if (this.web3Service.MM) {
       await this.numberOfSharesToBuyChanged();
       this.numberOfSharesToBuy = this.maxCanBuy;
+      await this.numberOfSharesToBuyChanged();
+      await delay(3000);
+    } else {
+      // this.web3Service.setStatus('Please use MetaMask to buy shares.');
+    }
+  }
+
+  async setMaxCanSell() {
+    if (this.web3Service.MM) {
+      await this.numberOfSharesToSellChanged();
+      this.numberOfSharesToSell = (this.maxBuyBack <= this.ALEQBalance) ? this.maxBuyBack : this.ALEQBalance;
+      await this.numberOfSharesToSellChanged();
       await delay(3000);
     } else {
       // this.web3Service.setStatus('Please use MetaMask to buy shares.');
@@ -236,6 +277,10 @@ export class Dispenser2Component implements OnInit {
 
     this.dispenserService.MaxCanBuyObservable.subscribe((max) => {
       this.maxCanBuy = Number(max.toString());
+    });
+
+    this.dispenserService.MaxBuyBackObservable.subscribe((max) => {
+      this.maxBuyBack = Number(max.toString());
     });
   }
 }

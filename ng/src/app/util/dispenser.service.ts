@@ -268,11 +268,13 @@ export class DispenserService {
   }
 
   public async balanceRefreshAlways() {
-    const XCHFbal = await this.getXCHFBalance(this.accounts[0]);
-    this.XCHFBalanceObservable.next(XCHFbal.div(10 ** 18));
+    if (this.accounts) {
+      const XCHFbal = await this.getXCHFBalance(this.accounts[0]);
+      this.XCHFBalanceObservable.next(XCHFbal.div(10 ** 18));
 
-    const ALEQbal = await this.getALEQBalance(this.accounts[0]);
-    this.ALEQBalanceObservable.next(ALEQbal);
+      const ALEQbal = await this.getALEQBalance(this.accounts[0]);
+      this.ALEQBalanceObservable.next(ALEQbal);
+    }
   }
 
 

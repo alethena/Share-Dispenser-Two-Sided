@@ -59,25 +59,25 @@ contract('ShareDispenser', (accounts) => {
 
     it('Change SD parameters', async () => {
         const newUsageFee = new BN(236, 10);
-        const newSpread = new BN(9534, 10);
+        // const newSpread = new BN(9534, 10);
 
         const tx1 = await ShareDispenserInstance.setUsageFee(newUsageFee);
-        const tx2 = await ShareDispenserInstance.setSpread(newSpread);
+        // const tx2 = await ShareDispenserInstance.setSpread(newSpread);
 
         // Check events
 
         assert.equal(tx1.logs[0].event, "UsageFeeSet");
         assert.equal(tx1.logs[0].args.usageFee.toString(), newUsageFee.toString());
-        assert.equal(tx2.logs[0].event, "SpreadSet");
-        assert.equal(tx2.logs[0].args.spread.toString(), newSpread.toString());
+        // assert.equal(tx2.logs[0].event, "SpreadSet");
+        // assert.equal(tx2.logs[0].args.spread.toString(), newSpread.toString());
 
         // Check effect
 
         const usageFeeAfter = await ShareDispenserInstance.usageFeeBSP();
-        const spreadAfter = await ShareDispenserInstance.spreadBSP();
+        // const spreadAfter = await ShareDispenserInstance.spreadBSP();
 
         assert.equal(usageFeeAfter.toString(), newUsageFee.toString());
-        assert.equal(spreadAfter.toString(), newSpread.toString());
+        // assert.equal(spreadAfter.toString(), newSpread.toString());
 
     });
 
@@ -130,6 +130,7 @@ contract('ShareDispenser', (accounts) => {
         assert.equal(tx.logs[0].args.buyer, Buyer);
         assert.equal(tx.logs[0].args.amount.toString(), numberOfSharesToBuy.toString());
         assert.equal(tx.logs[0].args.totalPrice.toString(), totalPrice.toString());
+        console.log("Next price:", tx.logs[0].args.nextPrice.toString());
 
     });
 
@@ -180,7 +181,7 @@ contract('ShareDispenser', (accounts) => {
         assert.equal(tx.logs[0].args.seller, Buyer);
         assert.equal(tx.logs[0].args.amount.toString(), numberOfSharesToSell.toString());
         assert.equal(tx.logs[0].args.buyBackPrice.toString(), buybackPrice.toString());
-
+        console.log(tx.logs[0].args.nextPrice.toString());
 
     });
 
@@ -204,10 +205,7 @@ contract('ShareDispenser', (accounts) => {
         await shouldRevert(ShareDispenserInstance.setUsageFee(newValue, {
             from: Buyer2
         }));
-        await shouldRevert(ShareDispenserInstance.setSpread(newValue, {
-            from: Buyer2
-        }));
-
+  
         await shouldRevert(ShareDispenserInstance.setMinVolume(newValue, {
             from: Buyer2
         }));
@@ -215,9 +213,11 @@ contract('ShareDispenser', (accounts) => {
         await shouldRevert(ShareDispenserInstance.setminPriceInXCHF(newValue, {
             from: Buyer2
         }));
+
         await shouldRevert(ShareDispenserInstance.setmaxPriceInXCHF(newValue, {
             from: Buyer2
         }));
+
         await shouldRevert(ShareDispenserInstance.setInitialNumberOfShares(newValue, {
             from: Buyer2
         }));
@@ -367,10 +367,10 @@ contract('ShareDispenser', (accounts) => {
 
     it('Set zero spread and fees', async () => {
         const newUsageFee = new BN(0, 10);
-        const newSpread = new BN(10000, 10);
+        // const newSpread = new BN(10000, 10);
 
         await ShareDispenserInstance.setUsageFee(newUsageFee);
-        await ShareDispenserInstance.setSpread(newSpread);
+        // await ShareDispenserInstance.setSpread(newSpread);
     });
 
     it('Buy and immediate resale at zero usage fee and spread only costs Ethereum TX fees', async () => {
@@ -502,11 +502,11 @@ contract('ShareDispenser', (accounts) => {
         assert.equal("UsageFeeSet", tx4.logs[0].event);
         assert.equal(newValue.toString(), tx4.logs[0].args.usageFee.toString());
 
-        const tx5 = await ShareDispenserInstance.setSpread(newValue);
-        const spreadBSP = await ShareDispenserInstance.spreadBSP();
-        assert.equal(newValue.toString(), spreadBSP.toString());
-        assert.equal("SpreadSet", tx5.logs[0].event);
-        assert.equal(newValue.toString(), tx5.logs[0].args.spread.toString());
+        // const tx5 = await ShareDispenserInstance.setSpread(newValue);
+        // const spreadBSP = await ShareDispenserInstance.spreadBSP();
+        // assert.equal(newValue.toString(), spreadBSP.toString());
+        // assert.equal("SpreadSet", tx5.logs[0].event);
+        // assert.equal(newValue.toString(), tx5.logs[0].args.spread.toString());
 
         const tx6 = await ShareDispenserInstance.setMinVolume(newValue);
         const minVolume = await ShareDispenserInstance.minVolume();

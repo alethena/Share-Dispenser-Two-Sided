@@ -43,7 +43,6 @@ The three addresses above have to be supplied to the constructor function (allow
 
 * `uint256 public usageFeeBSP`  This is the usage fee expressed in basis points (10000BSP = 100%). When shares are bought or sold, this fraction of the XCHF payment is transferred to the `usageFeeAddress`. A value of zero corresponds to no usage fee, a value of 500 corresponds to 5% usage fee.
 
-* `uint256 public spreadBSP` The company can decide to fix a spread between bid and ask prices. This is again expressed in basis points. Example: A value of 9500 corresponds to a spread of 5%, which means that the buyback price (i.e. the amount of XCHF a shareholder selling their shares to the company) will be reduced by 5%. 
 
 **Pricing Model**
 
@@ -51,8 +50,8 @@ The three addresses above have to be supplied to the constructor function (allow
 * Initially a total of `uint256 public initialNumberOfShares` shares are allocated (i.e. sent to) the share dispenser contract.
 * The first share is to be sold at price `uint256 public minPriceInXCHF` and the last at price `uint256 public maxPriceInXCHF`. Inbetween a linear interpolation is used, please see the pricing documentation for details and formulas.
 * The pricing functions are implemented in the `getCumulatedPrice` and `getCumulatedBuyBackPrice` functions which both take two arguments, namely the number of shares to be bought/sold and the number of shares currently available. 
-* There is a relation between buy and sell prices in the sense that, assuming zero spread, buying shares and subsequently selling them straight away should have no effect apart from transactions fees spent.
-* If the company additionally supplies XCHF or if a spread is set, a situation can occur where the number of shares held by the contract exceeds `initialNumberOfShares`. In this case, the share surplus will be sold at price `minPriceInXCHF`.
+* There is a relation between buy and sell prices in the sense that buying shares and subsequently selling them straight away should have no effect apart from transactions fees spent.
+* If the company additionally supplies XCHF, a situation can occur where the number of shares held by the contract exceeds `initialNumberOfShares`. In this case, the share surplus will be sold at price `minPriceInXCHF`.
 * The buy and sell sides can be separately enabled/disabled through the variables `bool public buyEnabled` and `bool public sellEnabled`.
 
 **The Buy Process**
@@ -96,7 +95,7 @@ XCHF has 18 decimals, ALEQ has zero decimals.
 Share prices are entered by the user in Rappen (0.01 XCHF). Hence we need a factor of 10**16 inbetween.
 
 All arithmetic operations are handled using the `safeMath` open-zeppelin library (https://www.npmjs.com/package/openzeppelin-solidity). 
-Given transaction costs (as well as usage fee and spread) rounding errors in integer division will not lead to an arbitrage possibility through repeated buying and selling.
+Given transaction costs (as well as usage fee) rounding errors in integer division will not lead to an arbitrage possibility through repeated buying and selling.
 
 **Additional Functions**
 

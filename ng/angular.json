@@ -22,7 +22,8 @@
               "src/resources/img/Alethena_horizontal.png",
               "src/assets/SDVideo.mp4",
               "src/assets/FirstFrame.jpg",
-              "src/resources/css/img/adventure-alps-altitude-1726970.jpg"
+              "src/resources/css/img/adventure-alps-altitude-1726970.jpg",
+              "src/assets/screenshot.png"
             ],
             "styles": [
               "src/vendors/css/Grid.css",

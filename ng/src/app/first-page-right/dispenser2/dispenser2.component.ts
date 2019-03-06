@@ -190,18 +190,24 @@ export class Dispenser2Component implements OnInit {
 
   ngOnInit(): void {
     // console.log('OnInit: ' + this.web3Service);
+  
+    this.numberOfSharesToBuy = 20;
     this.watchAccount();
-    // try {
-    //   this.setMaxCanBuy();
-    // } catch (error) {
-    // }
+    this.numberOfSharesToBuyChanged();
+    try {
+      this.setMaxCanBuy();
+    } catch (error) {
+    }
   }
 
   async numberOfSharesToBuyChanged() {
     // console.log("Called");
     if (this.numberOfSharesToBuy > this.ALEQAvailable) {
       this.numberOfSharesToBuy = this.ALEQAvailable;
-    } else if (this.numberOfSharesToBuy < 20) {
+      console.log(this.numberOfSharesToBuy);
+    }
+
+    if (this.numberOfSharesToBuy < 20) {
       this.numberOfSharesToBuy = 20;
     }
 

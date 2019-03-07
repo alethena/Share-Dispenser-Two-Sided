@@ -89,7 +89,7 @@ export class DialogComponent {
     this.buyPopup2 = true;
     await delay(4000);
     this.checkbox2 = true;
-    console.log(this.data.amount);
+    // console.log(this.data.amount);
   }
 
   async buyShares() {
@@ -204,7 +204,7 @@ export class Dispenser2Component implements OnInit {
     // console.log("Called");
     if (this.numberOfSharesToBuy > this.ALEQAvailable) {
       this.numberOfSharesToBuy = this.ALEQAvailable;
-      console.log(this.numberOfSharesToBuy);
+      // console.log(this.numberOfSharesToBuy);
     }
 
     if (this.numberOfSharesToBuy < 20) {

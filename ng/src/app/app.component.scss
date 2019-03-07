@@ -3,8 +3,8 @@
 	min-height: 100vh;
 	// background-image: linear-gradient(rgba(256, 256, 256, 0.7), rgba(256, 256, 256, 0.9), rgba(256, 256, 256, 0.95)), url(../resources/css/img/hero.png);
 	// background-image: linear-gradient(rgba(255, 255, 255, 0.89), rgba(255, 255, 255, 0.897), rgba(255, 255, 255, 0.829)), url(../resources/css/img/adventure-alps-altitude-1726970.jpg);
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffffc2), color-stop(#ffffffe8), to(#e3ebeed8)), url(../resources/css/img/adventure-alps-altitude-1726970.jpg);
-	background-image: linear-gradient(#ffffffc2, #ffffffe8, #e3ebeed8), url(../resources/css/img/adventure-alps-altitude-1726970.jpg);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.761)), color-stop(rgba(255, 255, 255, 0.91)), to(rgba(227, 235, 238, 0.847))), url(../resources/css/img/adventure-alps-altitude-1726970.jpg);
+	background-image: linear-gradient(rgba(255, 255, 255, 0.761), rgba(255, 255, 255, 0.91), rgba(227, 235, 238, 0.847)), url(../resources/css/img/adventure-alps-altitude-1726970.jpg);
 
 	background-size: cover;
 	background-position: center;

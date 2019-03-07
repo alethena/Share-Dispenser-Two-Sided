@@ -36,15 +36,15 @@ a {
 }
 
 a:hover {
-  color: #155c72a4;
+  color: rgba(21, 92, 114, 0.643);
 }
 
 .bg-img-2 {
   min-height: 100%;
   // background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/hero.png);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#155c72f1), color-stop(#155c72ec), to(#155c724f)),
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(21, 92, 114, 0.945)), color-stop(rgba(21, 92, 114, 0.925)), to(rgba(21, 92, 114, 0.31))),
     url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
-  background-image: linear-gradient(#155c72f1, #155c72ec, #155c724f),
+  background-image: linear-gradient(rgba(21, 92, 114, 0.945), rgba(21, 92, 114, 0.925), rgba(21, 92, 114, 0.31)),
     url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
   // background-image: linear-gradient(#12546af5, #12546ace, #12546a80), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
 

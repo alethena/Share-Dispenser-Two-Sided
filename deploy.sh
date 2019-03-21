@@ -6,5 +6,5 @@ npm install
 ng build --prod --aot
 /Users/benjaminrickenbacher/.anaconda/navigator/a.tool
 exit
-aws s3 rm s3://test.alethena.com --recursive
-aws s3 cp ./dist/ s3://test.alethena.com --recursive
+aws s3 rm s3://dispenser-uat.alethena.com --recursive
+aws s3 cp ./dist/ s3://dispenser-uat.alethena.com --recursive

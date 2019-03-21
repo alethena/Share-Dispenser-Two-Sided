@@ -31,7 +31,7 @@ import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { FirstPageLeftComponent } from './first-page-left/first-page-left.component';
 import { FirstPageRightComponent } from './first-page-right/first-page-right.component';
 import { Dispenser2Component } from './first-page-right/dispenser2/dispenser2.component';
-import { DialogComponent } from './first-page-right/dispenser2/dispenser2.component';
+import { DialogComponent, DialogSellComponent } from './first-page-right/dispenser2/dispenser2.component';
 import { BalanceComponent } from './first-page-right/dispenser2/dispenser2.component';
 import { Footer2Component } from './footer2/footer2.component';
 
@@ -45,9 +45,10 @@ import { Footer2Component } from './footer2/footer2.component';
     FirstPageRightComponent,
     Dispenser2Component,
     DialogComponent,
+    DialogSellComponent,
     Footer2Component
   ],
-  entryComponents: [DialogComponent, BalanceComponent],
+  entryComponents: [DialogComponent, DialogSellComponent, BalanceComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -3,25 +3,20 @@
         <h1 mat-dialog-title>Let's buy Alethena Shares</h1>
         <div mat-dialog-content>
             <mat-checkbox [(ngModel)]="checkbox"></mat-checkbox>
-                I acknowledge the terms set forth in the
-                <a href="https://www.alethena.com/wp-content/uploads/Prospectus-ALEQ-v1.0.pdf" target="_blank">
-                    Prospectus</a>,
-                <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
-                    Share Token Terms</a>, and the Alethena 
-                <a
-                    href="https://www.alethena.com/wp-content/uploads/Alethena_Privacy_Policy.pdf"
-                    target="_blank">
-                    Privacy
-                    Policy</a>. 
+            I acknowledge the terms set forth in the
+            <a href="https://www.alethena.com/wp-content/uploads/Prospectus-ALEQ-v1.0.pdf" target="_blank">
+                Prospectus</a>,
+            <a href="https://www.alethena.com/wp-content/uploads/Equility_AG_Share_Token_Terms.pdf" target="_blank">
+                Share Token Terms</a>, and the Alethena
+            <a href="https://www.alethena.com/wp-content/uploads/Alethena_Privacy_Policy.pdf" target="_blank">
+                Privacy
+                Policy</a>.
             <br><br>
         </div>
         <div mat-dialog-actions>
             <button mat-raised-button color="primary" (click)="openBuyPopup()" [(disabled)]="!checkbox">Agree</button>
             <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
         </div>
-
-
-
     </div>
 
     <div *ngIf="buyPopup2">
@@ -33,7 +28,6 @@
             If you are unsure at all, please reach out
             to <a href="mailto:contact@alethena.com">our team</a>. We are happy to help!
             <br>
-
         </div>
 
         <div mat-dialog-actions>
@@ -50,14 +44,9 @@
         </h1>
         <div mat-dialog-content>
             Transactions on the blockchain can take a while to process. <br><br>
-            <b>Do not refresh the window.</b>  <br><br>
+            <b>Do not refresh the window.</b> <br><br>
             If you don't want to wait, grab a cup of coffee - it will be through once you get back!
         </div>
-        <!-- <div mat-dialog-actions>
-            <mat-spinner>
-            </mat-spinner>
-            <br><br>
-        </div> -->
     </div>
 
     <div *ngIf="FirstSucceded">
@@ -71,16 +60,12 @@
     <div *ngIf="SecondSucceded">
         <h1 mat-dialog-title>Thank you for becoming a shareholder!</h1>
         <div mat-dialog-content>
-            To exercise your shareholder rights, please register in our 
-            shareholder registry at <a href="https://alethena.ledgy.com/signup"
-                target="_blank">Ledgy</a>.
+            To exercise your shareholder rights, please register in our
+            shareholder registry at <a href="https://alethena.ledgy.com/signup" target="_blank">Ledgy</a>.
         </div>
         <div mat-dialog-actions>
-            <a mat-raised-button color="primary" href="https://alethena.ledgy.com/signup"
-            target="_blank">Register</a>.
+            <a mat-raised-button color="primary" href="https://alethena.ledgy.com/signup" target="_blank">Register</a>.
             <button mat-raised-button [mat-dialog-close]="true">Done</button>
         </div>
     </div>
-
-
 </div>

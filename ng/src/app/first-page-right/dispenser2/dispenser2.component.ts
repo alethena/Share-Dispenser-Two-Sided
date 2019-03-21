@@ -128,6 +128,83 @@ export class DialogComponent {
 
 
 
+
+
+
+
+@Component({
+  selector: 'app-dialog-sell',
+  templateUrl: 'dialog-sell.html',
+})
+export class DialogSellComponent {
+
+  buyPopup = true;
+  buyPopup2 = false;
+  MMPopup = false;
+  FirstSucceded = false;
+  SecondSucceded = false;
+  checkbox2 = false;
+
+  constructor(@Inject(MAT_DIALOG_DATA)
+  public data: DialogData,
+    public dialog: MatDialog,
+    private web3Service: Web3Service,
+    private dispenserService: DispenserService,
+    private matSnackBar: MatSnackBar,
+    private matDividerModule: MatDividerModule) {
+
+  }
+
+  async openBuyPopup() {
+    this.buyPopup = false;
+    this.buyPopup2 = true;
+    await delay(4000);
+    this.checkbox2 = true;
+    // console.log(this.data.amount);
+  }
+
+  async sellShares() {
+    this.buyPopup2 = false;
+    this.MMPopup = true;
+
+    try {
+      const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
+      const SDInstance = await SDAbstraction.at(SDAddress);
+
+      const ALEQAbstraction = await this.web3Service.artifactsToContract(ALEQ_artifacts);
+      const ALEQInstance = await ALEQAbstraction.at(ALEQAddress);
+
+      // const supply = await ALEQInstance.balanceOf(SDAddress);
+
+      const temp = await this.dispenserService.getBuyBackPrice(this.data.amount);
+      // console.log(temp.toString());
+
+      const hash = await ALEQInstance.approve.sendTransaction(SDAddress, this.data.amount, { from: this.data.address });
+      this.MMPopup = false;
+      this.FirstSucceded = true;
+
+      await delay(4000);
+      const log = await SDInstance.sellShares.sendTransaction(this.data.amount, temp, { from: this.data.address });
+      // console.log(log);
+      this.FirstSucceded = false;
+      this.SecondSucceded = true;
+
+
+    } catch (error) {
+      this.web3Service.setStatus('An error occured during the transaction!');
+      this.dialog.closeAll();
+      console.log(error);
+    }
+    // }
+  }
+
+}
+
+
+
+
+
+
 @Component({
   selector: 'app-dispenser2',
   templateUrl: './dispenser2.component.html',
@@ -181,6 +258,18 @@ export class Dispenser2Component implements OnInit {
     }
   }
 
+  openSellDialog() {
+    if (this.web3Service.MM) {
+      this.checkbox = false;
+      this.dialog.open(DialogSellComponent, {
+        disableClose: true,
+        data: { address: this.account, amount: this.numberOfSharesToSell, price: this.totalPriceSell }
+      });
+    } else {
+      this.web3Service.setStatus('Please use MetaMask to buy or sell shares.');
+    }
+  }
+
   openBalances() {
     this.dialog.open(BalanceComponent, {
       data: { address: this.account, ALEQ: this.ALEQBalance, XCHF: this.XCHFBalance }
@@ -201,10 +290,8 @@ export class Dispenser2Component implements OnInit {
   }
 
   async numberOfSharesToBuyChanged() {
-    // console.log("Called");
     if (this.numberOfSharesToBuy > this.ALEQAvailable) {
       this.numberOfSharesToBuy = this.ALEQAvailable;
-      // console.log(this.numberOfSharesToBuy);
     }
 
     if (this.numberOfSharesToBuy < 20) {
@@ -225,8 +312,8 @@ export class Dispenser2Component implements OnInit {
     // console.log("Called");
     if (this.numberOfSharesToSell < 20) {
       this.numberOfSharesToSell = 20;
-    } else if (this.numberOfSharesToSell > this.ALEQAvailable) {
-      this.numberOfSharesToSell = this.ALEQAvailable;
+    } else if (this.numberOfSharesToSell > this.ALEQTotal) {
+      this.numberOfSharesToSell = this.ALEQTotal;
     }
     try {
       const total = new Big(await this.dispenserService.getBuyBackPrice(this.numberOfSharesToSell));

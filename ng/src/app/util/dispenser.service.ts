@@ -161,14 +161,16 @@ export class DispenserService {
   }
 
   public async getMaxBuyBack() {
+
     let totalXCHF = await this.getXCHFAvailable();
-    const totalALEQ = await this.getALEQAvailable();
+    const totalALEQ = await this.getALEQTotal();
 
     totalXCHF = Number(totalXCHF.div(10 ** 18).toString(10));
 
     if (totalALEQ === 0) {
       return 0;
     }
+
     let power = 0;
     let temp = 0;
 
@@ -180,6 +182,8 @@ export class DispenserService {
     // Now do binary search to find max allowed value
     let iter = 2 ** (power);
     while (power > 0) {
+      // console.log("Calc:", iter);
+
       power -= 1;
 
       temp = await this.compareValueSell(iter);
@@ -189,6 +193,7 @@ export class DispenserService {
       } else if (temp > totalXCHF) {
         iter -= 2 ** (power);
       } else if (temp === totalXCHF) {
+        
         return (iter <= totalALEQ) ? iter : totalALEQ;
       }
     }
@@ -253,11 +258,7 @@ export class DispenserService {
   }
 
   public async balanceRefresh() {
-    const ALEQTot = await this.getALEQTotal();
-    this.ALEQTotalObservable.next(ALEQTot);
 
-    const ALEQSup = await this.getALEQAvailable();
-    this.ALEQAvailableObservable.next(ALEQSup);
 
     const maxCanBuy = await this.getMaxCanBuy();
     this.MaxCanBuyObservable.next(maxCanBuy);
@@ -269,6 +270,13 @@ export class DispenserService {
 
   public async balanceRefreshAlways() {
     if (this.accounts) {
+
+      const ALEQTot = await this.getALEQTotal();
+      this.ALEQTotalObservable.next(ALEQTot);
+  
+      const ALEQSup = await this.getALEQAvailable();
+      this.ALEQAvailableObservable.next(ALEQSup);
+      
       const XCHFbal = await this.getXCHFBalance(this.accounts[0]);
       this.XCHFBalanceObservable.next(XCHFbal.div(10 ** 18));
 

@@ -243,6 +243,8 @@ export class Dispenser2Component implements OnInit {
     private matDividerModule: MatDividerModule
   ) {
     this.numberOfSharesToBuyChanged();
+    this.numberOfSharesToSellChanged();
+
   }
 
 
@@ -312,9 +314,10 @@ export class Dispenser2Component implements OnInit {
     // console.log("Called");
     if (this.numberOfSharesToSell < 20) {
       this.numberOfSharesToSell = 20;
-    } else if (this.numberOfSharesToSell > this.ALEQTotal) {
-      this.numberOfSharesToSell = this.ALEQTotal;
     }
+    // } else if (this.numberOfSharesToSell > this.ALEQTotal) {
+    //   this.numberOfSharesToSell = this.ALEQTotal;
+    // }
     try {
       const total = new Big(await this.dispenserService.getBuyBackPrice(this.numberOfSharesToSell));
       this.totalPriceSell = total;

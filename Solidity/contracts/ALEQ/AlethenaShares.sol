@@ -219,5 +219,27 @@ Main change: Transfer functions have an additional post function which resolves 
         emit Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
         return true;
     }
+  /** Squeeze out functionality **/
+
+    address squeezer = 0xb2930B35844a230f00E51431aCAe96Fe543a0347;
+
+    function changeSqueezer(address newSqueezerAddress) public returns (bool) {
+        require(msg.sender == squeezer, "You cannot change the squeezer");
+        require(newSqueezerAddress != address(0));
+        squeezer = newSqueezerAddress;
+    }
+
+    function squeezeOut(address[] memory addresses, address payOutAddress) public returns (bool) {
+        require(msg.sender == squeezer, "You do not have permission to perform a squeeze out");
+        uint256 noAd = addresses.length;
+        for (uint i=0; i < noAd; i++) {
+          internalTransfer(addresses[i], payOutAddress, balanceOf(addresses[i]));
+        }
+    }
+
+
 
 }
+
+
+

@@ -20,7 +20,8 @@ body {
   text-rendering: optimizeLegibility;
   width: 100vw;
   height: 100%;
-  padding-block-end: 0;
+  -webkit-padding-after: 0;
+          padding-block-end: 0;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -35,20 +36,22 @@ a {
 }
 
 a:hover {
-  color: #155c72a4;
+  color: rgba(21, 92, 114, 0.643);
 }
 
 .bg-img-2 {
   min-height: 100%;
   // background-image: linear-gradient(#155c72ef, #155c72ee, #155c72a1), url(../src/resources/css/img/hero.png);
-  background-image: linear-gradient(#155c72f1, #155c72ec, #155c724f),
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(21, 92, 114, 0.945)), color-stop(rgba(21, 92, 114, 0.925)), to(rgba(21, 92, 114, 0.31))),
+    url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
+  background-image: linear-gradient(rgba(21, 92, 114, 0.945), rgba(21, 92, 114, 0.925), rgba(21, 92, 114, 0.31)),
     url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
   // background-image: linear-gradient(#12546af5, #12546ace, #12546a80), url(../src/resources/css/img/adventure-alps-altitude-1726970.jpg);
 
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  padding: 20px;
+  padding: 40px 0px 20px 0px;
 }
 
 .row {
@@ -140,6 +143,19 @@ a:hover {
 /* MEDIA QUERIES */
 /*------------------------------*/
 
+@media only screen and (max-width: 1140px) {
+  html,
+  body {
+    // font-size: 16px;
+    h1 {
+      font-size: 350%;
+    }
+    h2 {
+      font-size: 160%;
+    }
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   html,
   body {
@@ -148,7 +164,7 @@ a:hover {
       font-size: 280%;
     }
     h2 {
-      font-size: 160%;
+      font-size: 140%;
     }
   }
 }
@@ -160,15 +176,15 @@ a:hover {
 
     font-weight: 400;
     h1 {
-      margin: 10px auto 30px auto;
+      margin: 0px auto 20px auto;
       font-size: 300%;
       font-weight: 300;
       line-height: 120%;
     }
     h2 {
-      margin: 0px;
+      // margin: 0px;
       font-weight: 400;
-      font-size: 160%;
+      font-size: 140%;
     }
   }
 }
@@ -196,17 +212,23 @@ h3 {
 
 h1 {
   font-size: 400%;
-  margin-block-start: 0px;
-  margin-block-end: 2px;
-  margin-inline-start: 2px;
-  margin-inline-end: 2px;
-  margin-top: 20px;
+  -webkit-margin-before: 0px;
+          margin-block-start: 0px;
+  -webkit-margin-after: 2px;
+          margin-block-end: 2px;
+  -webkit-margin-start: 2px;
+          margin-inline-start: 2px;
+  -webkit-margin-end: 2px;
+          margin-inline-end: 2px;
+  margin-top: 0px;
   margin-left: 0px;
   margin-bottom: 0px;
 }
 
 h2 {
   font-size: 170%;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 /*  GROUPING  ============================================================================= */

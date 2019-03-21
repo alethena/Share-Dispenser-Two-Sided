@@ -12,7 +12,8 @@
         <mat-card-title class="number-selection-title">
 
           <mat-form-field class="example-margin">
-            <input matInput type="number" placeholder="Average Price / Share" [(ngModel)]=pricePerShare [min]=20 [max]=ALEQAvailable readonly=true>
+            <input matInput type="number" placeholder="Average Price / Share" [(ngModel)]=pricePerShare [min]=20
+              [max]=ALEQAvailable readonly=true>
             <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
               help_outline
             </mat-icon>
@@ -32,74 +33,29 @@
           <mat-slider class="slider" [max]=ALEQAvailable [min]=20 [(ngModel)]="numberOfSharesToBuy"
             (change)="numberOfSharesToBuyChanged()" [step]=1 [thumbLabel]="true">
           </mat-slider>
-          <button mat-button class="max-button"  (click)="setMaxCanBuy()" [disabled]="maxLocked">
-              Max
-            </button>
+          <button mat-button class="max-button" (click)="setMaxCanBuy()" [disabled]="maxLocked">
+            Max
+          </button>
 
         </mat-card-actions>
 
       </mat-card>
 
       <div class="buttons">
-        
+
         <button mat-raised-button class="buy-button" color=primary (click)="openDialog()">
           Buy Now
         </button>
         <button class="more-button" mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
-      </div>
-
-    </mat-tab>
-
-
-
-    <mat-tab label="Sell">
-      <mat-card class="dispenser-card">
-
-        <mat-card-title class="total-price-title">
-
-          Buyback Price <br>
-          <span>CHF 120</span>
-
-        </mat-card-title>
-        <mat-card-title class="number-selection-title">
-
-          <mat-form-field class="example-margin">
-            <input matInput type="number" placeholder="Average Price / Share" value=6 readonly=true>
-            <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
-              help_outline
-            </mat-icon>
-          </mat-form-field>
-          <mat-form-field class="example-margin">
-            <input matInput type="number" placeholder="Max. buyback amount" value=3736 readonly=true>
-          </mat-form-field>
-
-          <mat-form-field class="example-margin">
-            <input matInput type="number" placeholder="Select amount" [(ngModel)]="numberOfSharesToBuy">
-          </mat-form-field>
-        </mat-card-title>
-
-        <mat-card-actions>
-          <mat-slider class="slider" [max]=500 [min]=20 [(ngModel)]="numberOfSharesToBuy" [step]=1 [thumbLabel]="true">
-          </mat-slider>
-        </mat-card-actions>
-
-      </mat-card>
-      <div class="buttons">
-        <button mat-raised-button class="buy-button" color=primary (click)="openDialog()">
-          Sell Now
-        </button>
-        <button class="more-button" mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item>
-            <span><a href="https://rinkeby.etherscan.io/address/0xf40c5e190a608b6f8c0bf2b38c9506b327941402#code"
+            <span><a href="https://etherscan.io/address/0xf40c5e190a608b6f8c0bf2b38c9506b327941402#code"
                 target="_blank">ALEQ on Etherscan</a></span>
           </button>
           <button mat-menu-item disabled>
-            <span><a href="https://rinkeby.etherscan.io/address/0x60689d8040fc5abc60589b9b2d5bab1f6f9b803f#code"
+            <span><a href="https://etherscan.io/address/0xa803d717cf4aba325f1143293b087aa0a4857a02#code"
                 target="_blank">Share Dispenser on Etherscan</a></span>
           </button>
           <button mat-menu-item (click)="openBalances()">
@@ -107,6 +63,73 @@
           </button>
         </mat-menu>
       </div>
+
     </mat-tab>
+
+
+    <mat-tab label="Sell" class="tab-label">
+
+      <mat-card class="dispenser-card">
+        <mat-card-title class="total-price-title">
+          Total Buyback Price <br>
+          <span>CHF {{ totalPriceDispSell }}</span>
+        </mat-card-title>
+        <mat-card-title class="number-selection-title">
+
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Average Price / Share" [(ngModel)]=pricePerShareSell [min]=20
+              [max]=ALEQAvailable readonly=true>
+            <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
+              help_outline
+            </mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Shares available for buyback" [(ngModel)]=maxBuyBack readonly=true>
+          </mat-form-field>
+
+          <mat-form-field class="example-margin">
+            <input matInput type="number" placeholder="Select amount" [(ngModel)]="numberOfSharesToSell"
+              (change)="numberOfSharesToSellChanged()">
+          </mat-form-field>
+        </mat-card-title>
+
+        <mat-card-actions>
+          <mat-slider class="slider" [max]=maxBuyBack [min]=20 [(ngModel)]="numberOfSharesToSell"
+            (change)="numberOfSharesToSellChanged()" [step]=1 [thumbLabel]="true">
+          </mat-slider>
+          <!-- <button mat-button class="max-button" (click)="setMaxCanBuy()" [disabled]="maxLocked">
+            Max
+          </button> -->
+
+        </mat-card-actions>
+
+      </mat-card>
+
+      <div class="buttons">
+
+        <button mat-raised-button class="buy-button" color=primary (click)="openSellDialog()">
+          Sell Now
+        </button>
+        <button class="more-button" mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <span><a href="https://etherscan.io/address/0xf40c5e190a608b6f8c0bf2b38c9506b327941402#code"
+                target="_blank">ALEQ on Etherscan</a></span>
+          </button>
+          <button mat-menu-item disabled>
+            <span><a href="https://etherscan.io/address/0xa803d717cf4aba325f1143293b087aa0a4857a02#code"
+                target="_blank">Share Dispenser on Etherscan</a></span>
+          </button>
+          <button mat-menu-item (click)="openBalances()">
+            <a>Check My Balance</a>
+          </button>
+        </mat-menu>
+      </div>
+
+    </mat-tab>
+
   </mat-tab-group>
 </div>

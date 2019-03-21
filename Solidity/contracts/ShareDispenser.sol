@@ -35,12 +35,22 @@ contract ShareDispenser is Ownable, Pausable {
         address initialALEQContractAddress, 
         address initialusageFeeAddress
         ) public {
+            
+        require(initialXCHFContractAddress != address(0), "XCHF does not reside at address 0!");
+        require(initialALEQContractAddress != address(0), "ALEQ does not reside at address 0!");
+        require(initialusageFeeAddress != address(0), "Usage fee address cannot be 0!");
+
         XCHFContractAddress = initialXCHFContractAddress;
         ALEQContractAddress = initialALEQContractAddress;
         usageFeeAddress = initialusageFeeAddress;
     }
 
-    // Fallback function to prevent accidentally dending Ether to the contract
+    /* 
+     * Fallback function to prevent accidentally sending Ether to the contract
+     * It is still possible to force Ether into the contract as this cannot be prevented fully.
+     * Sending Ether to this contract does not create any problems for the contract, but the Ether will be lost.
+    */ 
+
     function () external payable {
         revert("This contract does not accept Ether."); 
     }   
@@ -57,15 +67,14 @@ contract ShareDispenser is Ownable, Pausable {
     // 10000 basis points = 100%
 
     uint256 public usageFeeBSP  = 0;       // In basis points. 0 = no usage fee
-    uint256 public spreadBSP = 10000;      // In basis points. 9500 = 5% spread
-    uint256 public minVolume = 1;          // Minimum number of shares to buy/sell
+    uint256 public minVolume = 20;          // Minimum number of shares to buy/sell
 
     uint256 public minPriceInXCHF = 6*10**18;
-    uint256 public maxPriceInXCHF = 8*10**18;
-    uint256 public initialNumberOfShares = 10000;
+    uint256 public maxPriceInXCHF = 65*10**17;
+    uint256 public initialNumberOfShares = 2000;
 
     bool public buyEnabled = true;
-    bool public sellEnabled = true;
+    bool public sellEnabled = false;
 
     // Events 
 
@@ -73,13 +82,12 @@ contract ShareDispenser is Ownable, Pausable {
     event ALEQContractAddressSet(address newALEQContractAddress);
     event UsageFeeAddressSet(address newUsageFeeAddress);
 
-    event SharesPurchased(address indexed buyer, uint256 amount, uint256 totalPrice);
-    event SharesSold(address indexed seller, uint256 amount, uint256 buyBackPrice);
+    event SharesPurchased(address indexed buyer, uint256 amount, uint256 totalPrice, uint256 nextPrice);
+    event SharesSold(address indexed seller, uint256 amount, uint256 buyBackPrice, uint256 nextPrice);
     
     event TokensRetrieved(address contractAddress, address indexed to, uint256 amount);
 
     event UsageFeeSet(uint256 usageFee);
-    event SpreadSet(uint256 spread);
     event MinVolumeSet(uint256 minVolume);
     event MinPriceSet(uint256 minPrice);
     event MaxPriceSet(uint256 maxPrice);
@@ -122,8 +130,8 @@ contract ShareDispenser is Ownable, Pausable {
 
         // Transfer the shares
         require(ALEQ.transfer(buyer, numberOfSharesToBuy), "Share transfer failed");
-
-        emit SharesPurchased(buyer, numberOfSharesToBuy, totalPrice);
+        uint256 nextPrice = getCumulatedPrice(1, sharesAvailable.sub(numberOfSharesToBuy));
+        emit SharesPurchased(buyer, numberOfSharesToBuy, totalPrice, nextPrice);
         return true;
     }
 
@@ -163,8 +171,8 @@ contract ShareDispenser is Ownable, Pausable {
         // Transfer usage fee and payment amount
         require(XCHF.transfer(usageFeeAddress, usageFee), "Usage fee transfer failed");
         require(XCHF.transfer(seller, paymentAmount), "XCHF payment failed");
-
-        emit SharesSold(seller, numberOfSharesToSell, buyBackPrice);
+        uint256 nextPrice = getCumulatedBuyBackPrice(1, sharesAvailable.add(numberOfSharesToSell));
+        emit SharesSold(seller, numberOfSharesToSell, buyBackPrice, nextPrice);
         return true;
     }
 
@@ -207,10 +215,11 @@ contract ShareDispenser is Ownable, Pausable {
     }
 
     function getCumulatedBuyBackPrice(uint256 amount, uint256 supply) public view returns (uint256){
-        return getCumulatedPrice(amount, supply.add(amount)).mul(spreadBSP).div(10000); // For symmetry reasons
+        return getCumulatedPrice(amount, supply.add(amount)); // For symmetry reasons
     }
 
     // Function to retrieve ALEQ or XCHF from contract
+    // This can also be used to retrieve any other ERC-20 token sent to the smart contract by accident
 
     function retrieveERC20(address contractAddress, address to, uint256 amount) public onlyOwner() returns(bool) {
         ERC20 contractInstance = ERC20(contractAddress);
@@ -222,19 +231,19 @@ contract ShareDispenser is Ownable, Pausable {
     // Setters for addresses
 
     function setXCHFContractAddress(address newXCHFContractAddress) public onlyOwner() {
-        require(newXCHFContractAddress != 0x0000000000000000000000000000000000000000, "XCHF does not reside at address 0x");
+        require(newXCHFContractAddress != address(0), "XCHF does not reside at address 0");
         XCHFContractAddress = newXCHFContractAddress;
         emit XCHFContractAddressSet(XCHFContractAddress);
     }
 
     function setALEQContractAddress(address newALEQContractAddress) public onlyOwner() {
-        require(newALEQContractAddress != 0x0000000000000000000000000000000000000000, "ALEQ does not reside at address 0x");
+        require(newALEQContractAddress != address(0), "ALEQ does not reside at address 0");
         ALEQContractAddress = newALEQContractAddress;
         emit ALEQContractAddressSet(ALEQContractAddress);
     }
 
     function setUsageFeeAddress(address newUsageFeeAddress) public onlyOwner() {
-        require(newUsageFeeAddress != 0x0000000000000000000000000000000000000000, "ALEQ does not reside at address 0x");
+        require(newUsageFeeAddress != address(0), "ALEQ does not reside at address 0");
         usageFeeAddress = newUsageFeeAddress;
         emit UsageFeeAddressSet(usageFeeAddress);
     }
@@ -245,12 +254,6 @@ contract ShareDispenser is Ownable, Pausable {
         require(newUsageFeeInBSP <= 10000, "Usage fee must be given in basis points");
         usageFeeBSP = newUsageFeeInBSP;
         emit UsageFeeSet(usageFeeBSP);
-    }
-
-    function setSpread(uint256 newSpreadInBSP) public onlyOwner() {
-        require(newSpreadInBSP <= 10000, "Spread must be given in basis points");
-        spreadBSP = newSpreadInBSP;
-        emit SpreadSet(spreadBSP);
     }
 
     function setMinVolume(uint256 newMinVolume) public onlyOwner() {

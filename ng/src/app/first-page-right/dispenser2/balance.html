@@ -1,10 +1,11 @@
 <div class="dialog">
     <h1 mat-dialog-title>Your Balances</h1>
     <div mat-dialog-content>
-        <p> You have currently selected the following account <br><br> <b>{{ account }}</b>.
+        <p> You have currently selected the following account <br><br> <b>{{ account }}</b>
         </p>
-        <div>Alethena Shares: {{ ALEQ }}</div>
-        <div>Crypto Francs: {{ XCHF }}</div>
+        <div>Alethena Shares: <b>{{ ALEQ }}</b> </div>
+        <br>
+        <div>Crypto Francs: <b>{{ XCHF }}</b> </div>
     </div>
     <div mat-dialog-actions>
         <button mat-raised-button color=primary [mat-dialog-close]="true">Back</button>

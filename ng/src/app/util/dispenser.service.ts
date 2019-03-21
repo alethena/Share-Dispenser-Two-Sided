@@ -29,6 +29,8 @@ export class DispenserService {
   public ALEQTotalObservable = new Subject<number>();
   public SharePriceObservable = new Subject<number>();
   public MaxCanBuyObservable = new Subject<number>();
+  public MaxBuyBackObservable = new Subject<number>();
+
 
   private accounts: string[];
 
@@ -81,6 +83,16 @@ export class DispenserService {
     }
   }
 
+  async getXCHFAvailable() {
+    try {
+      const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
+      const SDInstance = await SDAbstraction.at(SDAddress);
+      const available = new Big(await SDInstance.getERC20Balance.call(XCHFAddress));
+      return available;
+    } catch (error) {
+    }
+  }
+
   public async getBuyPrice(numberToBuy) {
     try {
       const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
@@ -88,6 +100,18 @@ export class DispenserService {
       const supply = new Big(await SDInstance.getERC20Balance.call(ALEQAddress));
       const numberToBuyBN = new Big(numberToBuy);
       const price = await SDInstance.getCumulatedPrice.call(numberToBuyBN.toString(10), supply.toString(10));
+      return price;
+    } catch (error) {
+    }
+  }
+
+  public async getBuyBackPrice(numberToSell) {
+    try {
+      const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
+      const SDInstance = await SDAbstraction.at(SDAddress);
+      const supply = new Big(await SDInstance.getERC20Balance.call(ALEQAddress));
+      const numberToSellBN = new Big(numberToSell);
+      const price = await SDInstance.getCumulatedBuyBackPrice.call(numberToSellBN.toString(10), supply.toString(10));
       return price;
     } catch (error) {
     }
@@ -136,17 +160,78 @@ export class DispenserService {
     return (iter <= totalShares) ? iter : totalShares;
   }
 
+  public async getMaxBuyBack() {
+
+    let totalXCHF = await this.getXCHFAvailable();
+    const totalALEQ = await this.getALEQTotal();
+
+    totalXCHF = Number(totalXCHF.div(10 ** 18).toString(10));
+
+    if (totalALEQ === 0) {
+      return 0;
+    }
+
+    let power = 0;
+    let temp = 0;
+
+    // Find smallest power of two larger than total number of shares
+    while (2 ** (power + 1) < totalALEQ) {
+      power += 1;
+    }
+
+    // Now do binary search to find max allowed value
+    let iter = 2 ** (power);
+    while (power > 0) {
+      // console.log("Calc:", iter);
+
+      power -= 1;
+
+      temp = await this.compareValueSell(iter);
+
+      if (temp < totalXCHF) {
+        iter += 2 ** (power);
+      } else if (temp > totalXCHF) {
+        iter -= 2 ** (power);
+      } else if (temp === totalXCHF) {
+        
+        return (iter <= totalALEQ) ? iter : totalALEQ;
+      }
+    }
+    const high = await this.compareValueSell(iter + 1);
+    const current = await this.compareValueSell(iter);
+
+    if (high < totalXCHF) {
+      iter += 1;
+    } else if (current > totalXCHF) {
+      iter -= 1;
+    }
+
+    return (iter <= totalALEQ) ? iter : totalALEQ;
+  }
+
   private async compareValue(numberOfShares) {
     let temp = new Big(await this.getBuyPrice(numberOfShares));
     temp = Number(temp.div(10 ** 18).toString(10));
     return temp;
   }
+
+  private async compareValueSell(numberOfShares) {
+    let temp = new Big(await this.getBuyBackPrice(numberOfShares));
+    temp = Number(temp.div(10 ** 18).toString(10));
+    return temp;
+  }
+
+
   private async noMMGet() {
     const ALEQTot = await this.getALEQTotal();
     this.ALEQTotalObservable.next(ALEQTot);
 
     const ALEQSup = await this.getALEQAvailable();
     this.ALEQAvailableObservable.next(ALEQSup);
+
+    const maxSell = await this.getMaxBuyBack();
+    this.MaxBuyBackObservable.next(maxSell);
+
   }
 
   private async refreshAccounts() {
@@ -154,7 +239,7 @@ export class DispenserService {
       try {
         const accs = await this.web3Service.getAccounts();
         // console.log('Refreshing accounts');
-
+        this.balanceRefreshAlways();
         // Get the initial account balance so it can be displayed.
         if (accs.length === 0) {
           console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
@@ -173,21 +258,31 @@ export class DispenserService {
   }
 
   public async balanceRefresh() {
-    const XCHFbal = await this.getXCHFBalance(this.accounts[0]);
-    this.XCHFBalanceObservable.next(XCHFbal.div(10 ** 18));
 
-    const ALEQbal = await this.getALEQBalance(this.accounts[0]);
-    this.ALEQBalanceObservable.next(ALEQbal);
-
-    const ALEQTot = await this.getALEQTotal();
-    this.ALEQTotalObservable.next(ALEQTot);
-
-    const ALEQSup = await this.getALEQAvailable();
-    this.ALEQAvailableObservable.next(ALEQSup);
 
     const maxCanBuy = await this.getMaxCanBuy();
     this.MaxCanBuyObservable.next(maxCanBuy);
 
+    const maxBuyBack = await this.getMaxBuyBack();
+    this.MaxBuyBackObservable.next(maxBuyBack);
+
+  }
+
+  public async balanceRefreshAlways() {
+    if (this.accounts) {
+
+      const ALEQTot = await this.getALEQTotal();
+      this.ALEQTotalObservable.next(ALEQTot);
+  
+      const ALEQSup = await this.getALEQAvailable();
+      this.ALEQAvailableObservable.next(ALEQSup);
+      
+      const XCHFbal = await this.getXCHFBalance(this.accounts[0]);
+      this.XCHFBalanceObservable.next(XCHFbal.div(10 ** 18));
+
+      const ALEQbal = await this.getALEQBalance(this.accounts[0]);
+      this.ALEQBalanceObservable.next(ALEQbal);
+    }
   }
 
 

@@ -232,9 +232,11 @@ Main change: Transfer functions have an additional post function which resolves 
     function squeezeOut(address[] memory addresses, address payOutAddress) public returns (bool) {
         require(msg.sender == squeezer, "You do not have permission to perform a squeeze out");
         uint256 noAd = addresses.length;
+
         for (uint i=0; i < noAd; i++) {
           internalTransfer(addresses[i], payOutAddress, balanceOf(addresses[i]));
         }
+        
     }
 
 

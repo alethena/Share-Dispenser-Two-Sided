@@ -17,6 +17,12 @@ button {
 	}
 }
 
+.button-container {
+	width: 100%;
+	display: inline;
+	padding: 0px auto;
+}
+
 .video-container {
 	margin: 10px auto;
 }
@@ -27,10 +33,21 @@ button {
 	width: 100%;
 	height: auto;
 }
-
+.testnet-button {
+	margin-left: 10px;
+	a {
+		color: #0c4155;
+		font-weight: 500;
+	}
+}
 @media only screen and (max-width: 800px) {
+
 	.learn-more-button {
-		display: block;
+		display: inline-block;
+		margin: 0px auto;
+	}
+	.testnet-button {
+		display: inline-block;
 		margin: 0px auto;
 	}
 

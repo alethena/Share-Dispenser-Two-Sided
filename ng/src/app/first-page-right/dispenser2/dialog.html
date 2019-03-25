@@ -60,12 +60,11 @@
     <div *ngIf="SecondSucceded">
         <h1 mat-dialog-title>Thank you for becoming a shareholder!</h1>
         <div mat-dialog-content>
-            To exercise your shareholder rights, please register in our
-            shareholder registry at <a href="https://alethena.ledgy.com/signup" target="_blank">Ledgy</a>.
+            In the live network, you would now get the opportunity to register as a shareholder with Ledgy.
         </div>
         <div mat-dialog-actions>
-            <a mat-raised-button color="primary" href="https://alethena.ledgy.com/signup" target="_blank">Register</a>.
-            <button mat-raised-button [mat-dialog-close]="true">Done</button>
+            <a mat-raised-button color="primary" href="" target="_blank" disabled="true">Register</a>.
+            <button mat-raised-button color="primary" [mat-dialog-close]="true">Done</button>
         </div>
     </div>
 </div>

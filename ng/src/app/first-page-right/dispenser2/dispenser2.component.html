@@ -13,7 +13,7 @@
 
           <mat-form-field class="example-margin">
             <input matInput type="number" placeholder="Average Price / Share" [(ngModel)]=pricePerShare [min]=20
-              [max]=ALEQAvailable readonly=true>
+              [max]=1000 readonly=true>
             <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
               help_outline
             </mat-icon>
@@ -30,7 +30,7 @@
         </mat-card-title>
 
         <mat-card-actions>
-          <mat-slider class="slider" [max]=ALEQAvailable [min]=20 [(ngModel)]="numberOfSharesToBuy"
+          <mat-slider class="slider" [max]=1000 [min]=20 [(ngModel)]="numberOfSharesToBuy"
             (change)="numberOfSharesToBuyChanged()" [step]=1 [thumbLabel]="true">
           </mat-slider>
           <button mat-button class="max-button" (click)="setMaxCanBuy()" [disabled]="maxLocked">
@@ -78,7 +78,7 @@
 
           <mat-form-field class="example-margin">
             <input matInput type="number" placeholder="Average Price / Share" [(ngModel)]=pricePerShareSell [min]=20
-              [max]=ALEQAvailable readonly=true>
+              [max]=1000 readonly=true>
             <mat-icon class="icon-tooltip" matTooltip="The average price increses linearly as supply decreases.">
               help_outline
             </mat-icon>
@@ -95,7 +95,7 @@
         </mat-card-title>
 
         <mat-card-actions>
-          <mat-slider class="slider" [max]=maxBuyBack [min]=20 [(ngModel)]="numberOfSharesToSell"
+          <mat-slider class="slider" [max]=1000 [min]=20 [(ngModel)]="numberOfSharesToSell"
             (change)="numberOfSharesToSellChanged()" [step]=1 [thumbLabel]="true">
           </mat-slider>
           <!-- <button mat-button class="max-button" (click)="setMaxCanBuy()" [disabled]="maxLocked">

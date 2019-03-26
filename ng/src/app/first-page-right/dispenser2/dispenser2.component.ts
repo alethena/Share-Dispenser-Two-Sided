@@ -16,15 +16,16 @@ import { Big } from 'big.js';
 
 const BN = require('bn.js');
 const contractAddresses = require('../../../assets/contractAddresses.json');
+const networkSelection = contractAddresses.Network;
 
 const XCHF_artifacts = require('../../../../../Solidity/build/contracts/CryptoFranc.json');
-const XCHFAddress = contractAddresses.XCHFAddress;
+const XCHFAddress = contractAddresses[networkSelection].XCHFAddress;
 
 const SD_artifacts = require('../../../../../Solidity/build/contracts/ShareDispenser.json');
-const SDAddress = contractAddresses.SDAddress;
+const SDAddress = contractAddresses[networkSelection].SDAddress;
 
 const ALEQ_artifacts = require('../../../../../Solidity/build/contracts/AlethenaShares.json');
-const ALEQAddress = contractAddresses.ALEQAddress;
+const ALEQAddress = contractAddresses[networkSelection].ALEQAddress;
 
 
 export interface DialogData {

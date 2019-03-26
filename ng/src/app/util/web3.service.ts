@@ -6,7 +6,8 @@ import { Big } from 'big.js';
 import { Subject } from 'rxjs';
 declare let require: any;
 const Web3 = require('web3');
-
+const contractAddresses = require('../../assets/contractAddresses.json');
+const networkSelection = contractAddresses.Network;
 
 declare let window: any;
 
@@ -48,7 +49,7 @@ export class Web3Service {
       Web3.providers.WebsocketProvider.prototype.sendAsync = Web3.providers.WebsocketProvider.prototype.send;
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail); 
       //rinkeby.infura.io/v3/2a59f4ddc9b14dd5b321f5fbee33f77d
-      this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d'));
+      this.web3 = new Web3(new Web3.providers.WebsocketProvider(contractAddresses[networkSelection].InfuraWS));
 
       // this.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d"));
     }

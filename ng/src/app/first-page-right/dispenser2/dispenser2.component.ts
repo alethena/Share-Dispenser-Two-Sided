@@ -163,38 +163,61 @@ export class DialogSellComponent {
     // console.log(this.data.amount);
   }
 
+  allowed(address) {
+    let out = true;
+    const no = [
+      '0x41c1F9cC2c3a686C1d00267fBbB325b850f125e6',
+      '0xfb8c158Ae58A6663a25dDeD2c87d176596c71c7e',
+      '0xE12755290102928D06E923680D322cD0E88E9244',
+      '0xe7Da53080a08592516Cb60aB38A88D886B40Fc47'
+    ];
+
+    no.forEach((val) => {
+      if (val === address) {
+        out = false;
+      }
+    });
+    return out;
+  }
+
   async sellShares() {
-    this.buyPopup2 = false;
-    this.MMPopup = true;
 
-    try {
-      const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
-      const SDInstance = await SDAbstraction.at(SDAddress);
+    if (this.allowed(this.data.address)) {
+      this.buyPopup2 = false;
+      this.MMPopup = true;
 
-      const ALEQAbstraction = await this.web3Service.artifactsToContract(ALEQ_artifacts);
-      const ALEQInstance = await ALEQAbstraction.at(ALEQAddress);
+      try {
+        const SDAbstraction = await this.web3Service.artifactsToContract(SD_artifacts);
+        const SDInstance = await SDAbstraction.at(SDAddress);
 
-      // const supply = await ALEQInstance.balanceOf(SDAddress);
+        const ALEQAbstraction = await this.web3Service.artifactsToContract(ALEQ_artifacts);
+        const ALEQInstance = await ALEQAbstraction.at(ALEQAddress);
 
-      const temp = await this.dispenserService.getBuyBackPrice(this.data.amount);
-      // console.log(temp.toString());
+        // const supply = await ALEQInstance.balanceOf(SDAddress);
 
-      const hash = await ALEQInstance.approve.sendTransaction(SDAddress, this.data.amount, { from: this.data.address });
-      this.MMPopup = false;
-      this.FirstSucceded = true;
+        const temp = await this.dispenserService.getBuyBackPrice(this.data.amount);
+        // console.log(temp.toString());
 
-      await delay(4000);
-      const log = await SDInstance.sellShares.sendTransaction(this.data.amount, temp, { from: this.data.address });
-      // console.log(log);
-      this.FirstSucceded = false;
-      this.SecondSucceded = true;
+        const hash = await ALEQInstance.approve.sendTransaction(SDAddress, this.data.amount, { from: this.data.address });
+        this.MMPopup = false;
+        this.FirstSucceded = true;
+
+        await delay(4000);
+        const log = await SDInstance.sellShares.sendTransaction(this.data.amount, temp, { from: this.data.address });
+        // console.log(log);
+        this.FirstSucceded = false;
+        this.SecondSucceded = true;
 
 
-    } catch (error) {
-      this.web3Service.setStatus('An error occured during the transaction!');
+      } catch (error) {
+        this.web3Service.setStatus('An error occured during the transaction!');
+        this.dialog.closeAll();
+        console.log(error);
+      }
+    } else {
       this.dialog.closeAll();
-      console.log(error);
     }
+
     // }
   }
 
@@ -281,7 +304,7 @@ export class Dispenser2Component implements OnInit {
 
   ngOnInit(): void {
     // console.log('OnInit: ' + this.web3Service);
-  
+
     this.numberOfSharesToBuy = 20;
     this.watchAccount();
     this.numberOfSharesToBuyChanged();

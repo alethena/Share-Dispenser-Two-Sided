@@ -1,7 +1,6 @@
 
 
 p {
-	text-align: justify;
 	line-height: 170%;
 }
 
@@ -25,6 +24,10 @@ button {
 
 .video-container {
 	margin: 10px auto;
+}
+
+.custom-bold {
+	font-weight: 400;
 }
 
 .video-js {

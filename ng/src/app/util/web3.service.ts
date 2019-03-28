@@ -48,11 +48,12 @@ export class Web3Service {
       Web3.providers.WebsocketProvider.prototype.sendAsync = Web3.providers.WebsocketProvider.prototype.send;
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail); 
       //rinkeby.infura.io/v3/2a59f4ddc9b14dd5b321f5fbee33f77d
-      this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d'));
+      this.web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/e7ec903e54b9473598306368d84a517b'));
 
       // this.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d"));
     }
   }
+
 
   public async artifactsToContract(artifacts) {
     if (!this.web3) {

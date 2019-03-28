@@ -1,15 +1,15 @@
 {
-    "Network": "Mainnet",
+    "Network": "Rinkeby",
     "Rinkeby": {
         "XCHFAddress": "0x84286f1e0Aaa59787131DA691b5D5cFC2Aff289A",
         "SDAddress": "0xD091951A17030Aee1C0ab1319D6876048253bdc3",
         "ALEQAddress": "0x18a4251cd23a4e235987a11d2d36c0138e95fa7c",
-        "InfuraWS": "wss://rinkeby.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d"
+        "InfuraWS": "wss://rinkeby.infura.io/ws/v3/e7ec903e54b9473598306368d84a517b"
     },
     "Mainnet": {
         "XCHFAddress": "0xb4272071ecadd69d933adcd19ca99fe80664fc08",
         "SDAddress": "0xA803d717CF4aBA325F1143293b087AA0A4857a02",
         "ALEQAddress": "0xf40c5e190a608b6f8c0bf2b38c9506b327941402",
-        "InfuraWS": "wss://mainnet.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d"
+        "InfuraWS": "wss://mainnet.infura.io/ws/v3/e7ec903e54b9473598306368d84a517b"
     }
 }

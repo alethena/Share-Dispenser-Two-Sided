@@ -1,5 +1,5 @@
 {
-    "Network": "Rinkeby",
+    "Network": "Mainnet",
     "Rinkeby": {
         "XCHFAddress": "0x84286f1e0Aaa59787131DA691b5D5cFC2Aff289A",
         "SDAddress": "0xD091951A17030Aee1C0ab1319D6876048253bdc3",

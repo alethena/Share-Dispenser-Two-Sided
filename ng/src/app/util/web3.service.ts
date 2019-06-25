@@ -32,26 +32,21 @@ export class Web3Service {
   public async bootstrapWeb3() {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.ethereum !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      this.web3 = new Web3(window.ethereum);
       try {
         this.MM = await window.ethereum.enable();
-        // this.setStatus('MetaMask enabled!');
-      } catch {
-        // this.setStatus('There was an error enabling MetaMask');
-      }
-      
-
-    } else {
-      // this.setStatus('Please use MetaMask if you want to buy shares');
-      // console.log("MM", this.MM);
-      // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
+      } catch (error) { }
+    }
+    if ((typeof window.ethereum !== 'undefined') || (typeof window.web3 !== 'undefined')) {
+      const provider = window['ethereum'] || window.web3.currentProvider;
+      this.web3 = new Web3(provider);
       Web3.providers.WebsocketProvider.prototype.sendAsync = Web3.providers.WebsocketProvider.prototype.send;
-      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail); 
-      //rinkeby.infura.io/v3/2a59f4ddc9b14dd5b321f5fbee33f77d
-      this.web3 = new Web3(new Web3.providers.WebsocketProvider(contractAddresses[networkSelection].InfuraWS));
 
-      // this.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws/v3/2a59f4ddc9b14dd5b321f5fbee33f77d"));
+      // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail);
+    } else {
+      Web3.providers.WebsocketProvider.prototype.sendAsync = Web3.providers.WebsocketProvider.prototype.send;
+
+      this.web3 = new Web3(new Web3.providers.WebsocketProvider(contractAddresses[networkSelection].InfuraWS));
     }
   }
 

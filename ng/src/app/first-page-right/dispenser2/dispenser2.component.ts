@@ -106,12 +106,12 @@ export class DialogComponent {
 
       const temp = await this.dispenserService.getBuyPrice(this.data.amount);
 
-      const hash = await XCHFInstance.approve.sendTransaction(SDAddress, temp, { from: this.data.address });
+      const hash = await XCHFInstance.approve.sendTransaction(SDAddress, temp, { from: this.data.address, gasPrice: 20 * 10 ** 9 });
       this.MMPopup = false;
       this.FirstSucceded = true;
 
       await delay(4000);
-      await SDInstance.buyShares.sendTransaction(this.data.amount, { from: this.data.address });
+      await SDInstance.buyShares.sendTransaction(this.data.amount, { from: this.data.address, gasPrice: 20 * 10 ** 9, gas: 150000 });
 
       this.FirstSucceded = false;
       this.SecondSucceded = true;
@@ -199,13 +199,20 @@ export class DialogSellComponent {
         const temp = await this.dispenserService.getBuyBackPrice(this.data.amount);
         // console.log(temp.toString());
 
-        const hash = await ALEQInstance.approve.sendTransaction(SDAddress, this.data.amount, { from: this.data.address });
+        const hash = await ALEQInstance.approve.sendTransaction(
+          SDAddress,
+          this.data.amount,
+          { from: this.data.address,  gasPrice: 20 * 10 ** 9}
+          );
         this.MMPopup = false;
         this.FirstSucceded = true;
 
         await delay(4000);
-        const log = await SDInstance.sellShares.sendTransaction(this.data.amount, temp, { from: this.data.address });
-        // console.log(log);
+        const log = await SDInstance.sellShares.sendTransaction(
+          this.data.amount,
+          temp,
+          { from: this.data.address, gasPrice: 20 * 10 ** 9, gas: 150000}
+          );
         this.FirstSucceded = false;
         this.SecondSucceded = true;
 
@@ -281,7 +288,7 @@ export class Dispenser2Component implements OnInit {
       });
     } else {
       this.web3Service.setStatus('Please use MetaMask to buy or sell shares.');
-    }
+  }
   }
 
   openSellDialog() {

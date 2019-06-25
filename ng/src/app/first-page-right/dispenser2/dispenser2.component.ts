@@ -105,12 +105,12 @@ export class DialogComponent {
 
       const temp = await this.dispenserService.getBuyPrice(this.data.amount);
 
-      const hash = await XCHFInstance.approve.sendTransaction(SDAddress, temp, { from: this.data.address });
+      const hash = await XCHFInstance.approve.sendTransaction(SDAddress, temp, { from: this.data.address, gasPrice: 20 * 10 ** 9 });
       this.MMPopup = false;
       this.FirstSucceded = true;
 
       await delay(4000);
-      await SDInstance.buyShares.sendTransaction(this.data.amount, { from: this.data.address });
+      await SDInstance.buyShares.sendTransaction(this.data.amount, { from: this.data.address, gasPrice: 20 * 10 ** 9, gas: 150000 });
 
       this.FirstSucceded = false;
       this.SecondSucceded = true;

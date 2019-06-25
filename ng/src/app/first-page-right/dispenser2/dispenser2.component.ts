@@ -179,12 +179,20 @@ export class DialogSellComponent {
       const temp = await this.dispenserService.getBuyBackPrice(this.data.amount);
       // console.log(temp.toString());
 
-      const hash = await ALEQInstance.approve.sendTransaction(SDAddress, this.data.amount, { from: this.data.address });
+      const hash = await ALEQInstance.approve.sendTransaction(
+        SDAddress,
+        this.data.amount,
+        { from: this.data.address,  gasPrice: 20 * 10 ** 9  }
+        );
       this.MMPopup = false;
       this.FirstSucceded = true;
 
       await delay(4000);
-      const log = await SDInstance.sellShares.sendTransaction(this.data.amount, temp, { from: this.data.address });
+      const log = await SDInstance.sellShares.sendTransaction(
+        this.data.amount,
+        temp,
+        { from: this.data.address,  gasPrice: 20 * 10 ** 9, gas: 150000  }
+        );
       // console.log(log);
       this.FirstSucceded = false;
       this.SecondSucceded = true;
